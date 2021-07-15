@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import request from '@/utils/request'
 
 export const getUserInfo = (data: any) =>
@@ -55,21 +56,21 @@ export const getDRData = (data:data3) =>
     url: '/customer/deposit_records',
     method: 'post',
     data
-})
+  })
 
 export const getWRData = (data:data3) =>
   request({
     url: '/customer/withdraw_records',
     method: 'post',
     data
-})
+  })
 
 export const getARData = (data:data3) =>
   request({
     url: '/customer/airdrop_records',
     method: 'post',
     data
-})
+  })
 
 interface data4 {
   token_id: string
@@ -82,4 +83,27 @@ export const setToken = (data:data4) =>
     url: '/token/set',
     method: 'post',
     data
-})
+  })
+
+interface data5 {
+  token: string
+  level:string
+  quantity: string
+}
+export const createAirdrop = (data:data5) =>
+  request({
+    url: '/create_airdrop',
+    method: 'post',
+    data
+  })
+
+interface data6 {
+  page_no: Number
+  page_size: Number
+}
+export const airdropList = (data:data6) =>
+  request({
+    url: '/airdrop/list',
+    method: 'post',
+    data
+  })

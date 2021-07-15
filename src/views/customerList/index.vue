@@ -121,7 +121,7 @@
       </el-dialog>
       <el-dialog title="Level" :visible.sync="dialogVisiable.level">
         <el-select v-model="userLevel" placeholder="Level" clearable>
-          <el-option value="" label="no level"></el-option>
+          <el-option value="0" label="no level"></el-option>
           <el-option :value="item" v-for="item in 10" :key=item></el-option>
         </el-select>
          <span slot="footer" class="dialog-footer">

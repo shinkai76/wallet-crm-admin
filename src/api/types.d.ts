@@ -45,3 +45,13 @@ export interface TokenListData {
 
 
 /*  token list  END  */
+/* airdrop  */
+export interface AirdropListData {
+  time: number
+  token: string
+  quantity: string
+  level: string
+}
+
+
+/*  airdrop  END  */

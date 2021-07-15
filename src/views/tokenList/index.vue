@@ -101,15 +101,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { TokenListData } from '@/api/types'
 import { setToken } from '@/api/users'
+import { validateFee } from '@/utils/validate'
 
-
-const validateFee = (rule, value, callback) => {
-  if (Number(value) <= 0) {
-    callback(new Error('Must be greater than 0'))
-  } else {
-    callback();
-  }
-}
 @Component({
   name: 'tokenList'
 })
@@ -121,10 +114,10 @@ export default class extends Vue {
   private tableData:TokenListData[] = []
   private currentTokenInfo!:TokenListData
   private showSettingDialog = false
-  private showAddDialog = true
+  private showAddDialog = false
   private isNeedPay:string = '0'
   private addForm = {
-    
+
   }
 
   private rules = {
