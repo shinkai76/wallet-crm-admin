@@ -1,20 +1,4 @@
-export interface IArticleData {
-  id: number
-  status: string
-  title: string
-  abstractContent: string
-  fullContent: string
-  sourceURL: string
-  imageURL: string
-  timestamp: string | number
-  platforms: string[]
-  disableComment: boolean
-  importance: number
-  author: string
-  reviewer: string
-  type: string
-  pageviews: number
-}
+/* eslint-disable camelcase */
 
 /*  customer list  */
 
@@ -47,3 +31,17 @@ export interface AirdropData {
   quantity: string
 }
 /*  customer list  END  */
+
+
+
+/*  token list  */
+export interface TokenListData {
+  token_id: string
+  name: string
+  withdraw_fee: string
+  internal_withdraw_fee: string
+  contract_address: string
+}
+
+
+/*  token list  END  */

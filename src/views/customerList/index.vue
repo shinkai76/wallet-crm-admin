@@ -35,28 +35,28 @@
           label="Existing Assets"
           width="120">
           <template slot-scope="scope">
-            <a href="">View</a>
+            <a href="" @click="openDialog(scope.row, 'ea')">View</a>
           </template>
         </el-table-column>
         <el-table-column
           label="Deposit records"
           width="120">
           <template slot-scope="scope">
-            <a href="">View</a>
+           <a href="" @click="openDialog(scope.row, 'dr')">View</a>
           </template>
         </el-table-column>
         <el-table-column
           label="Withdrawal records"
           width="120">
           <template slot-scope="scope">
-            <a href="">View</a>
+           <a href="" @click="openDialog(scope.row, 'wr')">View</a>
           </template>
         </el-table-column>
         <el-table-column
           label="Airdrop records"
           width="120">
           <template slot-scope="scope">
-            <a href="">View</a>
+           <a href="" @click="openDialog(scope.row, 'ar')">View</a>
           </template>
         </el-table-column>
         <el-table-column
@@ -149,11 +149,11 @@ export default class extends Vue {
   private airdropData:AirdropData[] = []
   private existingAssetsData:ExistingAssetsData[] = []
   private depositData:DepositData[] = []
-  private currentUserInfo = {}
+  private currentUserInfo!:CustomerData
   private userLevel = ''
-  private dialogVisiable = {
+  private dialogVisiable: { [key: string]: boolean } = {
     ea: false,
-    dr: true,
+    dr: false,
     wr: false,
     ar: false,
     level: false
@@ -172,6 +172,7 @@ export default class extends Vue {
     page_size: 15
   }
 
+  private dialogType = ''
   private dialogTotal = 110
 
   mounted() {
@@ -187,15 +188,35 @@ export default class extends Vue {
     const params = this.searchQuery
     customerList(params).then(res => {
       console.log(res)
-    }).finally(()=> {
+    }).finally(() => {
       this.loading = false
     })
+  }
+
+  private getDialogData() {
+    const map = new Map([
+      ['dr', getDRData],
+      ['wr', getWRData],
+      ['ar', getARData]
+    ])
+    const params = this.dialogSearchQuery
+    if (!map.has(this.dialogType)) return
+    map.get(this.dialogType)(params).then(res => {
+      console.log(res)
+    })
+  }
+
+  private openDialog(row:CustomerData, type:string):void {
+    this.currentUserInfo = row
+    this.dialogType = type
+    this.dialogVisiable[type] = true
+    this.getDialogData()
   }
 
   private onModifyLevel():void {
     const params = {
       level: this.userLevel,
-      user_id: this.currentUserInfo.user_id,
+      user_id: this.currentUserInfo.user_id
     }
     modifyLevel(params).then(res => {
       console.log(res)
@@ -203,31 +224,18 @@ export default class extends Vue {
     })
   }
 
-  private editRow(index, row:object):void {
+  private editRow(index, row:CustomerData):void {
     this.currentUserInfo = row
-    this.dialogSearchQuery.user_id =  row.user_id
+    this.dialogSearchQuery.user_id = row.user_id
     this.dialogSearchQuery.page_no = 1
   }
 
-  private handleCurrentChange() {
+  private handleCurrentChange():void {
     this.getData()
   }
 
-  private handleDialogoCurrentChange(val) {
-    const map = new Map([
-      ['dr', getDRData],
-      ['wr', getWRData],
-      ['ar', getARData]
-    ])
-    const params = this.dialogSearchQuery
-    for (const i in this.dialogVisiable) {
-      if (this.dialogVisiable[i]) {
-        map.get(i)(params).then(res => {
-          console.log(res)
-        })
-        break
-      }
-    }
+  private handleDialogoCurrentChange():void {
+    this.getDialogData()
   }
 }
 

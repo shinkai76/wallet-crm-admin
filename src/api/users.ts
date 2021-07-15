@@ -70,3 +70,16 @@ export const getARData = (data:data3) =>
     method: 'post',
     data
 })
+
+interface data4 {
+  token_id: string
+  type: string
+  withdraw_fee:string
+  internal_withdraw_fee: string
+}
+export const setToken = (data:data4) =>
+  request({
+    url: '/token/set',
+    method: 'post',
+    data
+})
