@@ -2,30 +2,30 @@
 
 /*  customer list  */
 
-export interface CustomerData {
+export interface ICustomerData {
   user_id: string
   email: string
   registration_time: string
   level: string
 }
-export interface ExistingAssetsData {
+export interface IExistingAssetsData {
   token: string
   quantity: string
 }
-export interface DepositData {
+export interface IDepositData {
   time: string
   token: string
   quantity: string
   from_address: string
 }
-export interface WithdrawData {
+export interface IWithdrawData {
   time: string
   token: string
   quantity: string
   fee: string
   to_address: string
 }
-export interface AirdropData {
+export interface IAirdropData {
   time: string
   token: string
   quantity: string
@@ -35,7 +35,7 @@ export interface AirdropData {
 
 
 /*  token list  */
-export interface TokenListData {
+export interface ITokenListData {
   token_id: string
   name: string
   withdraw_fee: string
@@ -45,8 +45,9 @@ export interface TokenListData {
 
 
 /*  token list  END  */
+
 /* airdrop  */
-export interface AirdropListData {
+export interface IAirdropListData {
   time: number
   token: string
   quantity: string
@@ -55,3 +56,18 @@ export interface AirdropListData {
 
 
 /*  airdrop  END  */
+
+/* withdraw  */
+export interface IPendingListData {
+  order: string
+  account: string
+  application_time: number
+  token: string
+  type: string
+  quantity: string
+  fee: string
+  address: string
+}
+
+
+/*  withdraw  END  */

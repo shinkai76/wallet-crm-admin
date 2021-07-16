@@ -133,7 +133,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { CustomerData, WithdrawData, AirdropData, ExistingAssetsData, DepositData } from '@/api/types'
+import { ICustomerData, IWithdrawData, IAirdropData, IExistingAssetsData, IDepositData } from '@/api/types'
 import { customerList, modifyLevel, getDRData, getWRData, getARData } from '@/api/users'
 
 @Component({
@@ -144,12 +144,12 @@ export default class extends Vue {
   private total = 0
   private level:number | string = ''
   private address = ''
-  private tableData:CustomerData[] = []
-  private withdrawData:WithdrawData[] = []
-  private airdropData:AirdropData[] = []
-  private existingAssetsData:ExistingAssetsData[] = []
-  private depositData:DepositData[] = []
-  private currentUserInfo!:CustomerData
+  private tableData:ICustomerData[] = []
+  private withdrawData:IWithdrawData[] = []
+  private airdropData:IAirdropData[] = []
+  private existingAssetsData:IExistingAssetsData[] = []
+  private depositData:IDepositData[] = []
+  private currentUserInfo!:ICustomerData
   private userLevel = ''
   private dialogVisiable: { [key: string]: boolean } = {
     ea: false,
@@ -206,7 +206,7 @@ export default class extends Vue {
     })
   }
 
-  private openDialog(row:CustomerData, type:string):void {
+  private openDialog(row:ICustomerData, type:string):void {
     this.currentUserInfo = row
     this.dialogType = type
     this.dialogVisiable[type] = true
@@ -224,7 +224,7 @@ export default class extends Vue {
     })
   }
 
-  private editRow(index, row:CustomerData):void {
+  private editRow(index, row:ICustomerData):void {
     this.currentUserInfo = row
     this.dialogSearchQuery.user_id = row.user_id
     this.dialogSearchQuery.page_no = 1

@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import {getOverviewData} from '@/api/overview'
+import { getOverviewData } from '@/api/overview'
 
 @Component({
   name: 'Overview'
@@ -59,16 +59,19 @@ export default class extends Vue {
     {
       name: 'USDT',
       value: '631'
-    },
+    }
   ]
+
   mounted() {
     this.init()
   }
+
   private init():void {
     this.getData()
   }
+
   private getData():void {
-    const { data } = getOverviewData();
+    const { data } = getOverviewData({})
   }
 }
 </script>

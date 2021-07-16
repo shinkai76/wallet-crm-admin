@@ -99,7 +99,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { TokenListData } from '@/api/types'
+import { ITokenListData } from '@/api/types'
 import { setToken } from '@/api/users'
 import { validateFee } from '@/utils/validate'
 
@@ -111,8 +111,8 @@ export default class extends Vue {
   private total = 0
   private btns:string[] = ['OMNI', 'ERC20', 'TRC20', 'BSC', 'HECO', 'OKT']
   private current = 'OMNI'
-  private tableData:TokenListData[] = []
-  private currentTokenInfo!:TokenListData
+  private tableData:ITokenListData[] = []
+  private currentTokenInfo!:ITokenListData
   private showSettingDialog = false
   private showAddDialog = false
   private isNeedPay:string = '0'
@@ -132,7 +132,7 @@ export default class extends Vue {
     internal_withdraw_fee: ''
   }
 
-  private editRow(index, row:TokenListData):void {
+  private editRow(index, row:ITokenListData):void {
     this.currentTokenInfo = row
     this.showSettingDialog = true
   }

@@ -78,12 +78,12 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { validateFee } from '@/utils/validate'
 import { createAirdrop, airdropList } from '@/api/users'
-import { AirdropListData } from '@/api/types'
+import { IAirdropListData } from '@/api/types'
 @Component({
   name: 'airdrop'
 })
 export default class extends Vue {
-  private showCreateialog = true
+  private showCreateialog = false
   private loading = false
   private total:number = 0
 
@@ -98,7 +98,7 @@ export default class extends Vue {
     page_size: 50
   }
 
-  private tableData:AirdropListData[] = []
+  private tableData:IAirdropListData[] = []
 
   private rules = {
     quantity: [

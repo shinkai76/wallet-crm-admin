@@ -96,13 +96,23 @@ export default new Router({
     {
       path: '/withdraw',
       component: Layout,
+      meta: {
+        title: 'Withdraw',
+        icon: 'example'
+      },
       children: [
         {
-          path: 'index',
-          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/withdraw/index.vue'),
+          path: 'pendingReview',
+          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/withdraw/pendingReview.vue'),
           meta: {
-            title: 'Withdraw',
-            icon: 'user'
+            title: 'Pending review'
+          }
+        },
+        {
+          path: 'history',
+          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/withdraw/history.vue'),
+          meta: {
+            title: 'History'
           }
         }
       ]
