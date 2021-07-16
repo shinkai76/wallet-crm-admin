@@ -18,6 +18,9 @@
         prop="application_time"
         label="Application time"
       >
+      <template slot-scope="scope">
+        <span>{{ scope.row.application_time | formatTime }}</span>
+      </template>
       </el-table-column>
       <el-table-column
         prop="token"
@@ -63,7 +66,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { IPendingListData } from '@/api/types'
 import { approve, getPendingList } from '@/api/users'
-import { VNodeDirective } from 'vue/types/umd'
 @Component({
   name: 'pendingReview'
 })

@@ -68,6 +68,8 @@ export interface IPendingListData {
   fee: string
   address: string
 }
-
+export interface IHistoryListData extends IPendingListData {
+  chain_fee: string
+}
 
 /*  withdraw  END  */

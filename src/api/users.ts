@@ -128,3 +128,15 @@ export const getPendingList = (data:IData8) =>
     method: 'post',
     data
   })
+
+interface IData9 {
+  page_no: number
+  page_size: number
+  filter?: string
+}
+export const getHistoryList = (data:IData9) =>
+  request({
+    url: '/withdraw/history_list',
+    method: 'post',
+    data
+  })
