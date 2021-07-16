@@ -140,3 +140,24 @@ export const getHistoryList = (data:IData9) =>
     method: 'post',
     data
   })
+
+interface IData10 {
+  page_no: number
+  page_size: number
+}
+export const collectList = (data:IData10) =>
+  request({
+    url: '/collect/list',
+    method: 'post',
+    data
+  })
+
+interface IData11 {
+  token: string
+}
+export const collect = (data:IData11) =>
+  request({
+    url: '/collect/token',
+    method: 'post',
+    data
+  })

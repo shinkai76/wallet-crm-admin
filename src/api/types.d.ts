@@ -73,3 +73,17 @@ export interface IHistoryListData extends IPendingListData {
 }
 
 /*  withdraw  END  */
+
+/*  finance   */
+
+export interface ICollectListData {
+  application_time: number
+  token: string
+  type: string
+  quantity: string
+  cost: string
+  state: string
+  info: string
+}
+
+/*  withdraw  END  */

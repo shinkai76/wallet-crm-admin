@@ -122,7 +122,7 @@ export default new Router({
       component: Layout,
       redirect: '/finance/collectManagement',
       meta: {
-        title: 'Collect Management',
+        title: 'Finance',
         icon: 'example'
       },
       children: [
@@ -130,32 +130,28 @@ export default new Router({
           path: 'collectManagement',
           component: () => import(/* webpackChunkName: "collectManagement" */ '@/views/finance/collectManagement.vue'),
           meta: {
-            title: 'Collect Management',
-            icon: 'tree'
+            title: 'Collect Management'
           }
         },
         {
           path: 'withdrawFeeBalance',
           component: () => import(/* webpackChunkName: "withdrawFeeBalance" */ '@/views/finance/withdrawFeeBalance.vue'),
           meta: {
-            title: 'Withdraw fee balance',
-            icon: 'table'
+            title: 'Withdraw fee balance'
           }
         },
         {
           path: 'withdrawAccountBalance',
           component: () => import(/* webpackChunkName: "withdrawAccountBalance" */ '@/views/finance/withdrawAccountBalance.vue'),
           meta: {
-            title: 'Withdraw account balance',
-            icon: 'table'
+            title: 'Withdraw account balance'
           }
         },
         {
           path: 'feeProfit',
           component: () => import(/* webpackChunkName: "feeProfit" */ '@/views/finance/feeProfit.vue'),
           meta: {
-            title: 'Fee profit',
-            icon: 'table'
+            title: 'Fee profit'
           }
         }
       ]

@@ -1,66 +1,127 @@
 <template>
-    <div>collectManagement</div>
+  <div class="page-container">
+    <div class="actions-wrap">
+      <el-button type="primary" @click="openCollect">Collect</el-button>
+    </div>
+    <div class=table-wrap>
+      <el-table
+        v-loading="loading"
+        :data="tableData"
+        style="width: 100%"
+        highlight-current-row>
+        <el-table-column
+          prop="application_time"
+          label="Application time">
+          <template slot-scope="scope">
+            <span>{{ scope.row.application_time | formatTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="token"
+          label="Token">
+        </el-table-column>
+        <el-table-column
+          prop="type"
+          label="Type"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="quantity"
+          label="Collect quantity"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="cost"
+          label="Chain cost"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="states"
+          label="States"
+          width="120">
+          <template slot-scope="scope">
+            <span></span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        class="pagination-container"
+        @current-change="handleCurrentChange"
+        :current-page.sync="query.page_no"
+        :page-size="query.page_size"
+        layout="prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
+    <el-dialog title="Collect" :visible.sync="showCollect">
+      <el-select v-model="token" placeholder="Token" clearable>
+        <el-option :value="item" v-for="item in 10" :key=item></el-option>
+      </el-select>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="onCollect">Collect</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { Tree as ElTree } from 'element-ui'
-import { TreeData } from 'element-ui/types/tree'
+import { Component, Vue } from 'vue-property-decorator'
+import { ICollectListData } from '@/api/types'
+import { collectList, collect } from '@/api/users'
+
+enum STATE {
+  watting = 1,
+  successful = 2,
+  failed = 3
+}
 
 @Component({
-  name: 'Tree'
+  name: 'collectManagement'
 })
 export default class extends Vue {
-  private filterText = '';
-  private data2 = [{
-    id: 1,
-    label: 'Level one 1',
-    children: [{
-      id: 4,
-      label: 'Level two 1-1',
-      children: [{
-        id: 9,
-        label: 'Level three 1-1-1'
-      }, {
-        id: 10,
-        label: 'Level three 1-1-2'
-      }]
-    }]
-  }, {
-    id: 2,
-    label: 'Level one 2',
-    children: [{
-      id: 5,
-      label: 'Level two 2-1'
-    }, {
-      id: 6,
-      label: 'Level two 2-2'
-    }]
-  }, {
-    id: 3,
-    label: 'Level one 3',
-    children: [{
-      id: 7,
-      label: 'Level two 3-1'
-    }, {
-      id: 8,
-      label: 'Level two 3-2'
-    }]
-  }];
+  private showCollect = false
+  private token:string = ''
+  private tableData:ICollectListData[] = []
+  private loading = false
+  private total = 0
 
-  private defaultProps = {
-    children: 'children',
-    label: 'label'
-  };
-
-  @Watch('filterText')
-  private onFilterTextChange(value: string) {
-    (this.$refs.tree2 as ElTree).filter(value)
+  private init() {
+    this.getData()
   }
 
-  private filterNode(value: string, data: TreeData) {
-    if (!value) { return true }
-    return data.label && data.label.indexOf(value) !== -1
+  private query = {
+    page_no: 1,
+    page_size: 50
+  }
+
+  private getData() {
+    this.loading = true
+    const params = this.query
+    collectList(params).then(res => {
+      console.log(res)
+      this.tableData = res.data
+    }).finally(() => {
+      this.loading = false
+    })
+  }
+
+  private openCollect() {
+    this.showCollect = true
+  }
+
+  private onCollect() {
+    const params = {
+      token: this.token
+    }
+    collect(params).then(res => {
+      this.showCollect = false
+      this.query.page_no = 1
+      this.getData()
+    })
+  }
+
+  private handleCurrentChange():void {
+    this.getData()
   }
 }
 </script>
