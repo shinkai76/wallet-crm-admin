@@ -201,7 +201,7 @@ export default class extends Vue {
     ])
     const params = this.dialogSearchQuery
     if (!map.has(this.dialogType)) return
-    map.get(this.dialogType)(params).then(res => {
+    map!.get(this.dialogType)(params).then(res => {
       console.log(res)
     })
   }

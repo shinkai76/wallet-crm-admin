@@ -1,8 +1,9 @@
+/* eslint-disable camelcase */
 import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
-import { login, logout, getUserInfo } from '@/api/users'
+import { login } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/cookies'
 import store from '@/store'
-
+import router from '@/router'
 export interface IUserState {
   token: string
   name: string
@@ -44,13 +45,14 @@ class User extends VuexModule implements IUserState {
     this.roles = roles
   }
 
-  @Action
-  public async Login(userInfo: { username: string, password: string }) {
-    let { username, password } = userInfo
-    username = username.trim()
-    const { data } = await login({ username, password })
-    setToken(data.accessToken)
-    this.SET_TOKEN(data.accessToken)
+  @Action({ rawError: true})
+  public async Login(userInfo: { user_code: string, password: string }) {
+    let { user_code, password } = userInfo
+    user_code = user_code.trim()
+    const { data } = await login({ user_code, password })
+    console.log(router)
+    setToken(data.token || 'TEST')
+    this.SET_TOKEN(data.token)
   }
 
   @Action
@@ -60,32 +62,31 @@ class User extends VuexModule implements IUserState {
     this.SET_ROLES([])
   }
 
-  @Action
-  public async GetUserInfo() {
-    if (this.token === '') {
-      throw Error('GetUserInfo: token is undefined!')
-    }
-    const { data } = await getUserInfo({ /* Your params here */ })
-    if (!data) {
-      throw Error('Verification failed, please Login again.')
-    }
-    const { roles, name, avatar, introduction } = data.user
-    // roles must be a non-empty array
-    if (!roles || roles.length <= 0) {
-      throw Error('GetUserInfo: roles must be a non-null array!')
-    }
-    this.SET_ROLES(roles)
-    this.SET_NAME(name)
-    this.SET_AVATAR(avatar)
-    this.SET_INTRODUCTION(introduction)
-  }
+  // @Action
+  // public async GetUserInfo() {
+  //   if (this.token === '') {
+  //     throw Error('GetUserInfo: token is undefined!')
+  //   }
+  //   const { data } = await getUserInfo({ /* Your params here */ })
+  //   if (!data) {
+  //     throw Error('Verification failed, please Login again.')
+  //   }
+  //   const { roles, name, avatar, introduction } = data.user
+  //   // roles must be a non-empty array
+  //   if (!roles || roles.length <= 0) {
+  //     throw Error('GetUserInfo: roles must be a non-null array!')
+  //   }
+  //   this.SET_ROLES(roles)
+  //   this.SET_NAME(name)
+  //   this.SET_AVATAR(avatar)
+  //   this.SET_INTRODUCTION(introduction)
+  // }
 
-  @Action
+  @Action({rawError: true})
   public async LogOut() {
     if (this.token === '') {
       throw Error('LogOut: token is undefined!')
     }
-    await logout()
     removeToken()
     this.SET_TOKEN('')
     this.SET_ROLES([])

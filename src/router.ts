@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/layout/index.vue'
-
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location:any) {
+  // @ts-ignore
+  return originalPush.call(this, location).catch((err:any) => err)
+}
 Vue.use(Router)
 
 /*
@@ -134,17 +138,17 @@ export default new Router({
           }
         },
         {
-          path: 'withdrawFeeBalance',
-          component: () => import(/* webpackChunkName: "withdrawFeeBalance" */ '@/views/finance/withdrawFeeBalance.vue'),
-          meta: {
-            title: 'Withdraw fee balance'
-          }
-        },
-        {
           path: 'withdrawAccountBalance',
           component: () => import(/* webpackChunkName: "withdrawAccountBalance" */ '@/views/finance/withdrawAccountBalance.vue'),
           meta: {
             title: 'Withdraw account balance'
+          }
+        },
+        {
+          path: 'withdrawFeeBalance',
+          component: () => import(/* webpackChunkName: "withdrawFeeBalance" */ '@/views/finance/withdrawFeeBalance.vue'),
+          meta: {
+            title: 'Withdraw fee balance'
           }
         },
         {

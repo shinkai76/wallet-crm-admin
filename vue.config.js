@@ -3,23 +3,23 @@ const name = 'CRM SYSTEM'
 
 module.exports = {
   publicPath: './',
-  outputDir: 'dist-admin',
+  outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   pwa: {
     name: name
   },
   devServer: {
-    port: 4480,
+    hot: true,
+    disableHostCheck: true,
+    port: 5080,
     open: true,
-    // proxy: {
-    //   '/mgt/v1': {
-    //     target: `http://192.168.0.60:10090/`,
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/mgt/v1': '/mgt/v1'
-    //   }
-    // }
+    proxy: {
+      '/nuvateq': {
+        target: 'http://192.168.0.110:9099/',
+        changeOrigin: true,
+      }
+    }
   },
   pluginOptions: {
     'style-resources-loader': {

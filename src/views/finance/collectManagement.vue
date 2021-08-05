@@ -97,7 +97,7 @@ export default class extends Vue {
   private getData() {
     this.loading = true
     const params = this.query
-    collectList(params).then(res => {
+    collectList(params).then((res:any) => {
       console.log(res)
       this.tableData = res.data
     }).finally(() => {

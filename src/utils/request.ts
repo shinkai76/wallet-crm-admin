@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
-
+import router from '@/router'
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API,
+  baseURL: "",
   timeout: 5000
 })
 
@@ -12,7 +12,7 @@ service.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
-      config.headers['X-Access-Token'] = UserModule.token
+      config.headers['token'] = UserModule.token
     }
     return config
   },
@@ -33,9 +33,9 @@ service.interceptors.response.use(
     // code == 50005: username or password is incorrect
     // You can change this part for your own usage.
     const res = response.data
-    if (res.code !== 20000) {
+    if (res.code !== 0) {
       Message({
-        message: res.message || 'Error',
+        message: res.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
@@ -53,7 +53,7 @@ service.interceptors.response.use(
           location.reload() // To prevent bugs from vue-router
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.msg || 'Error'))
     } else {
       return response.data
     }
@@ -68,4 +68,42 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+
+/**
+ * get方法，对应get请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ */
+export function get(url:string, params:any) {
+  return new Promise((resolve, reject) => {
+    axios.get(url, {
+      params: params
+    }).then(res => {
+      resolve(res.data);
+    }).catch(err => {
+      throw err
+    })
+  });
+}
+
+/**
+ * post方法，对应post请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ */
+export function post(url:string, params:any) {
+  return new Promise((resolve, reject) => {
+    axios.post(url, params)
+      .then(res => {
+        if (res.data.code == 401) { // token 失效
+          router.push({path: '/login'})
+          return
+        }
+        resolve(res.data);
+      })
+      .catch(err => {
+        console.log(err)
+        reject(err.data)
+      })
+  });
+}

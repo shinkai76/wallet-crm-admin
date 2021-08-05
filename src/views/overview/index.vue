@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getOverviewData } from '@/api/overview'
+// import { getOverviewData } from '@/api/overview'
 
 @Component({
   name: 'Overview'
@@ -71,7 +71,7 @@ export default class extends Vue {
   }
 
   private getData():void {
-    const { data } = getOverviewData({})
+    // const { data } = getOverviewData({})
   }
 }
 </script>

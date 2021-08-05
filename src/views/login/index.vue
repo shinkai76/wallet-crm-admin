@@ -14,13 +14,13 @@
         </h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="user_code">
         <span class="svg-container">
           <svg-icon name="user" />
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
+          v-model="loginForm.user_code"
           name="username"
           type="text"
           autocomplete="on"
@@ -59,12 +59,12 @@
         Sign in
       </el-button>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span> username: admin </span>
-          <span> password: any </span>
-        </div>
-      </div>
+      <!--      <div style="position:relative">-->
+      <!--        <div class="tips">-->
+      <!--          <span> username: admin </span>-->
+      <!--          <span> password: any </span>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </el-form>
   </div>
 </template>
@@ -75,37 +75,31 @@ import { Route } from 'vue-router'
 import { Dictionary } from 'vue-router/types/router'
 import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
-import { isValidUsername } from '@/utils/validate'
+const sha256 = require('js-sha256').sha256
+import { JSEncrypt } from 'jsencrypt'
+import { pubKey } from '@/api/users'
 
 @Component({
   name: 'Login'
 })
 export default class extends Vue {
-  private validateUsername = (rule: any, value: string, callback: Function) => {
-    if (!isValidUsername(value)) {
-      callback(new Error('Please enter the correct user name'))
-    } else {
-      callback()
-    }
-  }
-
-  private validatePassword = (rule: any, value: string, callback: Function) => {
-    if (value.length < 6) {
-      callback(new Error('The password can not be less than 6 digits'))
-    } else {
-      callback()
-    }
-  }
 
   private loginForm = {
-    username: 'admin',
-    password: '111111'
+    user_code: 'admin',
+    password: '123456'
   }
 
   private loginRules = {
-    username: [{ validator: this.validateUsername, trigger: 'blur' }],
-    password: [{ validator: this.validatePassword, trigger: 'blur' }]
+    user_code: [{
+      required: true,
+      trigger: 'blur'
+    }],
+    password: [{
+      required: true,
+      trigger: 'blur'
+    }]
   }
+  private pk = ''
 
   private passwordType = 'password'
   private loading = false
@@ -125,7 +119,7 @@ export default class extends Vue {
   }
 
   mounted() {
-    if (this.loginForm.username === '') {
+    if (this.loginForm.user_code === '') {
       (this.$refs.username as Input).focus()
     } else if (this.loginForm.password === '') {
       (this.$refs.password as Input).focus()
@@ -144,18 +138,20 @@ export default class extends Vue {
   }
 
   private handleLogin() {
-    (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
+    (this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
       if (valid) {
         this.loading = true
-        await UserModule.Login(this.loginForm)
-        this.$router.push({
-          path: this.redirect || '/',
-          query: this.otherQuery
-        })
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.loading = false
-        }, 0.5 * 1000)
+        const resData = await pubKey()
+        if (resData && resData.code === 0) {
+          this.pk = resData.data.pk
+        }
+        const params = JSON.parse(JSON.stringify(this.loginForm))
+        params.password = this.rsaData(sha256(this.loginForm.password))
+
+        await UserModule.Login(params)
+
+        this.$router.push('/overview')
+        this.loading = false
       } else {
         return false
       }
@@ -170,6 +166,16 @@ export default class extends Vue {
       return acc
     }, {} as Dictionary<string>)
   }
+
+  private rsaData(data: string): string|boolean {
+    const PUBLIC_KEY = this.pk
+    let jsencrypt = new JSEncrypt()
+    jsencrypt.setPublicKey(PUBLIC_KEY)
+    console.log(PUBLIC_KEY)
+    console.log(data)
+    let result = jsencrypt.encrypt(data)
+    return result
+  }
 }
 </script>
 
@@ -177,8 +183,13 @@ export default class extends Vue {
 // References: https://www.zhangxinxu.com/wordpress/2018/01/css-caret-color-first-line/
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
   .login-container .el-input {
-    input { color: $loginCursorColor; }
-    input::first-line { color: $lightGray; }
+    input {
+      color: $loginCursorColor;
+    }
+
+    input::first-line {
+      color: $lightGray;
+    }
   }
 }
 

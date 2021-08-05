@@ -1,25 +1,15 @@
 /* eslint-disable camelcase */
-import request from '@/utils/request'
+import { get, post } from '@/utils/request'
+const baseUrl = 'nuvateq/mgt/v1'
 
-export const getUserInfo = (data: any) =>
-  request({
-    url: '/users/info',
-    method: 'post',
-    data
-  })
+// 获取公钥
+export const pubKey = (params:any):any =>{
+  return post(baseUrl + '/user/pk', params)
+}
 
-export const login = (data: any) =>
-  request({
-    url: '/users/login',
-    method: 'post',
-    data
-  })
-
-export const logout = () =>
-  request({
-    url: '/users/logout',
-    method: 'post'
-  })
+export const login = (params: any):any => {
+  return post(baseUrl + '/user/login', params)
+}
 
 interface IData1 {
   address: string
@@ -27,50 +17,32 @@ interface IData1 {
   page_no: number
   page_size: number
 }
-
-export const customerList = (data:IData1) =>
-  request({
-    url: '/customer/list',
-    method: 'post',
-    data
-  })
+export const customerList = (params: IData1) => {
+  return post(baseUrl + '/customer/list', params)
+}
 
 interface IData2 {
   level:string
   user_id: string
 }
-export const modifyLevel = (data:IData2) =>
-  request({
-    url: '/customer/level',
-    method: 'post',
-    data
-  })
+export const modifyLevel = (params: IData2) => {
+  return post(baseUrl + '/customer/level', params)
+}
 
 interface IData3 {
   user_id: string
   page_no: number
   page_size: number
 }
-export const getDRData = (data:IData3) =>
-  request({
-    url: '/customer/deposit_records',
-    method: 'post',
-    data
-  })
-
-export const getWRData = (data:IData3) =>
-  request({
-    url: '/customer/withdraw_records',
-    method: 'post',
-    data
-  })
-
-export const getARData = (data:IData3) =>
-  request({
-    url: '/customer/airdrop_records',
-    method: 'post',
-    data
-  })
+export const getDRData = (params: IData3) => {
+  return post(baseUrl + '/customer/deposit_records', params)
+}
+export const getWRData = (params: IData3) => {
+  return post(baseUrl + '/customer/withdraw_records', params)
+}
+export const getARData = (params: IData3) => {
+  return post(baseUrl + '/customer/airdrop_records', params)
+}
 
 interface IData4 {
   token_id: string
@@ -78,86 +50,61 @@ interface IData4 {
   withdraw_fee:string
   internal_withdraw_fee: string
 }
-export const setToken = (data:IData4) =>
-  request({
-    url: '/token/set',
-    method: 'post',
-    data
-  })
+export const setToken = (params: IData4) => {
+  return post(baseUrl + '/token/set', params)
+}
 
 interface IData5 {
   token: string
   level:string
   quantity: string
 }
-export const createAirdrop = (data:IData5) =>
-  request({
-    url: '/create_airdrop',
-    method: 'post',
-    data
-  })
-
+export const createAirdrop = (params: IData5) => {
+  return post(baseUrl + '/create_airdrop', params)
+}
 interface IData6 {
   page_no: number
   page_size: number
 }
-export const airdropList = (data:IData6) =>
-  request({
-    url: '/airdrop/list',
-    method: 'post',
-    data
-  })
+export const airdropList = (params: IData6) => {
+  return post(baseUrl + '/airdrop/list', params)
+}
 
 interface IData7 {
   order: string
 }
-export const approve = (data:IData7) =>
-  request({
-    url: '/withdraw/approve',
-    method: 'post',
-    data
-  })
+export const approve = (params: IData7) => {
+  return post(baseUrl + '/withdraw/approve', params)
+}
 
 interface IData8 {
   page_no: number
   page_size: number
 }
-export const getPendingList = (data:IData8) =>
-  request({
-    url: '/withdraw/pending_list',
-    method: 'post',
-    data
-  })
+export const getPendingList = (params: IData8) => {
+  return post(baseUrl + '/withdraw/pending_list', params)
+}
 
 interface IData9 {
   page_no: number
   page_size: number
   filter?: string
 }
-export const getHistoryList = (data:IData9) =>
-  request({
-    url: '/withdraw/history_list',
-    method: 'post',
-    data
-  })
+export const getHistoryList = (params: IData9) => {
+  return post(baseUrl + '/withdraw/history_list', params)
+}
 
 interface IData10 {
   page_no: number
   page_size: number
 }
-export const collectList = (data:IData10) =>
-  request({
-    url: '/collect/list',
-    method: 'post',
-    data
-  })
+export const collectList = (params: IData10) => {
+  return post(baseUrl + '/collect/list', params)
+}
 
 interface IData11 {
   token: string
 }
-export const collect = (data:IData11) =>
-  request({
-    url: '/collect/token',
-    method: 'post',
-    data
-  })
+export const collect = (params: IData11) => {
+  return post(baseUrl + '/collect/token', params)
+}

@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import 'normalize.css'
 import ElementUI from 'element-ui'
+// @ts-ignore
 import locale from 'element-ui/lib/locale/lang/en'
 import SvgIcon from 'vue-svgicon'
 
