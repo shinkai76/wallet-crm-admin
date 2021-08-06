@@ -10,16 +10,16 @@ export const pubKey = (params:any):any =>{
 export const login = (params: any):any => {
   return post(baseUrl + '/user/login', params)
 }
-
-interface IData1 {
-  address: string
-  level: string
-  page_no: number
-  page_size: number
-}
-export const customerList = (params: IData1) => {
-  return post(baseUrl + '/customer/list', params)
-}
+//
+// interface IData1 {
+//   address: string
+//   level: string
+//   page_no: number
+//   page_size: number
+// }
+// export const customerList = (params: IData1) => {
+//   return post(baseUrl + '/customer/list', params)
+// }
 
 interface IData2 {
   level:string
@@ -107,4 +107,14 @@ interface IData11 {
 }
 export const collect = (params: IData11) => {
   return post(baseUrl + '/collect/token', params)
+}
+
+interface IData12 {
+  page_no: number
+  page_size: number
+  email?: string
+  level: number // -1是查全部
+}
+export const userList = (params: IData12) => {
+  return post(baseUrl + '/user/list', params)
 }

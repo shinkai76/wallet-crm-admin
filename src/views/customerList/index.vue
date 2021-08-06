@@ -1,12 +1,15 @@
 <template>
   <div class="page-container">
     <div class="actions-wrap">
-      <el-input v-model.trim="address" class="input mr-2"
+      <el-input v-model.trim="searchQuery.email" class="input mr-2"
         placeholder="Email address"
       ></el-input>
-      <el-select v-model="level" placeholder="Level" clearable class="mr-2">
-        <el-option value=""></el-option>
-        <el-option :value="item" v-for="item in 10" :key=item></el-option>
+      <el-select v-model="searchQuery.level" placeholder="Level" class="mr-2">
+        <el-option :value="item.value"
+                   v-for="item in levels"
+                   :key="item.value"
+                   :label="item.text"
+        ></el-option>
       </el-select>
       <el-button type="primary" @click="getData">Search</el-button>
     </div>
@@ -81,27 +84,27 @@
       </el-pagination>
     </div>
 
-      <el-dialog title="Existing  Assets" :visible.sync="dialogVisiable.ea">
+      <el-dialog title="Existing  Assets" :visible.sync="dialogVisible.ea">
         <el-table :data="existingAssetsData">
           <el-table-column property="token" label="Token"></el-table-column>
           <el-table-column property="quantity" label="Quantity"></el-table-column>
         </el-table>
       </el-dialog>
-      <el-dialog title="Deposit records" :visible.sync="dialogVisiable.dr">
+      <el-dialog title="Deposit records" :visible.sync="dialogVisible.dr">
         <el-table :data="depositData">
           <el-table-column property="token" label="Token"></el-table-column>
           <el-table-column property="quantity" label="Quantity"></el-table-column>
         </el-table>
         <el-pagination
           class="pagination-container"
-          @current-change="handleDialogoCurrentChange"
+          @current-change="handleDialogCurrentChange"
           :current-page.sync="dialogSearchQuery.page_no"
           :page-size="dialogSearchQuery.page_size"
           layout="prev, pager, next, jumper"
           :total="dialogTotal">
         </el-pagination>
       </el-dialog>
-      <el-dialog title="Withdrawal records" :visible.sync="dialogVisiable.wr">
+      <el-dialog title="Withdrawal records" :visible.sync="dialogVisible.wr">
         <el-table :data="withdrawData">
           <el-table-column property="time" label="Time"></el-table-column>
           <el-table-column property="token" label="Token"></el-table-column>
@@ -110,7 +113,7 @@
           <el-table-column property="to_address" label="To address"></el-table-column>
         </el-table>
       </el-dialog>
-      <el-dialog title="Airdrop records" :visible.sync="dialogVisiable.ar">
+      <el-dialog title="Airdrop records" :visible.sync="dialogVisible.ar">
         <el-table :data="airdropData">
           <el-table-column property="time" label="Time"></el-table-column>
           <el-table-column property="token" label="Token"></el-table-column>
@@ -119,7 +122,7 @@
           <el-table-column property="to_address" label="To address"></el-table-column>
         </el-table>
       </el-dialog>
-      <el-dialog title="Level" :visible.sync="dialogVisiable.level">
+      <el-dialog title="Level" :visible.sync="dialogVisible.level">
         <el-select v-model="userLevel" placeholder="Level" clearable>
           <el-option value="0" label="no level"></el-option>
           <el-option :value="item" v-for="item in 10" :key=item></el-option>
@@ -134,7 +137,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ICustomerData, IWithdrawData, IAirdropData, IExistingAssetsData, IDepositData } from '@/api/types'
-import { customerList, modifyLevel, getDRData, getWRData, getARData } from '@/api/users'
+import { modifyLevel, getDRData, getWRData, getARData, userList } from '@/api/users'
 
 @Component({
   name: 'customerList'
@@ -142,8 +145,6 @@ import { customerList, modifyLevel, getDRData, getWRData, getARData } from '@/ap
 export default class extends Vue {
   private loading = false
   private total = 0
-  private level:number | string = ''
-  private address = ''
   private tableData:ICustomerData[] = []
   private withdrawData:IWithdrawData[] = []
   private airdropData:IAirdropData[] = []
@@ -151,7 +152,15 @@ export default class extends Vue {
   private depositData:IDepositData[] = []
   private currentUserInfo!:ICustomerData
   private userLevel = ''
-  private dialogVisiable: { [key: string]: boolean } = {
+  /**
+   * @缩略
+   * ea: Existing  Assets
+   * dr: Deposit records
+   * wr: Withdrawal records
+   * ar: Airdrop records
+   *
+   */
+  private dialogVisible: { [key: string]: boolean } = {
     ea: false,
     dr: false,
     wr: false,
@@ -159,11 +168,49 @@ export default class extends Vue {
     level: false
   }
 
+  private levels = [{
+    value: -1,
+    text: 'All levels'
+  },{
+    value: 0,
+    text: 'Level 0'
+  },{
+    value: 1,
+    text: 'Level 1'
+  },{
+    value: 2,
+    text: 'Level 2'
+  },{
+    value: 3,
+    text: 'Level 3'
+  },{
+    value: 4,
+    text: 'Level 4'
+  },{
+    value: 5,
+    text: 'Level 5'
+  },{
+    value: 6,
+    text: 'Level 6'
+  },{
+    value: 7,
+    text: 'Level 7'
+  },{
+    value: 8,
+    text: 'Level 8'
+  },{
+    value: 9,
+    text: 'Level 9'
+  },{
+    value: 10,
+    text: 'Level 10'
+  }]
+
   private searchQuery = {
-    address: '',
-    level: '',
+    email: '',
+    level: -1,
     page_no: 1,
-    page_size: 15
+    page_size: 50
   }
 
   private dialogSearchQuery = {
@@ -186,7 +233,7 @@ export default class extends Vue {
   private getData() {
     this.loading = true
     const params = this.searchQuery
-    customerList(params).then(res => {
+    userList(params).then(res => {
       console.log(res)
     }).finally(() => {
       this.loading = false
@@ -209,18 +256,21 @@ export default class extends Vue {
   private openDialog(row:ICustomerData, type:string):void {
     this.currentUserInfo = row
     this.dialogType = type
-    this.dialogVisiable[type] = true
+    this.dialogVisible[type] = true
     this.getDialogData()
   }
 
   private onModifyLevel():void {
     const params = {
       level: this.userLevel,
-      user_id: this.currentUserInfo.user_id
+      user_code: this.currentUserInfo.user_code
     }
     modifyLevel(params).then(res => {
-      console.log(res)
-      this.dialogVisiable.level = false
+      this.$message({
+        message: 'Set successfully',
+        type: 'success'
+      });
+      this.dialogVisible.level = false
     })
   }
 
@@ -234,7 +284,7 @@ export default class extends Vue {
     this.getData()
   }
 
-  private handleDialogoCurrentChange():void {
+  private handleDialogCurrentChange():void {
     this.getDialogData()
   }
 }
