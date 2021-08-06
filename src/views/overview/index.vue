@@ -2,15 +2,15 @@
   <div class="dashboard-container">
     <div class="register-info-wrap">
       <div class="register-info-block block-shadow">
-        <span class="register-info-num">{{ 1222665 | formatNumber }}</span>
+        <span class="register-info-num">{{ registrants.total | formatNumber }}</span>
         <div class="register-info-title">Total registrants</div>
       </div>
       <div class="register-info-block block-shadow">
-        <span class="register-info-num">65</span>
+        <span class="register-info-num">{{ registrants.today }}</span>
         <div class="register-info-title">Today registrants</div>
       </div>
       <div class="register-info-block block-shadow">
-        <span class="register-info-num">1,88,665</span>
+        <span class="register-info-num">{{ registrants.yesterday }}</span>
         <div class="register-info-title">yesterday registrants</div>
       </div>
     </div>
@@ -29,49 +29,47 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-// import { getOverviewData } from '@/api/overview'
+import { getOverviewAssets, getOverviewRegistrants } from '@/api/overview'
 
 @Component({
   name: 'Overview'
 })
 export default class extends Vue {
-  private data:object[] = [
-    {
-      name: 'BTC',
-      value: '1'
-    },
-    {
-      name: 'ETH',
-      value: '2'
-    },
-    {
-      name: 'TRX',
-      value: '1'
-    },
-    {
-      name: 'BNB',
-      value: '1'
-    },
-    {
-      name: 'OKT',
-      value: '22221'
-    },
-    {
-      name: 'USDT',
-      value: '631'
-    }
-  ]
+  private data:object[] = []
+  private registrants:object = {}
 
   mounted() {
     this.init()
   }
 
   private init():void {
-    this.getData()
+    this.getAssets()
+    this.getRegistrants()
   }
 
-  private getData():void {
-    // const { data } = getOverviewData({})
+  private getAssets():void {
+    getOverviewAssets().then(res=> {
+       if (res.code == 0) {
+         this.data = res.data.assets || []
+       }
+     }).catch(()=> {
+       this.$message({
+         type: 'error',
+         message: 'Network request failed'
+       })
+     })
+  }
+  private getRegistrants():void {
+    getOverviewRegistrants().then(res=> {
+       if (res.code == 0) {
+         this.registrants = res.data
+       }
+    }).catch(()=> {
+       this.$message({
+         type: 'error',
+         message: 'Network request failed'
+       })
+    })
   }
 }
 </script>

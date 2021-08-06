@@ -79,7 +79,15 @@ export function get(url:string, params:any) {
     axios.get(url, {
       params: params
     }).then(res => {
-      resolve(res.data);
+      if (res.data.code == 0) {
+        resolve(res.data);
+      } else {
+        Message({
+          message: res.data.msg || 'Error',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
     }).catch(err => {
       throw err
     })
