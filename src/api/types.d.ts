@@ -3,7 +3,7 @@
 /*  customer list  */
 
 export interface ICustomerData {
-  user_id: string
+  user_code: string
   email: string
   registration_time: string
   level: string

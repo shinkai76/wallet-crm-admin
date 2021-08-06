@@ -5,6 +5,7 @@
         placeholder="Email address"
       ></el-input>
       <el-select v-model="searchQuery.level" placeholder="Level" class="mr-2">
+        <el-option value="-1" label="All levels"></el-option>
         <el-option :value="item.value"
                    v-for="item in levels"
                    :key="item.value"
@@ -67,7 +68,7 @@
           label="Level"
           width="120">
           <template slot-scope="scope">
-            <span v-if="scope.row.level">{{ scope.row.level }}
+            <span v-if="scope.row.level" class="pointer">{{ scope.row.level }}
               <i class="el-icon-s-tools" @click="editRow(scope.$index, scope.row)"></i>
             </span>
           </template>
@@ -124,8 +125,12 @@
       </el-dialog>
       <el-dialog title="Level" :visible.sync="dialogVisible.level">
         <el-select v-model="userLevel" placeholder="Level" clearable>
-          <el-option value="0" label="no level"></el-option>
-          <el-option :value="item" v-for="item in 10" :key=item></el-option>
+          <el-option
+            :value="item.value"
+            v-for="item in levels"
+            :key="item.value"
+            :label="item.text"
+          ></el-option>
         </el-select>
          <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="onModifyLevel">OK</el-button>
@@ -169,9 +174,6 @@ export default class extends Vue {
   }
 
   private levels = [{
-    value: -1,
-    text: 'All levels'
-  },{
     value: 0,
     text: 'Level 0'
   },{
@@ -214,7 +216,7 @@ export default class extends Vue {
   }
 
   private dialogSearchQuery = {
-    user_id: '',
+    user_code: '',
     page_no: 1,
     page_size: 15
   }
@@ -234,7 +236,11 @@ export default class extends Vue {
     this.loading = true
     const params = this.searchQuery
     userList(params).then(res => {
-      console.log(res)
+      if (res.code == 0) {
+        let { total, users } = res.data
+        this.total = total
+        this.tableData = users
+      }
     }).finally(() => {
       this.loading = false
     })
@@ -248,7 +254,9 @@ export default class extends Vue {
     ])
     const params = this.dialogSearchQuery
     if (!map.has(this.dialogType)) return
-    map!.get(this.dialogType)(params).then(res => {
+    let fn = map.get(this.dialogType)
+    if (!fn) return
+    fn(params).then(res => {
       console.log(res)
     })
   }
@@ -266,18 +274,21 @@ export default class extends Vue {
       user_code: this.currentUserInfo.user_code
     }
     modifyLevel(params).then(res => {
-      this.$message({
-        message: 'Set successfully',
-        type: 'success'
-      });
-      this.dialogVisible.level = false
+      if (res.code == 0) {
+        this.$message({
+          message: 'Set successfully',
+          type: 'success'
+        });
+        this.dialogVisible.level = false
+      }
     })
   }
 
-  private editRow(index, row:ICustomerData):void {
+  private editRow(index:any, row:ICustomerData):void {
     this.currentUserInfo = row
-    this.dialogSearchQuery.user_id = row.user_id
+    this.dialogSearchQuery.user_code = row.user_code
     this.dialogSearchQuery.page_no = 1
+    this.dialogVisible.level = true
   }
 
   private handleCurrentChange():void {
