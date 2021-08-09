@@ -4,9 +4,9 @@
 
 export interface ICustomerData {
   user_code: string
-  email: string
-  registration_time: string
-  level: string
+  email: number
+  registration_time: number
+  level: number
 }
 export interface IExistingAssetsData {
   token: string

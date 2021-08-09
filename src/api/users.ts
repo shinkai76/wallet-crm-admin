@@ -22,11 +22,11 @@ export const login = (params: any):any => {
 // }
 
 interface IData2 {
-  level:string
+  level: number
   user_code: string
 }
 export const modifyLevel = (params: IData2) => {
-  return post(baseUrl + '/customer/level', params)
+  return post(baseUrl + '/user/set-level', params)
 }
 
 interface IData3 {

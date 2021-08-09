@@ -5,7 +5,6 @@
         placeholder="Email address"
       ></el-input>
       <el-select v-model="searchQuery.level" placeholder="Level" class="mr-2">
-        <el-option value="-1" label="All levels"></el-option>
         <el-option :value="item.value"
                    v-for="item in levels"
                    :key="item.value"
@@ -18,47 +17,41 @@
       <el-table
         v-loading="loading"
         :data="tableData"
-        style="width: 100%"
         highlight-current-row>
         <el-table-column
           fixed
+          width="120"
           prop="user_id"
           label="UserIO">
         </el-table-column>
         <el-table-column
           prop="email"
-          label="Email"
-          width="120">
+          label="Email">
         </el-table-column>
         <el-table-column
           prop="registration_time"
-          label="Registration time"
-          width="120">
+          label="Registration time">
         </el-table-column>
         <el-table-column
-          label="Existing Assets"
-          width="120">
+          label="Existing Assets">
           <template slot-scope="scope">
             <a href="" @click="openDialog(scope.row, 'ea')">View</a>
           </template>
         </el-table-column>
         <el-table-column
-          label="Deposit records"
-          width="120">
+          label="Deposit records">
           <template slot-scope="scope">
            <a href="" @click="openDialog(scope.row, 'dr')">View</a>
           </template>
         </el-table-column>
         <el-table-column
-          label="Withdrawal records"
-          width="120">
+          label="Withdrawal records">
           <template slot-scope="scope">
            <a href="" @click="openDialog(scope.row, 'wr')">View</a>
           </template>
         </el-table-column>
         <el-table-column
-          label="Airdrop records"
-          width="120">
+          label="Airdrop records">
           <template slot-scope="scope">
            <a href="" @click="openDialog(scope.row, 'ar')">View</a>
           </template>
@@ -68,8 +61,8 @@
           label="Level"
           width="120">
           <template slot-scope="scope">
-            <span v-if="scope.row.level" class="pointer">{{ scope.row.level }}
-              <i class="el-icon-s-tools" @click="editRow(scope.$index, scope.row)"></i>
+            <span v-if="scope.row.level">Lv {{ scope.row.level }}
+              <i class="el-icon-s-tools pointer" @click="editRow(scope.$index, scope.row)"></i>
             </span>
           </template>
         </el-table-column>
@@ -123,11 +116,11 @@
           <el-table-column property="to_address" label="To address"></el-table-column>
         </el-table>
       </el-dialog>
-      <el-dialog title="Level" :visible.sync="dialogVisible.level">
-        <el-select v-model="userLevel" placeholder="Level" clearable>
+      <el-dialog title="Level" :visible.sync="dialogVisible.level" width="330px">
+        <el-select v-model="userLevel" placeholder="Level" clearable style="width: 100%">
           <el-option
             :value="item.value"
-            v-for="item in levels"
+            v-for="item in levels.slice(1)"
             :key="item.value"
             :label="item.text"
           ></el-option>
@@ -174,6 +167,9 @@ export default class extends Vue {
   }
 
   private levels = [{
+    value: -1,
+    text: 'All levels'
+  },{
     value: 0,
     text: 'Level 0'
   },{
