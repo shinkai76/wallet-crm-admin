@@ -9,14 +9,14 @@ export interface ICustomerData {
   level: number
 }
 export interface IExistingAssetsData {
-  token: string
-  quantity: string
+  name: string
+  num: string
 }
 export interface IDepositData {
-  time: string
-  token: string
-  quantity: string
-  from_address: string
+  time: number
+  coin: string
+  amount: string
+  from: string
 }
 export interface IWithdrawData {
   time: string

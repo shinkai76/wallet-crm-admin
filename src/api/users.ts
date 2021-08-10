@@ -11,16 +11,9 @@ export const login = (params: any):any => {
   return post(baseUrl + '/user/login', params)
 }
 //
-// interface IData1 {
-//   address: string
-//   level: string
-//   page_no: number
-//   page_size: number
-// }
-// export const customerList = (params: IData1) => {
-//   return post(baseUrl + '/customer/list', params)
-// }
-
+interface IData1 {
+  user_code: string
+}
 interface IData2 {
   level: number
   user_code: string
@@ -29,19 +22,23 @@ export const modifyLevel = (params: IData2) => {
   return post(baseUrl + '/user/set-level', params)
 }
 
+
 interface IData3 {
   user_code: string
   page_no: number
   page_size: number
 }
+export const getEAData = (params: IData1) => {
+  return post(baseUrl + '/user/assets', params)
+}
 export const getDRData = (params: IData3) => {
-  return post(baseUrl + '/customer/deposit_records', params)
+  return post(baseUrl + '/user/deposit/records', params)
 }
 export const getWRData = (params: IData3) => {
-  return post(baseUrl + '/customer/withdraw_records', params)
+  return post(baseUrl + '/user/withdrawal/records', params)
 }
 export const getARData = (params: IData3) => {
-  return post(baseUrl + '/customer/airdrop_records', params)
+  return post(baseUrl + '/user/airdrop/records', params)
 }
 
 interface IData4 {

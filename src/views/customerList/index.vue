@@ -31,29 +31,32 @@
         <el-table-column
           prop="registration_time"
           label="Registration time">
+          <template slot-scope="scope">
+            <span>{{ scope.row.registration_time | formatTime }}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="Existing Assets">
           <template slot-scope="scope">
-            <a href="" @click="openDialog(scope.row, 'ea')">View</a>
+            <span @click="openDialog(scope.row, 'ea')">View</span>
           </template>
         </el-table-column>
         <el-table-column
           label="Deposit records">
           <template slot-scope="scope">
-           <a href="" @click="openDialog(scope.row, 'dr')">View</a>
+           <span @click="openDialog(scope.row, 'dr')">View</span>
           </template>
         </el-table-column>
         <el-table-column
           label="Withdrawal records">
           <template slot-scope="scope">
-           <a href="" @click="openDialog(scope.row, 'wr')">View</a>
+           <span @click="openDialog(scope.row, 'wr')">View</span>
           </template>
         </el-table-column>
         <el-table-column
           label="Airdrop records">
           <template slot-scope="scope">
-           <a href="" @click="openDialog(scope.row, 'ar')">View</a>
+           <span @click="openDialog(scope.row, 'ar')">View</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -80,14 +83,20 @@
 
       <el-dialog title="Existing  Assets" :visible.sync="dialogVisible.ea">
         <el-table :data="existingAssetsData">
-          <el-table-column property="token" label="Token"></el-table-column>
-          <el-table-column property="quantity" label="Quantity"></el-table-column>
+          <el-table-column property="name" label="Token"></el-table-column>
+          <el-table-column property="num" label="Quantity"></el-table-column>
         </el-table>
       </el-dialog>
       <el-dialog title="Deposit records" :visible.sync="dialogVisible.dr">
         <el-table :data="depositData">
-          <el-table-column property="token" label="Token"></el-table-column>
-          <el-table-column property="quantity" label="Quantity"></el-table-column>
+          <el-table-column property="deposit_time" label="Time">
+            <template slot-scope="scope">
+              <span>{{ scope.row.deposit_time | formatTime }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column property="coin" label="Token"></el-table-column>
+          <el-table-column property="amount" label="Quantity"></el-table-column>
+          <el-table-column property="from" label="From address"></el-table-column>
         </el-table>
         <el-pagination
           class="pagination-container"
@@ -100,21 +109,43 @@
       </el-dialog>
       <el-dialog title="Withdrawal records" :visible.sync="dialogVisible.wr">
         <el-table :data="withdrawData">
-          <el-table-column property="time" label="Time"></el-table-column>
+          <el-table-column property="time" label="Time">
+            <template slot-scope="scope">
+              <span>{{ scope.row.withdrawal_time | formatTime }}</span>
+            </template>
+          </el-table-column>
           <el-table-column property="token" label="Token"></el-table-column>
-          <el-table-column property="quantity" label="Quantity"></el-table-column>
+          <el-table-column property="amount" label="Quantity"></el-table-column>
           <el-table-column property="fee" label="Fee"></el-table-column>
-          <el-table-column property="to_address" label="To address"></el-table-column>
+          <el-table-column property="to" label="To address"></el-table-column>
         </el-table>
+        <el-pagination
+          class="pagination-container"
+          @current-change="handleDialogCurrentChange"
+          :current-page.sync="dialogSearchQuery.page_no"
+          :page-size="dialogSearchQuery.page_size"
+          layout="prev, pager, next, jumper"
+          :total="dialogTotal">
+        </el-pagination>
       </el-dialog>
       <el-dialog title="Airdrop records" :visible.sync="dialogVisible.ar">
         <el-table :data="airdropData">
-          <el-table-column property="time" label="Time"></el-table-column>
+          <el-table-column property="time" label="Time">
+            <template slot-scope="scope">
+              <span>{{ scope.row.airdrop_time | formatTime }}</span>
+            </template>
+          </el-table-column>
           <el-table-column property="token" label="Token"></el-table-column>
-          <el-table-column property="quantity" label="Quantity"></el-table-column>
-          <el-table-column property="fee" label="Fee"></el-table-column>
-          <el-table-column property="to_address" label="To address"></el-table-column>
+          <el-table-column property="amount" label="Quantity"></el-table-column>
         </el-table>
+        <el-pagination
+          class="pagination-container"
+          @current-change="handleDialogCurrentChange"
+          :current-page.sync="dialogSearchQuery.page_no"
+          :page-size="dialogSearchQuery.page_size"
+          layout="prev, pager, next, jumper"
+          :total="dialogTotal">
+        </el-pagination>
       </el-dialog>
       <el-dialog title="Level" :visible.sync="dialogVisible.level" width="330px">
         <el-select v-model="userLevel" placeholder="Level" clearable style="width: 100%">
@@ -134,8 +165,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { ICustomerData, IWithdrawData, IAirdropData, IExistingAssetsData, IDepositData } from '@/api/types'
-import { modifyLevel, getDRData, getWRData, getARData, userList } from '@/api/users'
+import { ICustomerData } from '@/api/types'
+import { modifyLevel,getEAData, getDRData, getWRData, getARData, userList } from '@/api/users'
 
 @Component({
   name: 'customerList'
@@ -143,11 +174,11 @@ import { modifyLevel, getDRData, getWRData, getARData, userList } from '@/api/us
 export default class extends Vue {
   private loading = false
   private total = 0
-  private tableData:ICustomerData[] = []
-  private withdrawData:IWithdrawData[] = []
-  private airdropData:IAirdropData[] = []
-  private existingAssetsData:IExistingAssetsData[] = []
-  private depositData:IDepositData[] = []
+  private tableData = []
+  private withdrawData = []
+  private airdropData = []
+  private existingAssetsData = []
+  private depositData = []
   private currentUserInfo!:ICustomerData
   private userLevel = ''
   /**
@@ -244,16 +275,48 @@ export default class extends Vue {
 
   private getDialogData() {
     const map = new Map([
-      ['dr', getDRData],
-      ['wr', getWRData],
-      ['ar', getARData]
+      ['ea', '_getEAData'],
+      ['dr', '_getDRData'],
+      ['wr', '_getWRData'],
+      ['ar', '_getARData']
     ])
     const params = this.dialogSearchQuery
+    params.user_code = this.currentUserInfo.email
     if (!map.has(this.dialogType)) return
     let fn = map.get(this.dialogType)
     if (!fn) return
-    fn(params).then(res => {
-      console.log(res)
+    this[fn]()
+  }
+
+  private _getEAData() {
+    let params = {}
+    params.user_code = this.currentUserInfo.email
+    getEAData(params).then(res=> {
+      this.existingAssetsData = res.data.assets
+    })
+  }
+  private _getDRData() {
+    let params = this.dialogSearchQuery
+    params.user_code = this.currentUserInfo.email
+    getDRData(params).then(res=> {
+      this.depositData = res.data.records
+      this.dialogTotal = res.data.total
+    })
+  }
+  private _getWRData() {
+    let params = this.dialogSearchQuery
+    params.user_code = this.currentUserInfo.email
+    getWRData(params).then(res=> {
+      this.withdrawData = res.data.records
+      this.dialogTotal = res.data.total
+    })
+  }
+  private _getARData() {
+    let params = this.dialogSearchQuery
+    params.user_code = this.currentUserInfo.email
+    getARData(params).then(res=> {
+      this.airdropData = res.data.records
+      this.dialogTotal = res.data.total
     })
   }
 
