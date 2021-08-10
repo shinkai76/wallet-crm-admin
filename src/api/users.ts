@@ -50,6 +50,14 @@ interface IData4 {
 export const setToken = (params: IData4) => {
   return post(baseUrl + '/token/set', params)
 }
+interface IData4_1 {
+  proto: string
+  page_no: number
+  page_size: number
+}
+export const tokenList = (params: IData4_1) => {
+  return post(baseUrl + '/token/query', params)
+}
 
 interface IData5 {
   token: string

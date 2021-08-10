@@ -36,10 +36,10 @@ export interface IAirdropData {
 
 /*  token list  */
 export interface ITokenListData {
-  token_id: string
+  id: number
   name: string
   withdraw_fee: string
-  internal_withdraw_fee: string
+  internal_fee: string
   contract_address: string
 }
 
