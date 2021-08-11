@@ -77,7 +77,7 @@
 <script lang="ts">
 import { Component, Vue, Watch} from 'vue-property-decorator'
 import { IHistoryListData } from '@/api/types'
-import { getHistoryList } from '@/api/users'
+import { getWithdrawList } from '@/api/users'
 @Component({
   name: 'history'
 })
@@ -90,7 +90,7 @@ export default class extends Vue {
   private query = {
     page_no: 1,
     page_size: 50,
-    filter: ''
+    status: 1
   }
 
   created() {
@@ -105,8 +105,8 @@ export default class extends Vue {
   private getData():void {
     this.loading = true
     const params = this.query
-    getHistoryList(params).then(res => {
-      this.tableData = res.data
+    getWithdrawList(params).then(res => {
+      this.tableData = res.data.records
     }).finally(() => {
       this.loading = false
     })

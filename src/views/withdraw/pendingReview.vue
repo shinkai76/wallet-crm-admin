@@ -7,19 +7,19 @@
       highlight-current-row>
       <el-table-column
         fixed
-        prop="order"
+        prop="id"
         label="Order">
       </el-table-column>
       <el-table-column
-        prop="account"
+        prop="user_code"
         label="Account">
       </el-table-column>
       <el-table-column
-        prop="application_time"
+        prop="withdrawal_time"
         label="Application time"
       >
       <template slot-scope="scope">
-        <span>{{ scope.row.application_time | formatTime }}</span>
+        <span>{{ scope.row.withdrawal_time | formatTime }}</span>
       </template>
       </el-table-column>
       <el-table-column
@@ -28,7 +28,7 @@
       >
       </el-table-column>
       <el-table-column
-        prop="type"
+        prop="withdrawal_type"
         label="Withdrawal Type"
       >
       </el-table-column>
@@ -38,7 +38,7 @@
       >
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="to"
         label="Withdrawal address"
       >
       </el-table-column>
@@ -59,13 +59,23 @@
         layout="prev, pager, next, jumper"
         :total="total">
       </el-pagination>
+
+    <el-dialog
+      :visible.sync="resultDialogVisible"
+      width="400px"
+      center>
+      <span>{{ result }}</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="resultDialogVisible = false">OK</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { IPendingListData } from '@/api/types'
-import { approve, getPendingList } from '@/api/users'
+import { approve, getWithdrawList } from '@/api/users'
 @Component({
   name: 'pendingReview'
 })
@@ -76,8 +86,11 @@ export default class extends Vue {
 
   private query = {
     page_no: 1,
-    page_size: 50
+    page_size: 50,
+    status: 0
   }
+  private resultDialogVisible:boolean = false
+  private result:string = ''
 
   created() {
     this.getData()
@@ -86,19 +99,20 @@ export default class extends Vue {
   private getData():void {
     this.loading = true
     const params = this.query
-    getPendingList(params).then(res => {
-      this.tableData = res.data
+    getWithdrawList(params).then(res => {
+      console.log(res)
+      this.tableData = res.data.records
     }).finally(() => {
       this.loading = false
     })
   }
 
-  private secondConfirm(order:string) {
+  private secondConfirm(code:string) {
     this.$confirm('Are you sure about this operation', '', {
       confirmButtonText: 'Sure',
       cancelButtonText: 'No'
     }).then(() => {
-      this.onApprove(order)
+      this.onApprove(code)
     })
   }
 
@@ -106,19 +120,27 @@ export default class extends Vue {
     this.getData()
   }
 
-  private onApprove(order:string) {
-    const params = { order }
+  private onApprove(code:string) {
+    const params = { code }
     this.loading = true
     approve(params).then(res => {
-      this.query.page_no = 1
-      this.getData()
+      if (res.code == 0) {
+        this.$message.success('Execute successfully')
+        this.query.page_no = 1
+        this.getData()
+        return
+      }
+      this.resultDialogVisible = true
+      if (res.code === '100600') {
+        this.result = 'withdrawal account balance is not enough'
+      }
     }).finally(() => {
       this.loading = false
     })
   }
 
   private onSet(index:any, row:IPendingListData):void {
-    this.secondConfirm(row.order)
+    this.secondConfirm(row.code)
   }
 }
 </script>

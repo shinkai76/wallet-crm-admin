@@ -87,28 +87,21 @@ export const airdropList = (params: IData6) => {
 }
 
 interface IData7 {
-  order: string
+  code: string
 }
 export const approve = (params: IData7) => {
-  return post(baseUrl + '/withdraw/approve', params)
+  return post(baseUrl + '/withdrawal/pass', params)
 }
 
 interface IData8 {
   page_no: number
   page_size: number
+  status: string
 }
-export const getPendingList = (params: IData8) => {
-  return post(baseUrl + '/withdraw/pending_list', params)
+export const getWithdrawList = (params: IData8) => {
+  return post(baseUrl + '/withdrawal/records', params)
 }
 
-interface IData9 {
-  page_no: number
-  page_size: number
-  filter?: string
-}
-export const getHistoryList = (params: IData9) => {
-  return post(baseUrl + '/withdraw/history_list', params)
-}
 
 interface IData10 {
   page_no: number
