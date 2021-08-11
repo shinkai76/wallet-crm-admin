@@ -19,7 +19,7 @@ interface IData2 {
   user_code: string
 }
 export const modifyLevel = (params: IData2) => {
-  return post(baseUrl + '/user/set-level', params)
+  return post(baseUrl + '/customer/set-level', params)
 }
 
 
@@ -29,16 +29,16 @@ interface IData3 {
   page_size: number
 }
 export const getEAData = (params: IData1) => {
-  return post(baseUrl + '/user/assets', params)
+  return post(baseUrl + '/customer/assets', params)
 }
 export const getDRData = (params: IData3) => {
-  return post(baseUrl + '/user/deposit/records', params)
+  return post(baseUrl + '/customer/deposit/records', params)
 }
 export const getWRData = (params: IData3) => {
-  return post(baseUrl + '/user/withdrawal/records', params)
+  return post(baseUrl + '/customer/withdrawal/records', params)
 }
 export const getARData = (params: IData3) => {
-  return post(baseUrl + '/user/airdrop/records', params)
+  return post(baseUrl + '/customer/airdrop/records', params)
 }
 
 interface IData4 {
@@ -125,5 +125,5 @@ interface IData12 {
   level: number // -1是查全部
 }
 export const userList = (params: IData12) => {
-  return post(baseUrl + '/user/list', params)
+  return post(baseUrl + '/customer/list', params)
 }
