@@ -58,6 +58,17 @@ interface IData4_1 {
 export const tokenList = (params: IData4_1) => {
   return post(baseUrl + '/token/query', params)
 }
+interface IData4_2 {
+  token_name: string
+  withdrawal_fee: string
+  internal_fee: string
+  contract_address: string
+  collect_limit: string
+  proto: string
+}
+export const addToken = (params: IData4_2) => {
+  return post(baseUrl + '/token/add', params)
+}
 
 interface IData5 {
   token: string
