@@ -10,8 +10,7 @@
         style="width: 100%"
         highlight-current-row>
          <el-table-column
-          type="Num"
-          width="50">
+          type="Num">
         </el-table-column>
         <el-table-column
           prop="time"
@@ -26,13 +25,11 @@
         </el-table-column>
         <el-table-column
           prop="quantity"
-          label="Quantity"
-          width="120">
+          label="Quantity">
         </el-table-column>
         <el-table-column
           prop="level"
-          label="Customer Level"
-          width="120">
+          label="Customer Level">
           <template slot-scope="scope">
             <span v-if="scope.row.level">
               Lv {{ scope.row.level }}

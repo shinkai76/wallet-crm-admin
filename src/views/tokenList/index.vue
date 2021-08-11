@@ -163,7 +163,7 @@ export default class extends Vue {
     'token_name': '',
     'withdrawal_fee': '',
     'internal_fee': '',
-    'contract_address': '',
+    'contract_address': '',// TODO 差接口
     'collect_limit': '',
     'proto': '' // 就是tab的名字
   }

@@ -14,6 +14,7 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
   NProgress.start()
 
   // Determine whether the user has logged in
+  // TODO 删除TEST
   if (UserModule.token || 'TEST') {
     if (to.path === '/login') {
       // If is logged in, redirect to the home page

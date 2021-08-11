@@ -51,6 +51,7 @@ class User extends VuexModule implements IUserState {
     user_code = user_code.trim()
     const { data } = await login({ user_code, password })
     console.log(router)
+    // TODO 删除TEST
     setToken(data.token || 'TEST')
     this.SET_TOKEN(data.token)
   }
