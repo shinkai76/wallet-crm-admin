@@ -15,11 +15,11 @@
         label="Account">
       </el-table-column>
       <el-table-column
-        prop="application_time"
-        label="Application time"
+        prop="withdrawal_time"
+        label="Deposit time"
       >
       <template slot-scope="scope">
-        <span>{{ scope.row.application_time | formatTime }}</span>
+        <span>{{ scope.row.withdrawal_time | formatTime }}</span>
       </template>
       </el-table-column>
       <el-table-column
@@ -33,21 +33,21 @@
       >
       </el-table-column>
       <el-table-column
-        prop="fee"
-        label="Fee"
+        prop="quantity"
+        label="Withdrawal quantity"
       >
       </el-table-column>
       <el-table-column
-        prop="to"
-        label="Withdrawal address"
-      >
+        prop="from"
+        label="From"
+        width="120">
       </el-table-column>
       <el-table-column
         prop=""
         label="Set"
         width="120">
         <template slot-scope="scope">
-          <i class="el-icon-s-tools" @click="onSet(scope.$index, scope.row)"></i>
+          <span @click="onSet(scope.$index, scope.row)">Approve</span>
         </template>
       </el-table-column>
     </el-table>
@@ -75,7 +75,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { IPendingListData } from '@/api/types'
-import { approve, getWithdrawList } from '@/api/users'
+import { approve, depositApprove, getDepositList } from '@/api/users'
 @Component({
   name: 'pendingReview'
 })
@@ -89,6 +89,7 @@ export default class extends Vue {
     page_size: 50,
     status: 0
   }
+
   private resultDialogVisible:boolean = false
   private result:string = ''
 
@@ -99,7 +100,7 @@ export default class extends Vue {
   private getData():void {
     this.loading = true
     const params = this.query
-    getWithdrawList(params).then(res => {
+    getDepositList(params).then(res => {
       console.log(res)
       this.tableData = res.data.records
     }).finally(() => {
@@ -123,7 +124,7 @@ export default class extends Vue {
   private onApprove(code:string) {
     const params = { code }
     this.loading = true
-    approve(params).then(res => {
+    depositApprove(params).then(res => {
       if (res.code == 0) {
         this.$message.success('Execute successfully')
         this.query.page_no = 1

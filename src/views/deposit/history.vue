@@ -21,7 +21,7 @@
         highlight-current-row>
         <el-table-column
           fixed
-          prop="id"
+          prop="order"
           label="Order">
         </el-table-column>
         <el-table-column
@@ -37,20 +37,12 @@
         </template>
         </el-table-column>
         <el-table-column
-          prop="processing_time"
-          label="Processing time"
-        >
-        <template slot-scope="scope">
-          <span>{{ scope.row.processing_time | formatTime }}</span>
-        </template>
-        </el-table-column>
-        <el-table-column
           prop="token"
           label="Token"
         >
         </el-table-column>
         <el-table-column
-          prop="withdrawal_type"
+          prop="type"
           label="Withdrawal Type"
         >
         </el-table-column>

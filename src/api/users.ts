@@ -41,6 +41,10 @@ export const getARData = (params: IData3) => {
   return post(baseUrl + '/customer/airdrop/records', params)
 }
 
+export const getDepositList = (params: IData3) => {
+  return post(baseUrl + '/customer/deposit/records', params)
+}
+
 interface IData4 {
   token_id: string
   type: string
@@ -91,6 +95,10 @@ interface IData7 {
 }
 export const approve = (params: IData7) => {
   return post(baseUrl + '/withdrawal/pass', params)
+}
+
+export const depositApprove = (params: IData7) => {
+  return post(baseUrl + '/deposit/pass', params)
 }
 
 interface IData8 {

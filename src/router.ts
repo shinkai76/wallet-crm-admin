@@ -98,6 +98,30 @@ export default new Router({
       ]
     },
     {
+      path: '/deposit',
+      component: Layout,
+      meta: {
+        title: 'Deposit',
+        icon: 'example'
+      },
+      children: [
+        {
+          path: 'pendingReview',
+          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/deposit/pendingReview.vue'),
+          meta: {
+            title: 'Pending review'
+          }
+        },
+        {
+          path: 'history',
+          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/deposit/history.vue'),
+          meta: {
+            title: 'History'
+          }
+        }
+      ]
+    },
+    {
       path: '/withdraw',
       component: Layout,
       meta: {
