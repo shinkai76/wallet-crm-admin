@@ -16,35 +16,11 @@
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <img
-            :src="avatar+'?imageView2/1/w/80/h/80'"
-            class="user-avatar"
-          >
+          {{ name }}
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              Home
-            </el-dropdown-item>
-          </router-link>
-          <a
-            target="_blank"
-            href="https://github.com/armour/vue-typescript-admin-template/"
-          >
-            <el-dropdown-item>
-              Github
-            </el-dropdown-item>
-          </a>
-          <a
-            target="_blank"
-            href="https://armour.github.io/vue-typescript-admin-docs/"
-          >
-            <el-dropdown-item>
-              Docs
-            </el-dropdown-item>
-          </a>
-          <el-dropdown-item divided>
+          <el-dropdown-item>
             <span
               style="display:block;"
               @click="logout"
@@ -74,7 +50,9 @@ export default class extends Vue {
   get sidebar() {
     return AppModule.sidebar
   }
-
+  get name() {
+    return localStorage.getItem('code')
+  }
   get device() {
     return AppModule.device.toString()
   }
