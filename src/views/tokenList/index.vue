@@ -61,7 +61,7 @@
                :visible.sync="showSettingDialog"
                center
                width="430px"
-               @before-close="closeDialog('settingForm')"
+               :before-close="closeDialog"
     >
       <el-form ref="settingForm"
                label-position='top'
@@ -93,7 +93,7 @@
                :visible.sync="showAddDialog"
                center
                width="460px"
-               @before-close="closeDialog('addForm')"
+               :before-close="closeDialog"
     >
       <el-form ref="addForm"
                label-position='top'
@@ -103,14 +103,17 @@
         <el-form-item label="Contract address" prop="contract_address">
           <el-select v-model="addForm.contract_address"
                      filterable
+                     remote
+                     :remote-method="selectFilter"
                      placeholder="Search"
                      style="width: 100%"
           >
             <el-option
               v-for="item in addressList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.id"
+              :value="item.address">
+              <div style="float: left">{{ item.name }}</div> &nbsp;&nbsp;
+              <div style="float: right">{{ item.address }}</div>
             </el-option>
           </el-select>
         </el-form-item>
@@ -142,7 +145,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ITokenListData } from '@/api/types'
-import { addToken, setToken, tokenList } from '@/api/users'
+import { addToken, setToken, tokenAddress, tokenList } from '@/api/users'
 import { validateFee } from '@/utils/validate'
 
 @Component({
@@ -163,7 +166,7 @@ export default class extends Vue {
     'token_name': '',
     'withdrawal_fee': '',
     'internal_fee': '',
-    'contract_address': '',// TODO 差接口
+    'contract_address': '',
     'collect_limit': '',
     'proto': '' // 就是tab的名字
   }
@@ -235,7 +238,7 @@ export default class extends Vue {
     })
   }
 
-  private editRow(index, row: ITokenListData): void {
+  private editRow(index:any, row: ITokenListData): void {
     this.currentTokenInfo = row
     this.settingDialogTitle = this.currentTokenInfo?.name + `(${this.current}) SET`
     this.showSettingDialog = true
@@ -244,7 +247,7 @@ export default class extends Vue {
     this.settingForm.internal_fee = this.currentTokenInfo.internal_fee
   }
 
-  private refresh(tab) {
+  private refresh(tab:string) {
     this.current = tab
     this.getData()
   }
@@ -280,12 +283,26 @@ export default class extends Vue {
     })
   }
 
-  private closeDialog(formName) {
-    this.resetForm(formName)
+  private closeDialog() {
+    this.resetForm('settingForm')
+    this.resetForm('addForm')
+    this.showAddDialog = false
+    this.showSettingDialog = false
   }
 
-  private resetForm(formName) {
-    this.$refs[formName].resetFields()
+  private resetForm(formName:string) {
+    this.$refs[formName] && this.$refs[formName].resetFields()
+  }
+
+  private selectFilter(val:string){
+    this.addressList = []
+    let params = {
+      name: val
+    }
+    tokenAddress(params).then(res=> {
+      if (res.code == 0)
+      this.addressList = res.data.sys_tokens
+    })
   }
 
   private openAddDialog() {
