@@ -1,13 +1,13 @@
 <template>
   <div class="page-container">
     <div class="actions-wrap">
-      <el-select v-model="query.filter" placeholder="" class="mr-2">
-        <!-- 问过wz了筛选的是token -->
+      <el-select v-model="query.token" placeholder="" class="mr-2">
+        <el-option value="" label="ALL">ALL</el-option>
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          v-for="item in tokens"
+          :key="item.id"
+          :label="item.name"
+          :value="item.name">
         </el-option>
       </el-select>
       <el-button type="primary" @click="onSearch">Search</el-button>
@@ -37,29 +37,32 @@
         </template>
         </el-table-column>
         <el-table-column
+          prop="processing_time"
+          label="Processing time"
+        >
+        <template slot-scope="scope">
+          <span>{{ scope.row.processing_time | formatTime }}</span>
+        </template>
+        </el-table-column>
+        <el-table-column
           prop="token"
           label="Token"
         >
         </el-table-column>
         <el-table-column
-          prop="type"
-          label="Withdrawal Type"
+          prop="deposit_type"
+          label="Deposit Type"
         >
         </el-table-column>
         <el-table-column
-          prop="fee"
-          label="Fee"
+          prop="deposit_quantity"
+          label="Deposit quantity"
         >
         </el-table-column>
         <el-table-column
-          prop="to"
-          label="Withdrawal address"
+          prop="from"
+          label="From"
         >
-        </el-table-column>
-        <el-table-column
-          prop="chain_fee"
-          label="Chain Fee"
-          width="120">
         </el-table-column>
       </el-table>
       <el-pagination
@@ -77,7 +80,7 @@
 <script lang="ts">
 import { Component, Vue, Watch} from 'vue-property-decorator'
 import { IHistoryListData } from '@/api/types'
-import { getWithdrawList } from '@/api/users'
+import { getWithdrawList, tokenList } from '@/api/users'
 @Component({
   name: 'history'
 })
@@ -85,19 +88,21 @@ export default class extends Vue {
   private loading = false
   private total = 0
   private tableData:IHistoryListData[] = []
-  private options:[] = []
+  private tokens = []
 
   private query = {
     page_no: 1,
     page_size: 50,
-    status: 1
+    status: 1,
+    token: ""
   }
 
   created() {
     this.getData()
+    this.getTokens()
   }
 
-  @Watch('query.filter')
+  @Watch('query.token')
   private resetQuery() {
     this.query.page_no = 1
   }
@@ -109,6 +114,15 @@ export default class extends Vue {
       this.tableData = res.data.records
     }).finally(() => {
       this.loading = false
+    })
+  }
+
+  private getTokens():void {
+    const params = {
+      proto: ''
+    }
+    tokenList(params).then(res=> {
+      this.tokens = res.data.tokens
     })
   }
 

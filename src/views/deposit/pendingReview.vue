@@ -15,11 +15,11 @@
         label="Account">
       </el-table-column>
       <el-table-column
-        prop="withdrawal_time"
+        prop="deposit_time"
         label="Deposit time"
       >
       <template slot-scope="scope">
-        <span>{{ scope.row.withdrawal_time | formatTime }}</span>
+        <span>{{ scope.row.deposit_time | formatTime }}</span>
       </template>
       </el-table-column>
       <el-table-column
@@ -28,13 +28,13 @@
       >
       </el-table-column>
       <el-table-column
-        prop="withdrawal_type"
-        label="Withdrawal Type"
+        prop="deposit_type"
+        label="Deposit Type"
       >
       </el-table-column>
       <el-table-column
-        prop="quantity"
-        label="Withdrawal quantity"
+        prop="deposit_quantity"
+        label="Deposit quantity"
       >
       </el-table-column>
       <el-table-column

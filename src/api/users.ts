@@ -41,9 +41,6 @@ export const getARData = (params: IData3) => {
   return post(baseUrl + '/customer/airdrop/records', params)
 }
 
-export const getDepositList = (params: IData3) => {
-  return post(baseUrl + '/customer/deposit/records', params)
-}
 
 interface IData4 {
   token_id: string
@@ -54,12 +51,14 @@ interface IData4 {
 export const setToken = (params: IData4) => {
   return post(baseUrl + '/token/set', params)
 }
+
 interface IData4_1 {
   proto: string
 }
 export const tokenList = (params: IData4_1) => {
   return post(baseUrl + '/token/query', params)
 }
+
 interface IData4_2 {
   token_name: string
   withdrawal_fee: string
@@ -95,6 +94,7 @@ interface IData5 {
 export const createAirdrop = (params: IData5) => {
   return post(baseUrl + '/air-drop/add', params)
 }
+
 interface IData6 {
   page_no: number
   page_size: number
@@ -122,7 +122,9 @@ interface IData8 {
 export const getWithdrawList = (params: IData8) => {
   return post(baseUrl + '/withdrawal/records', params)
 }
-
+export const getDepositList = (params: IData8) => {
+  return post(baseUrl + '/deposit/records', params)
+}
 
 interface IData10 {
   page_no: number
