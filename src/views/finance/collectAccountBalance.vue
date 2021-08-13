@@ -52,10 +52,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ICollectAccountListData } from '@/api/types'
-import { withdrawalAccount } from '@/api/users'
+import { collectAccount } from '@/api/users'
 
 @Component({
-  name: 'withdrawAccountBalance'
+  name: 'collectAccountBalance'
 })
 export default class extends Vue {
   private loading = false
@@ -75,7 +75,7 @@ export default class extends Vue {
 
   private getData() {
     this.loading = true
-    withdrawalAccount().then(res => {
+    collectAccount().then(res => {
       this.tableData = res.data.accounts
     }).finally(()=> {
       this.loading = false

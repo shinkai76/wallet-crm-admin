@@ -118,6 +118,7 @@ interface IData8 {
   page_no: number
   page_size: number
   status: string
+  token?: string
 }
 export const getWithdrawList = (params: IData8) => {
   return post(baseUrl + '/withdrawal/records', params)
@@ -149,4 +150,12 @@ interface IData12 {
 }
 export const userList = (params: IData12) => {
   return post(baseUrl + '/customer/list', params)
+}
+
+export const collectAccount = (params={})=> {
+  return get(baseUrl + '/finance/collect/hot-account', params)
+}
+
+export const withdrawalAccount = (params={})=> {
+  return get(baseUrl + '/finance/withdrawal-account', params)
 }

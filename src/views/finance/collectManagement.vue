@@ -22,23 +22,19 @@
         </el-table-column>
         <el-table-column
           prop="type"
-          label="Type"
-          width="120">
+          label="Type">
         </el-table-column>
         <el-table-column
           prop="quantity"
-          label="Collect quantity"
-          width="120">
+          label="Collect quantity">
         </el-table-column>
         <el-table-column
           prop="cost"
-          label="Chain cost"
-          width="120">
+          label="Chain cost">
         </el-table-column>
         <el-table-column
           prop="states"
-          label="States"
-          width="120">
+          label="States">
           <template slot-scope="scope">
             <span></span>
           </template>
@@ -53,9 +49,15 @@
         :total="total">
       </el-pagination>
     </div>
-    <el-dialog title="Collect" :visible.sync="showCollect">
-      <el-select v-model="token" placeholder="Token" clearable>
-        <el-option :value="item" v-for="item in 10" :key=item></el-option>
+    <el-dialog title="Collect" :visible.sync="showCollect" width="400px">
+      <el-select v-model="token" placeholder="Token" style="width: 100%">
+        <el-option value="" label="ALL">ALL</el-option>
+        <el-option
+          v-for="item in tokens"
+          :key="item.id"
+          :label="item.name"
+          :value="item.name">
+        </el-option>
       </el-select>
         <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onCollect">Collect</el-button>
@@ -67,7 +69,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ICollectListData } from '@/api/types'
-import { collectList, collect } from '@/api/users'
+import { collectList, collect, tokenList } from '@/api/users'
 
 enum STATE {
   watting = 1,
@@ -84,9 +86,15 @@ export default class extends Vue {
   private tableData:ICollectListData[] = []
   private loading = false
   private total = 0
+  private tokens = []
+
+  created() {
+    this.init()
+  }
 
   private init() {
     this.getData()
+    this.getTokens()
   }
 
   private query = {
@@ -107,6 +115,15 @@ export default class extends Vue {
 
   private openCollect() {
     this.showCollect = true
+  }
+
+  private getTokens(): void {
+    const params = {
+      proto: ''
+    }
+    tokenList(params).then(res => {
+      this.tokens = res.data.tokens
+    })
   }
 
   private onCollect() {

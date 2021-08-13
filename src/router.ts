@@ -162,17 +162,17 @@ export default new Router({
           }
         },
         {
+          path: 'collectAccountBalance',
+          component: () => import(/* webpackChunkName: "collectAccountBalance" */ '@/views/finance/collectAccountBalance.vue'),
+          meta: {
+            title: 'Collect account balance'
+          }
+        },
+        {
           path: 'withdrawAccountBalance',
           component: () => import(/* webpackChunkName: "withdrawAccountBalance" */ '@/views/finance/withdrawAccountBalance.vue'),
           meta: {
             title: 'Withdraw account balance'
-          }
-        },
-        {
-          path: 'withdrawFeeBalance',
-          component: () => import(/* webpackChunkName: "withdrawFeeBalance" */ '@/views/finance/withdrawFeeBalance.vue'),
-          meta: {
-            title: 'Withdraw fee balance'
           }
         },
         {

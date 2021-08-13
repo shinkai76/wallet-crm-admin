@@ -86,4 +86,10 @@ export interface ICollectListData {
   info: string
 }
 
-/*  withdraw  END  */
+export interface ICollectAccountListData {
+  token: string
+  address: string
+  balance: string
+}
+
+/*  finance  END  */

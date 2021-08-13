@@ -15,7 +15,10 @@ import router from '@/router'
 import '@/icons/components'
 import '@/permission'
 import * as filters from '@/filters'
+// @ts-ignore
+import VueClipboard from 'vue-clipboard2'
 
+Vue.use(VueClipboard)
 Object.keys(filters).forEach(key => {
   Vue.filter(key, (filters as { [key: string ]: Function })[key])
 })

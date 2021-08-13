@@ -11,7 +11,7 @@
         label="Order">
       </el-table-column>
       <el-table-column
-        prop="user_code"
+        prop="account"
         label="Account">
       </el-table-column>
       <el-table-column
@@ -102,6 +102,7 @@ export default class extends Vue {
     const params = this.query
     getDepositList(params).then(res => {
       console.log(res)
+      this.total = res.data.total
       this.tableData = res.data.records
     }).finally(() => {
       this.loading = false

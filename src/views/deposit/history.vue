@@ -21,7 +21,7 @@
         highlight-current-row>
         <el-table-column
           fixed
-          prop="order"
+          prop="id"
           label="Order">
         </el-table-column>
         <el-table-column
@@ -32,17 +32,17 @@
           prop="application_time"
           label="Application time"
         >
-        <template slot-scope="scope">
-          <span>{{ scope.row.application_time | formatTime }}</span>
-        </template>
+          <template slot-scope="scope">
+            <span>{{ scope.row.application_time | formatTime }}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="processing_time"
           label="Processing time"
         >
-        <template slot-scope="scope">
-          <span>{{ scope.row.processing_time | formatTime }}</span>
-        </template>
+          <template slot-scope="scope">
+            <span>{{ scope.row.processing_time | formatTime }}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="token"
@@ -78,23 +78,24 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch} from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { IHistoryListData } from '@/api/types'
-import { getWithdrawList, tokenList } from '@/api/users'
+import { getDepositList, getWithdrawList, tokenList } from '@/api/users'
+
 @Component({
   name: 'history'
 })
 export default class extends Vue {
   private loading = false
   private total = 0
-  private tableData:IHistoryListData[] = []
+  private tableData: IHistoryListData[] = []
   private tokens = []
 
   private query = {
     page_no: 1,
     page_size: 50,
     status: 1,
-    token: ""
+    token: ''
   }
 
   created() {
@@ -107,30 +108,31 @@ export default class extends Vue {
     this.query.page_no = 1
   }
 
-  private getData():void {
+  private getData(): void {
     this.loading = true
     const params = this.query
-    getWithdrawList(params).then(res => {
+    getDepositList(params).then(res => {
+      this.total = res.data.total
       this.tableData = res.data.records
     }).finally(() => {
       this.loading = false
     })
   }
 
-  private getTokens():void {
+  private getTokens(): void {
     const params = {
       proto: ''
     }
-    tokenList(params).then(res=> {
+    tokenList(params).then(res => {
       this.tokens = res.data.tokens
     })
   }
 
-  private onSearch():void {
+  private onSearch(): void {
     this.getData()
   }
 
-  private handleCurrentChange():void {
+  private handleCurrentChange(): void {
     this.getData()
   }
 }
