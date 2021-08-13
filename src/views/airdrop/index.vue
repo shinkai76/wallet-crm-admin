@@ -10,7 +10,8 @@
         style="width: 100%"
         highlight-current-row>
          <el-table-column
-          type="Num">
+           prop="num"
+           label="Num">
         </el-table-column>
         <el-table-column
           prop="time"
@@ -28,11 +29,11 @@
           label="Quantity">
         </el-table-column>
         <el-table-column
-          prop="level"
+          prop="customer_level"
           label="Customer Level">
           <template slot-scope="scope">
-            <span v-if="scope.row.level">
-              Lv {{ scope.row.level }}
+            <span v-if="scope.row.customer_level">
+              Lv {{ scope.row.customer_level }}
             </span>
           </template>
         </el-table-column>
@@ -47,7 +48,7 @@
         :total="total">
       </el-pagination>
     </div>
-    <el-dialog title="ADD" :visible.sync="showCreateialog">
+    <el-dialog title="ADD" :visible.sync="showCreateDialog" :before-close="closeDialog">
         <el-form ref="form"
                   label-position='top'
                   :model="form"
@@ -55,13 +56,36 @@
                   :rules="rules"
         >
           <el-form-item label="Token" prop="token">
-           <!-- TODO  -->
+            <el-select v-model="tokenQuery"
+                       filterable
+                       remote
+                       :remote-method="selectFilter"
+                       placeholder="Search"
+                       style="width: 100%"
+                       @change="afterSelect"
+            >
+              <el-option
+                v-for="item in tokens"
+                :key="item.id"
+                :label="item.proto"
+                :value="item.id">
+                <div style="float: left">{{ item.proto }}</div> &nbsp;&nbsp;
+                <div style="float: right">{{ item.name }}</div>
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="Customer Level" prop="level">
-           <!-- TODO  -->
+          <el-form-item label="Customer Level" prop="user_level">
+            <el-select v-model="form.user_level" placeholder="Level" clearable style="width: 100%">
+              <el-option
+                :value="item.value"
+                v-for="item in levels.slice(1)"
+                :key="item.value"
+                :label="item.text"
+              ></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="Quantity" prop="quantity">
-           <el-input v-model.trim="form.quantity"></el-input>
+          <el-form-item label="Quantity" prop="amount">
+           <el-input v-model.trim="form.amount"></el-input>
           </el-form-item>
         </el-form>
          <span slot="footer" class="dialog-footer">
@@ -74,21 +98,61 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { validateFee } from '@/utils/validate'
-import { createAirdrop, airdropList } from '@/api/users'
+import { createAirdrop, airdropList, tokenAddress, tokenQuery } from '@/api/users'
 import { IAirdropListData } from '@/api/types'
 @Component({
   name: 'airdrop'
 })
 export default class extends Vue {
-  private showCreateialog = false
+  private showCreateDialog = false
   private loading = false
   private total:number = 0
-
+  private tokens = []
   private form:{ [key:string]:string } = {
     token: '',
-    level: '',
-    quantify: ''
+    proto: '',
+    user_level: '',
+    amount: ''
   }
+  private tokenQuery =  ''
+
+  private levels = [{
+    value: -1,
+    text: 'All levels'
+  },{
+    value: 0,
+    text: 'Level 0'
+  },{
+    value: 1,
+    text: 'Level 1'
+  },{
+    value: 2,
+    text: 'Level 2'
+  },{
+    value: 3,
+    text: 'Level 3'
+  },{
+    value: 4,
+    text: 'Level 4'
+  },{
+    value: 5,
+    text: 'Level 5'
+  },{
+    value: 6,
+    text: 'Level 6'
+  },{
+    value: 7,
+    text: 'Level 7'
+  },{
+    value: 8,
+    text: 'Level 8'
+  },{
+    value: 9,
+    text: 'Level 9'
+  },{
+    value: 10,
+    text: 'Level 10'
+  }]
 
   private query = {
     page_no: 1,
@@ -98,14 +162,14 @@ export default class extends Vue {
   private tableData:IAirdropListData[] = []
 
   private rules = {
-    quantity: [
+    amount: [
       { required: true, message: 'required', trigger: 'blur' },
       { validator: validateFee, trigger: 'blur' }
     ],
     token: [
       { required: true, message: 'required', trigger: 'blur' }
     ],
-    level: [
+    user_level: [
       { required: true, message: 'required', trigger: 'blur' }
     ]
   }
@@ -122,9 +186,39 @@ export default class extends Vue {
     this.loading = true
     const params = this.query
     airdropList(params).then(res => {
-      console.log(res)
+      this.tableData = res.data.records
+      this.total = res.data.total
     }).finally(() => {
       this.loading = false
+    })
+  }
+
+  private closeDialog() {
+    this.tokenQuery = ''
+    this.$refs.form.resetFields()
+    this.showCreateDialog = false
+  }
+
+  private afterSelect(val:number) {
+    this.tokenQuery = this.tokenQuery + '  ' + val
+    this.tokens.find(el=> {
+      if (el.id == val) {
+        this.form.token = el.name
+        this.form.proto = el.proto
+        this.tokenQuery = el.proto + '  ' + el.name
+        return
+      }
+    })
+  }
+
+  private selectFilter(val:string){
+    this.tokens = []
+    let params = {
+      proto: val
+    }
+    tokenQuery(params).then(res=> {
+      if (res.code == 0)
+        this.tokens = res.data.tokens
     })
   }
 
@@ -133,7 +227,15 @@ export default class extends Vue {
   }
 
   private openCreateDialog() {
-    this.showCreateialog = true
+    this.showCreateDialog = true
+    this.tokens = []
+    let params = {
+      proto: ''
+    }
+    tokenQuery(params).then(res=> {
+      if (res.code == 0)
+        this.tokens = res.data.tokens
+    })
   }
 
   private secondConfirm() {
@@ -156,7 +258,7 @@ export default class extends Vue {
       this.query.page_no = 1
       this.getData()
     }).finally(() => {
-      this.showCreateialog = false
+      this.showCreateDialog = false
     })
   }
 

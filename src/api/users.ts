@@ -79,20 +79,28 @@ export const tokenAddress =(params:IData4_3) => {
   return post(baseUrl + '/token/all', params)
 }
 
+interface IData4_4 {
+  proto:string
+}
+export const tokenQuery =(params:IData4_4) => {
+  return post(baseUrl + '/token/query', params)
+}
+
 interface IData5 {
   token: string
-  level:string
-  quantity: string
+  proto: string
+  level: number
+  amount: string
 }
 export const createAirdrop = (params: IData5) => {
-  return post(baseUrl + '/create_airdrop', params)
+  return post(baseUrl + '/air-drop/add', params)
 }
 interface IData6 {
   page_no: number
   page_size: number
 }
 export const airdropList = (params: IData6) => {
-  return post(baseUrl + '/airdrop/list', params)
+  return post(baseUrl + '/air-drop/records', params)
 }
 
 interface IData7 {
