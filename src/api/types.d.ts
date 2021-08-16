@@ -92,4 +92,9 @@ export interface ICollectAccountListData {
   balance: string
 }
 
+export interface IFeeProfitListData {
+  token: string
+  balance: string
+}
+
 /*  finance  END  */

@@ -159,3 +159,7 @@ export const collectAccount = (params={})=> {
 export const withdrawalAccount = (params={})=> {
   return get(baseUrl + '/finance/withdrawal-account', params)
 }
+
+export const feeProfit = (params={})=> {
+  return get(baseUrl + '/finance/fee-profit', params)
+}
