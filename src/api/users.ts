@@ -163,3 +163,11 @@ export const withdrawalAccount = (params={})=> {
 export const feeProfit = (params={})=> {
   return get(baseUrl + '/finance/fee-profit', params)
 }
+
+interface IData13 {
+  old_pwd: string
+  new_pwd: string
+}
+export const setVerifyPwd = (params:IData13)=> {
+  return post(baseUrl + '/set/verify-password', params)
+}
