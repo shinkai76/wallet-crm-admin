@@ -2,6 +2,10 @@
 import { get, post } from '@/utils/request'
 const baseUrl = 'nuvateq/mgt/v1'
 
+export const getMenus = (params={})=> {
+  return get(baseUrl + '/sys/menus', params)
+}
+
 // 获取公钥
 export const pubKey = (params:any):any =>{
   return post(baseUrl + '/user/pk', params)

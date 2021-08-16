@@ -182,7 +182,7 @@ export default new Router({
       component: Layout,
       redirect: '/set/collectManagement',
       meta: {
-        title: 'Collect Address Set',
+        title: 'Set',
       },
       children: [
         {

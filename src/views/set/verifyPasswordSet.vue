@@ -19,7 +19,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { setVerifyPwd } from '@/api/users'
+import { pubKey, setVerifyPwd } from '@/api/users'
+const sha256 = require('js-sha256').sha256
+import { JSEncrypt } from 'jsencrypt'
 
 @Component({
   name: 'verifyPasswordSet'
@@ -76,9 +78,16 @@ export default class extends Vue {
     })
   }
 
-  private onReset() {
-    let params = this.form
+  private async onReset() {
+    const params = JSON.parse(JSON.stringify(this.form))
     delete params.repeat_pwd
+    params.user_code = localStorage.getItem('code')
+    const resData = await pubKey()
+    if (resData && resData.code === 0) {
+      this.pk = resData.data.pk
+    }
+    params.new_pwd = this.rsaData(sha256(this.form.new_pwd))
+    params.old_pwd = this.rsaData(sha256(this.form.old_pwd))
     setVerifyPwd(params).then(res=> {
       if (res.code == 0) {
         this.$message.success('Modified successfully')
@@ -86,6 +95,16 @@ export default class extends Vue {
     }).finally(() => {
       this.resetForm('form')
     })
+  }
+
+  private rsaData(data: string): string|boolean {
+    const PUBLIC_KEY = this.pk
+    let jsencrypt = new JSEncrypt()
+    jsencrypt.setPublicKey(PUBLIC_KEY)
+    console.log(PUBLIC_KEY)
+    console.log(data)
+    let result = jsencrypt.encrypt(data)
+    return result
   }
 
   private resetForm(formName) {
