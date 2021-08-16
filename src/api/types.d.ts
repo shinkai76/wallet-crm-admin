@@ -4,7 +4,7 @@
 
 export interface ICustomerData {
   user_code: string
-  email: number
+  email: string
   registration_time: number
   level: number
 }

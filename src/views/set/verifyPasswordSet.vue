@@ -19,7 +19,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { IFeeProfitListData } from '@/api/types'
 import { setVerifyPwd } from '@/api/users'
 
 @Component({
@@ -37,7 +36,10 @@ export default class extends Vue {
       callback(new Error('required'));
     } else if (value !== this.form.new_pwd) {
       callback(new Error('The two passwords are inconsistent!'));
-    } else {
+    } else if (value == this.form.old_pwd) {
+      callback(new Error('Cannot be the same as the old password!'));
+    }
+    else {
       callback();
     }
   };

@@ -171,3 +171,12 @@ interface IData13 {
 export const setVerifyPwd = (params:IData13)=> {
   return post(baseUrl + '/set/verify-password', params)
 }
+
+interface IData14 {
+  old_pwd: string
+  new_pwd: string
+  user_code: string
+}
+export const setAccountPwd = (params:IData14)=> {
+  return post(baseUrl + '/user/password/reset', params)
+}

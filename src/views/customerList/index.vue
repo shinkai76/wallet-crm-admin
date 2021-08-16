@@ -180,7 +180,7 @@ export default class extends Vue {
   private existingAssetsData = []
   private depositData = []
   private currentUserInfo!:ICustomerData
-  private userLevel = ''
+  private userLevel = 0
   /**
    * @缩略
    * ea: Existing  Assets
