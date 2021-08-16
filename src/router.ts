@@ -50,7 +50,6 @@ export default new Router({
           component: () => import(/* webpackChunkName: "overview" */ '@/views/overview/index.vue'),
           meta: {
             title: 'Overview',
-            icon: 'dashboard'
           }
         }
       ]
@@ -64,7 +63,6 @@ export default new Router({
           component: () => import(/* webpackChunkName: "customerList" */ '@/views/customerList/index.vue'),
           meta: {
             title: 'Customer list',
-            icon: 'user'
           }
         }
       ]
@@ -78,7 +76,6 @@ export default new Router({
           component: () => import(/* webpackChunkName: "tokenList" */ '@/views/tokenList/index.vue'),
           meta: {
             title: 'Token list',
-            icon: 'user'
           }
         }
       ]
@@ -92,7 +89,6 @@ export default new Router({
           component: () => import(/* webpackChunkName: "airdrop" */ '@/views/airdrop/index.vue'),
           meta: {
             title: 'Airdrop',
-            icon: 'user'
           }
         }
       ]
@@ -102,7 +98,6 @@ export default new Router({
       component: Layout,
       meta: {
         title: 'Deposit',
-        icon: 'example'
       },
       children: [
         {
@@ -126,7 +121,6 @@ export default new Router({
       component: Layout,
       meta: {
         title: 'Withdraw',
-        icon: 'example'
       },
       children: [
         {
@@ -151,7 +145,6 @@ export default new Router({
       redirect: '/finance/collectManagement',
       meta: {
         title: 'Finance',
-        icon: 'example'
       },
       children: [
         {
@@ -190,7 +183,6 @@ export default new Router({
       redirect: '/set/collectManagement',
       meta: {
         title: 'Collect Address Set',
-        icon: 'example'
       },
       children: [
         {
@@ -198,7 +190,6 @@ export default new Router({
           component: () => import(/* webpackChunkName: "collectAddressSet" */ '@/views/set/collectAddressSet.vue'),
           meta: {
             title: 'Collect Address Set',
-            icon: 'tree'
           }
         },
         {
@@ -206,7 +197,6 @@ export default new Router({
           component: () => import(/* webpackChunkName: "verifyPasswordSet" */ '@/views/set/verifyPasswordSet.vue'),
           meta: {
             title: 'Verify Password Set',
-            icon: 'table'
           }
         },
         {
@@ -214,21 +204,13 @@ export default new Router({
           component: () => import(/* webpackChunkName: "accountSet" */ '@/views/set/accountSet.vue'),
           meta: {
             title: 'Account Set',
-            icon: 'table'
           }
-        }
-      ]
-    },
-    {
-      path: '/form',
-      component: Layout,
-      children: [
+        },
         {
-          path: 'index',
-          component: () => import(/* webpackChunkName: "form" */ '@/views/form/index.vue'),
+          path: 'loginPassword',
+          component: () => import(/* webpackChunkName: "accountSet" */ '@/views/set/loginPassword.vue'),
           meta: {
-            title: 'Form',
-            icon: 'form'
+            title: 'Login Password',
           }
         }
       ]
