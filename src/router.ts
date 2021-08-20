@@ -117,22 +117,22 @@ export default new Router({
       ]
     },
     {
-      path: '/withdraw',
+      path: '/withdrawal',
       component: Layout,
       meta: {
-        title: 'Withdraw',
+        title: 'Withdrawal',
       },
       children: [
         {
           path: 'pendingReview',
-          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/withdraw/pendingReview.vue'),
+          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/withdrawal/pendingReview.vue'),
           meta: {
             title: 'Pending review'
           }
         },
         {
           path: 'history',
-          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/withdraw/history.vue'),
+          component: () => import(/* webpackChunkName: "withdraw" */ '@/views/withdrawal/history.vue'),
           meta: {
             title: 'History'
           }
@@ -165,7 +165,7 @@ export default new Router({
           path: 'withdrawAccountBalance',
           component: () => import(/* webpackChunkName: "withdrawAccountBalance" */ '@/views/finance/withdrawAccountBalance.vue'),
           meta: {
-            title: 'Withdraw account balance'
+            title: 'Withdrawal account balance'
           }
         },
         {

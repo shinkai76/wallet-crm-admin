@@ -149,7 +149,7 @@ export default class extends Vue {
         params.password = this.rsaData(sha256(this.loginForm.password))
 
         await UserModule.Login(params)
-
+        // TODO 获取menus
         this.$router.push('/overview')
         this.loading = false
       } else {

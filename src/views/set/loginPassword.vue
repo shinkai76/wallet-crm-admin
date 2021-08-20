@@ -103,12 +103,11 @@ export default class extends Vue {
     let jsencrypt = new JSEncrypt()
     jsencrypt.setPublicKey(PUBLIC_KEY)
     console.log(PUBLIC_KEY)
-    console.log(data)
     let result = jsencrypt.encrypt(data)
     return result
   }
 
-  private resetForm(formName) {
+  private resetForm(formName:string) {
     this.$refs[formName].resetFields();
   }
 }

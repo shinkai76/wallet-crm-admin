@@ -24,14 +24,6 @@ service.interceptors.request.use(
 // Response interceptors
 service.interceptors.response.use(
   (response) => {
-    // Some example codes here:
-    // code == 20000: success
-    // code == 50001: invalid access token
-    // code == 50002: already login in other place
-    // code == 50003: access token expired
-    // code == 50004: invalid user (user not exist)
-    // code == 50005: username or password is incorrect
-    // You can change this part for your own usage.
     const res = response.data
     if (res.code !== 0) {
       Message({
@@ -39,7 +31,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      if (res.code === 401) {
         MessageBox.confirm(
           'You have been logged out, try to login again.',
           'Log out',
@@ -105,6 +97,14 @@ export function post(url:string, params:any) {
       .then(res => {
         if (res.data.code == 401) { // token 失效
           router.push({path: '/login'})
+          return
+        }
+        if (res.data.code != 0) {
+          Message({
+            message: res.data.msg || 'Error',
+            type: 'error',
+            duration: 5 * 1000
+          })
           return
         }
         resolve(res.data);

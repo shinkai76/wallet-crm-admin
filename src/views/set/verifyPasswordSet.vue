@@ -81,7 +81,7 @@ export default class extends Vue {
   private async onReset() {
     const params = JSON.parse(JSON.stringify(this.form))
     delete params.repeat_pwd
-    params.user_code = localStorage.getItem('code')
+    // params.user_code = localStorage.getItem('code')
     const resData = await pubKey()
     if (resData && resData.code === 0) {
       this.pk = resData.data.pk

@@ -184,3 +184,21 @@ interface IData14 {
 export const setAccountPwd = (params:IData14)=> {
   return post(baseUrl + '/user/password/reset', params)
 }
+
+interface IData15 {
+  user_code: string
+  to_address: string
+  id: number
+}
+export const profitWithdrawal = (params:IData15)=> {
+  return post(baseUrl + '/finance/profit-withdrawal', params)
+}
+
+
+interface IData16 {
+  password: string
+}
+export const authPwdVerify = (params:IData16)=> {
+  return post(baseUrl + '/auth/verify-password', params)
+}
+

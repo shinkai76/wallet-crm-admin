@@ -67,7 +67,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { IFeeProfitListData } from '@/api/types'
-import { feeProfit } from '@/api/users'
+import { authPwdVerify, feeProfit, profitWithdrawal, pubKey } from '@/api/users'
+const sha256 = require('js-sha256').sha256
+import { JSEncrypt } from 'jsencrypt'
 
 @Component({
   name: 'feeProfit'
@@ -78,6 +80,7 @@ export default class extends Vue {
   private showDialog = false
   private showInnerDialog = false
   private currentToken = ''
+  private pk = ''
 
   private withdrawForm = {
     address: ''
@@ -133,11 +136,40 @@ export default class extends Vue {
   }
 
   private onConfirm(name) {
-    this.$refs[name].validate((valid) => {
-      if (valid) {
-        // TODO 差接口 注意要加密
-        this.showInnerDialog = false
+    this.$refs[name].validate(async (valid) => {
+      if (!valid) return
+      const resData = await pubKey()
+      if (resData && resData.code === 0) {
+        this.pk = resData.data.pk
       }
+      const params = JSON.parse(JSON.stringify(this.confirmForm))
+      params.password = this.rsaData(sha256(this.confirmForm.password))
+
+      authPwdVerify(params).then(res=> {
+        this.onWithdrawal()
+        this.showInnerDialog = false
+      })
+    })
+  }
+
+  private rsaData(data: string): string|boolean {
+    const PUBLIC_KEY = this.pk
+    let jsencrypt = new JSEncrypt()
+    jsencrypt.setPublicKey(PUBLIC_KEY)
+    console.log(PUBLIC_KEY)
+    console.log(data)
+    let result = jsencrypt.encrypt(data)
+    return result
+  }
+
+  private onWithdrawal() {
+    let params = {
+      to_address: this.withdrawForm.address,
+      id: this.currentToken.id,
+      user_code: localStorage.getItem('code')
+    }
+    profitWithdrawal(params).then(res=> {
+      this.$message.success('Withdraw successfully')
     })
   }
 

@@ -47,7 +47,7 @@
         label="Set"
         width="120">
         <template slot-scope="scope">
-          <span @click="onSet(scope.$index, scope.row)">Approve</span>
+          <span class="blue--text" @click="onSet(scope.$index, scope.row)">Approve</span>
         </template>
       </el-table-column>
     </el-table>
