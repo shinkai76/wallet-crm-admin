@@ -202,3 +202,23 @@ export const authPwdVerify = (params:IData16)=> {
   return post(baseUrl + '/auth/verify-password', params)
 }
 
+
+export const getRoles = (params:IData10)=> {
+  return post(baseUrl + '/set/permissions/list', params)
+}
+
+interface IData17 {
+  name: string
+}
+export const deleteRoles = (params:IData17)=> {
+  return post(baseUrl + '/set/permissions/delete', params)
+}
+
+interface IData18 {
+  name: string
+  menus: []
+}
+export const setRoles = (params:IData18)=> {
+  return post(baseUrl + '/set/permissions/set', params)
+}
+

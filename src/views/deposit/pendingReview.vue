@@ -58,7 +58,7 @@
         :page-size="query.page_size"
         layout="prev, pager, next, jumper"
         :total="total">
-      </el-pagination>
+    </el-pagination>
 
     <el-dialog
       :visible.sync="resultDialogVisible"
