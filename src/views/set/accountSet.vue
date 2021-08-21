@@ -64,7 +64,7 @@
           >
             <el-form-item label="Name">
               <el-input
-                v-model.trim="role.name"
+                v-model="role.name"
                 placeholder="Role Name"
               />
             </el-form-item>
@@ -203,9 +203,9 @@ export default class extends Vue{
     this.dialogType = 'edit'
     this.dialogVisible = true
     this.checkStrictly = true
-    this.role = cloneDeep({name: row.name, menus_id: row.menus})
+    this.role = cloneDeep(row)
     this.$nextTick(() => {
-      (this.$refs.tree as Tree).setCheckedKeys(row.menus)
+      (this.$refs.tree as Tree).setCheckedKeys(row.menus_id)
       this.checkStrictly = false
     })
   }
