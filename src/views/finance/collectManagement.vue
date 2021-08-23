@@ -25,18 +25,23 @@
           label="Type">
         </el-table-column>
         <el-table-column
-          prop="quantity"
+          prop="collect_quantity"
           label="Collect quantity">
         </el-table-column>
         <el-table-column
-          prop="cost"
+          prop="chain_cost"
           label="Chain cost">
         </el-table-column>
         <el-table-column
-          prop="states"
+          prop="status"
           label="States">
           <template slot-scope="scope">
-            <span></span>
+            <span :class="'status-' + scope.row.status">{{STATE[scope.row.status]}}
+
+            <el-tooltip v-show="scope.row.status == 3" class="item" effect="dark" :content="scope.row.remark" placement="top-start">
+              <i class="el-icon-warning"></i>
+        </el-tooltip>
+            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -51,12 +56,11 @@
     </div>
     <el-dialog title="Collect" :visible.sync="showCollect" width="400px">
       <el-select v-model="token" placeholder="Token" style="width: 100%">
-        <el-option value="" label="ALL">ALL</el-option>
         <el-option
           v-for="item in tokens"
           :key="item.id"
           :label="item.name + ' ' + item.proto"
-          :value="item.name">
+          :value="item.id">
         </el-option>
       </el-select>
         <span slot="footer" class="dialog-footer">
@@ -71,11 +75,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import { ICollectListData } from '@/api/types'
 import { collectList, collect, tokenList } from '@/api/users'
 
-enum STATE {
-  watting = 1,
-  successful = 2,
-  failed = 3
-}
 
 @Component({
   name: 'collectManagement'
@@ -88,6 +87,12 @@ export default class extends Vue {
   private total = 0
   private tokens = []
 
+  private STATE =  {
+  0: 'waiting',
+  1: 'successful',
+  2: 'ongoing',
+  3: 'failed'
+}
   created() {
     this.init()
   }
@@ -106,8 +111,7 @@ export default class extends Vue {
     this.loading = true
     const params = this.query
     collectList(params).then((res:any) => {
-      console.log(res)
-      this.tableData = res.data
+      this.tableData = res.data.list
     }).finally(() => {
       this.loading = false
     })
@@ -127,10 +131,12 @@ export default class extends Vue {
   }
 
   private onCollect() {
+    if (this.token == null)  return
     const params = {
       token: this.token
     }
     collect(params).then(res => {
+      this.$message.success('Collection successfully')
       this.showCollect = false
       this.query.page_no = 1
       this.getData()
@@ -142,3 +148,18 @@ export default class extends Vue {
   }
 }
 </script>
+
+<style>
+.status-0 {
+  color: orange;
+}
+.status-1 {
+  color: forestgreen;
+}
+.status-2 {
+  color: orange;
+}
+.status-3 {
+  color: orangered;
+}
+</style>

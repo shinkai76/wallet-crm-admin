@@ -183,12 +183,14 @@
             <el-form-item label="Name" prop="name">
               <el-input
                 v-model="admin.name"
+                :readonly="dialogType==='edit'"
                 placeholder="User Name"
               />
             </el-form-item>
             <el-form-item label="Password" prop="password">
               <el-input
                 v-model="admin.password"
+                :readonly="dialogType==='edit'"
                 type="password"
                 placeholder="password"
               />

@@ -140,10 +140,10 @@ export const collectList = (params: IData10) => {
 }
 
 interface IData11 {
-  token: string
+  token: number
 }
 export const collect = (params: IData11) => {
-  return post(baseUrl + '/collection/token', params)
+  return post(baseUrl + '/collection/send', params)
 }
 
 interface IData12 {

@@ -80,10 +80,12 @@ export interface ICollectListData {
   application_time: number
   token: string
   type: string
-  quantity: string
-  cost: string
-  state: string
-  info: string
+  user_code: string
+  collect_quantity: string
+  collection_address: string
+  chain_cost: string
+  status: number
+  remark: string
 }
 
 export interface ICollectAccountListData {
