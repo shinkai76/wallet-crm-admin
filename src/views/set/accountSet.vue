@@ -98,21 +98,144 @@
         </el-dialog>
       </el-tab-pane>
       <el-tab-pane label="Administrator" name="Administrator">
-        Administrator
+        <el-button
+          type="primary"
+          @click="handleCreateAdmin"
+        >
+          ADD Administrator
+        </el-button>
+        <el-table
+          :data="adminList"
+          style="width: 100%;margin-top:30px;"
+          border
+        >
+          <el-table-column
+            align="center"
+            label="UserName"
+            width="320"
+          >
+            <template slot-scope="{row}">
+              {{ row.name }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="Password"
+            width="320"
+          >
+            <template slot-scope="{row}">
+              ******
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="Permissions"
+            width="320"
+          >
+            <template slot-scope="{row}">
+              {{ row.permissions }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="Set"
+          >
+            <template slot-scope="scope">
+              <el-button
+                type="primary"
+                size="small"
+                @click="handleEditAdmin(scope.row)"
+              >
+                EDIT
+              </el-button>
+              <el-button
+                type="danger"
+                size="small"
+                @click="handleDeleteAdmin(scope.row)"
+              >
+                DELETE
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          class="pagination-container"
+          @current-change="handleCurrentChangeAdmin"
+          :current-page.sync="queryAdmin.page_no"
+          :page-size="queryAdmin.page_size"
+          layout="prev, pager, next, jumper"
+          :total="adminTotal">
+        </el-pagination>
+        <!--        新建admin弹窗-->
+        <el-dialog
+          center
+          :visible.sync="dialogVisibleAdmin"
+          :title="dialogType==='edit'?'Edit Administrator':'New Administrator'"
+          width="520px"
+        >
+          <el-form
+            :model="admin"
+            label-width="120px"
+            label-position="left"
+            ref="admin"
+            :rules="rules"
+          >
+            <el-form-item label="Name" prop="name">
+              <el-input
+                v-model="admin.name"
+                placeholder="User Name"
+              />
+            </el-form-item>
+            <el-form-item label="Password" prop="password">
+              <el-input
+                v-model="admin.password"
+                type="password"
+                placeholder="password"
+              />
+            </el-form-item>
+            <el-form-item label="Permission" prop="permission">
+              <el-select v-model="admin.permissions" style="width: 100%" >
+                <el-option
+                  v-for="item in rolesList"
+                  :key="item.name"
+                  :label="item.name"
+                  :value="item.name">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div style="text-align:right;">
+            <el-button
+              type="primary"
+              size="small"
+              @click="createAdmin"
+            >
+              ADD
+            </el-button>
+          </div>
+        </el-dialog>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script lang="ts">
-import path from 'path'
 import { Component, Vue } from 'vue-property-decorator'
 import { cloneDeep } from 'lodash'
 import { Tree } from 'element-ui'
-import { deleteRoles, setRoles, getRoutes, getRoles, createRoles } from '@/api/roles'
+import { deleteRoles, setRoles, getRoutes, getRoles, createRoles,getAdmins,deleteAdmin, createAdmin } from '@/api/roles'
+const sha256 = require('js-sha256').sha256
+import { JSEncrypt } from 'jsencrypt'
+import { pubKey } from '@/api/users'
+
 const defaultRole = {
   name: '',
   menus_id: []
+}
+const defaultAdmin = {
+  name: '',
+  permissions: '',
+  password: '',
 }
 
 @Component({
@@ -120,11 +243,15 @@ const defaultRole = {
 })
 export default class extends Vue{
   private role = Object.assign({}, defaultRole)
+  private admin = Object.assign({}, defaultAdmin)
   private activeName = 'Permissions'
   private total:number = 0
+  private adminTotal:number = 0
   private routesTreeData = [] // 树
   private rolesList = []
+  private adminList = []
   private dialogVisible = false
+  private dialogVisibleAdmin = false
   private checkStrictly = false
   private dialogType = 'new'
   private defaultProps = {
@@ -132,7 +259,27 @@ export default class extends Vue{
     label: 'title'
   }
 
+  private rules = {
+    name: [{
+      required: true,
+      trigger: 'blur'
+    }],
+    password: [{
+      required: true,
+      trigger: 'blur'
+    }],
+    permissions: [{
+      required: true,
+      trigger: 'blur'
+    }],
+  }
+
   private query = {
+    page_no: 1,
+    page_size: 50
+  }
+
+  private queryAdmin = {
     page_no: 1,
     page_size: 50
   }
@@ -140,7 +287,14 @@ export default class extends Vue{
   created() {
     this.getRoutes()
     this.getRoles()
+  }
 
+  private rsaData(data: string): string|boolean {
+    const PUBLIC_KEY = this.pk
+    let jsencrypt = new JSEncrypt()
+    jsencrypt.setPublicKey(PUBLIC_KEY)
+    let result = jsencrypt.encrypt(data)
+    return result
   }
 
   private async getRoutes() {
@@ -166,8 +320,75 @@ export default class extends Vue{
         this.getRoles()
       })
   }
+// ====  admin/user  ====
 
+  private async getAdmins() {
+    const params = this.queryAdmin
+    const { data } = await getAdmins(params)
+    this.adminList = data.users
+    this.adminTotal = data.total
+  }
 
+  private createAdmin() {
+    this.$refs.admin.validate((valid) => {
+      if (valid) {
+        this.$confirm('Are you sure about this operation', '', {
+          confirmButtonText: 'Sure',
+          cancelButtonText: 'No'
+        }).then(async () => {
+          this.dialogVisibleAdmin = false
+          const resData = await pubKey()
+          if (resData && resData.code === 0) {
+            this.pk = resData.data.pk
+          }
+          const params = JSON.parse(JSON.stringify(this.admin))
+          params.password = this.rsaData(sha256(this.admin.password))
+          createAdmin(params).then(res=> {
+            this.$message.success('created successfully')
+            this.getAdmins()
+          })
+        })
+      }
+    })
+
+  }
+
+  private handleCurrentChangeAdmin():void {
+    this.getAdmins()
+  }
+
+  private handleEditAdmin(row) {
+    this.dialogVisibleAdmin = true
+
+  }
+
+  private handleDeleteAdmin(row) {
+    this.$confirm('Are you sure to delete ' +row.name, '', {
+      confirmButtonText: 'confirm',
+      cancelButtonText: 'cancel',
+      type: 'warning'
+    }).then(() => {
+      let params = {
+        name: row.name
+      }
+      deleteAdmin(params).then(res=> {
+        if (res.code == 0) {
+          this.$message.success('delete successfully')
+          this.getAdmins()
+        }
+      })
+    }).catch(() => {
+
+    });
+  }
+
+  private handleCreateAdmin() {
+    this.admin = Object.assign({}, defaultAdmin)
+    this.dialogType = 'new'
+    this.dialogVisibleAdmin = true
+  }
+
+// ====  role  ====
 
 
 
@@ -179,11 +400,15 @@ export default class extends Vue{
     const params = this.query
     const { data } = await getRoles(params)
     this.rolesList = data.roles
+    this.total = data.total
   }
 
   private handleClick(tab, event) {
     if (this.activeName === 'Permissions') {
       this.getRoles()
+    }
+    if (this.activeName === 'Administrator') {
+      this.getAdmins()
     }
   }
 

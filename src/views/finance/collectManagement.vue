@@ -55,7 +55,7 @@
         <el-option
           v-for="item in tokens"
           :key="item.id"
-          :label="item.name"
+          :label="item.name + ' ' + item.proto"
           :value="item.name">
         </el-option>
       </el-select>

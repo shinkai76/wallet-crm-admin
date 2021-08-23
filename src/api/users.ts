@@ -136,14 +136,14 @@ interface IData10 {
   page_size: number
 }
 export const collectList = (params: IData10) => {
-  return post(baseUrl + '/collect/list', params)
+  return post(baseUrl + '/collection/list', params)
 }
 
 interface IData11 {
   token: string
 }
 export const collect = (params: IData11) => {
-  return post(baseUrl + '/collect/token', params)
+  return post(baseUrl + '/collection/token', params)
 }
 
 interface IData12 {
@@ -221,4 +221,3 @@ interface IData18 {
 export const setRoles = (params:IData18)=> {
   return post(baseUrl + '/set/permissions/set', params)
 }
-
