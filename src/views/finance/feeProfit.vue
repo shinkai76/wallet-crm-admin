@@ -156,8 +156,6 @@ export default class extends Vue {
     const PUBLIC_KEY = this.pk
     let jsencrypt = new JSEncrypt()
     jsencrypt.setPublicKey(PUBLIC_KEY)
-    console.log(PUBLIC_KEY)
-    console.log(data)
     let result = jsencrypt.encrypt(data)
     return result
   }

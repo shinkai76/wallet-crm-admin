@@ -64,7 +64,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { IFeeProfitListData } from '@/api/types'
-import { feeProfit } from '@/api/users'
+import { collectAddressSet, collectAddressList, pubKey, authPwdVerify } from '@/api/users'
+const sha256 = require('js-sha256').sha256
+import { JSEncrypt } from 'jsencrypt'
 
 @Component({
   name: 'collectAddressSet'
@@ -75,6 +77,7 @@ export default class extends Vue {
   private showDialog = false
   private showInnerDialog = false
   private currentToken = ''
+  private pk = ''
 
   private form = {
     address: ''
@@ -103,12 +106,11 @@ export default class extends Vue {
 
   private getData() {
     this.loading = true
-    // TODO 差接口
-    // feeProfit().then(res => {
-    //   this.tableData = res.data.fee_profits
-    // }).finally(()=> {
-    //   this.loading = false
-    // })
+    collectAddressList().then(res => {
+      this.tableData = res.data.Address
+    }).finally(()=> {
+      this.loading = false
+    })
   }
 
   private openDialog(row: IFeeProfitListData): void {
@@ -125,17 +127,40 @@ export default class extends Vue {
           cancelButtonText: 'No'
         }).then(() => {
           this.showInnerDialog = true
-        })
+        }).catch(() => {
+          this.showDialog = false
+          this.form.address = ''
+        });
       }
     })
   }
 
   private onConfirm(name) {
-    this.$refs[name].validate((valid) => {
-      if (valid) {
-        // TODO 差接口 注意要加密
-        this.showInnerDialog = false
+    this.$refs[name].validate(async (valid) => {
+      if (!valid) return
+      const resData = await pubKey()
+      if (resData && resData.code === 0) {
+        this.pk = resData.data.pk
       }
+      const params = JSON.parse(JSON.stringify(this.confirmForm))
+      params.password = this.rsaData(sha256(this.confirmForm.password))
+
+      authPwdVerify(params).then(res=> {
+        this.onSet()
+        this.showInnerDialog = false
+      })
+    })
+  }
+
+  private onSet() {
+    let params = {
+      address: this.form.address,
+      token: this.currentToken
+    }
+    collectAddressSet(params).then(res=> {
+      this.$message.success('Set successfully')
+      this.showDialog = false
+      this.showInnerDialog = false
     })
   }
 
@@ -143,6 +168,15 @@ export default class extends Vue {
     this.showDialog = false
     this.$refs.form.resetFields()
   }
+
+  private rsaData(data: string): string|boolean {
+    const PUBLIC_KEY = this.pk
+    let jsencrypt = new JSEncrypt()
+    jsencrypt.setPublicKey(PUBLIC_KEY)
+    let result = jsencrypt.encrypt(data)
+    return result
+  }
+
 }
 </script>
 

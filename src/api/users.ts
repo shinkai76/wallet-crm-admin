@@ -221,3 +221,14 @@ interface IData18 {
 export const setRoles = (params:IData18)=> {
   return post(baseUrl + '/set/permissions/set', params)
 }
+
+export const collectAddressList = (params:IData10)=> {
+  return post(baseUrl + '/cold-address/list', params)
+}
+interface IData20 {
+  token: string
+  address: string
+}
+export const collectAddressSet = (params:IData20)=> {
+  return post(baseUrl + '/set/collect-address', params)
+}
