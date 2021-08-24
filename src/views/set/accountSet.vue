@@ -344,8 +344,8 @@ export default class extends Vue {
         }).then(async() => {
           this.dialogVisibleAdmin = false
           const resData = await pubKey()
-          if (resData && resData.code === 0) {
-            this.pk = resData.data.pk
+          if (resData && resData.pk) {
+            this.pk = resData.pk
           }
           const params = JSON.parse(JSON.stringify(this.admin))
           params.password = this.rsaData(sha256(this.admin.password))

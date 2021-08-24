@@ -142,8 +142,8 @@ export default class extends Vue {
     (this.$refs[name] as ElForm).validate(async(valid:boolean) => {
       if (!valid) return
       const resData = await pubKey()
-      if (resData && resData.code === 0) {
-        this.pk = resData.data.pk
+      if (resData && resData.pk) {
+        this.pk = resData.pk
       }
       const params = JSON.parse(JSON.stringify(this.confirmForm))
       params.password = this.rsaData(sha256(this.confirmForm.password))

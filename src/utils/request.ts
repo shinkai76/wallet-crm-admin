@@ -8,11 +8,11 @@ const service = axios.create({
 })
 
 // Request interceptors
-service.interceptors.request.use(
+axios.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
-    if (UserModule.token) {
-      config.headers.token = UserModule.token
+    if (localStorage.getItem('token')) {
+      config.headers.token = localStorage.getItem('token')
     }
     return config
   },
@@ -22,7 +22,7 @@ service.interceptors.request.use(
 )
 
 // Response interceptors
-service.interceptors.response.use(
+axios.interceptors.response.use(
   (response) => {
     const res = response.data
     if (res.code !== 0) {
@@ -71,11 +71,11 @@ export function get(url:string, params:any) {
     axios.get(url, {
       params: params
     }).then(res => {
-      if (res.data.code === 0) {
+      if (res.code === 0) {
         resolve(res.data);
       } else {
         Message({
-          message: res.data.msg || 'Error',
+          message: res.msg || 'Error',
           type: 'error',
           duration: 5 * 1000
         })
@@ -95,13 +95,14 @@ export function post(url:string, params:any) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(res => {
-        if (res.data.code === 401) { // token 失效
+        console.log(res)
+        if (res.code === 401) { // token 失效
           router.push({ path: '/login' })
           return
         }
-        if (res.data.code !== 0) {
+        if (res.code !== 0) {
           Message({
-            message: res.data.msg || 'Error',
+            message: res.msg || 'Error',
             type: 'error',
             duration: 5 * 1000
           })

@@ -74,8 +74,8 @@ export default class extends Vue {
     delete params.repeat_pwd
     // params.user_code = localStorage.getItem('code')
     const resData = await pubKey()
-    if (resData && resData.code === 0) {
-      this.pk = resData.data.pk
+    if (resData && resData.pk) {
+      this.pk = resData.pk
     }
     params.new_pwd = this.rsaData(sha256(this.form.new_pwd))
     params.old_pwd = this.rsaData(sha256(this.form.old_pwd))

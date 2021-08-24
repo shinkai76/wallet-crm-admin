@@ -141,8 +141,8 @@ export default class extends Vue {
       if (valid) {
         this.loading = true
         const resData = await pubKey()
-        if (resData && resData.code === 0) {
-          this.pk = resData.data.pk
+        if (resData && resData.pk) {
+          this.pk = resData.pk
         }
         const params = JSON.parse(JSON.stringify(this.loginForm))
         params.password = this.rsaData(sha256(this.loginForm.password))
