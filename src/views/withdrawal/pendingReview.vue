@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { IPendingListData } from '@/api/types'
+import { IWithdrawPendingListData } from '@/api/types'
 import { approve, getWithdrawList } from '@/api/users'
 @Component({
   name: 'pendingReview'
@@ -82,15 +82,16 @@ import { approve, getWithdrawList } from '@/api/users'
 export default class extends Vue {
   private loading = false
   private total = 0
-  private tableData:IPendingListData[] = []
+  private tableData = []
 
   private query = {
     page_no: 1,
     page_size: 50,
     status: 0
   }
-  private resultDialogVisible:boolean = false
-  private result:string = ''
+
+  private resultDialogVisible = false
+  private result = ''
 
   created() {
     this.getData()
@@ -99,7 +100,7 @@ export default class extends Vue {
   private getData():void {
     this.loading = true
     const params = this.query
-    getWithdrawList(params).then(res => {
+    getWithdrawList(params).then((res:any) => {
       console.log(res)
       this.tableData = res.data.records
     }).finally(() => {
@@ -123,8 +124,8 @@ export default class extends Vue {
   private onApprove(code:string) {
     const params = { code }
     this.loading = true
-    approve(params).then(res => {
-      if (res.code == 0) {
+    approve(params).then((res:any) => {
+      if (res.code === 0) {
         this.$message.success('Execute successfully')
         this.query.page_no = 1
         this.getData()
@@ -139,9 +140,10 @@ export default class extends Vue {
     })
   }
 
-  private onSet(index:any, row:IPendingListData):void {
+  private onSet(index:any, row:IWithdrawPendingListData):void {
     this.secondConfirm(row.code)
   }
+
 }
 </script>
 

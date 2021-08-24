@@ -45,13 +45,13 @@ class User extends VuexModule implements IUserState {
     this.roles = roles
   }
 
-  @Action({ rawError: true})
+  @Action({ rawError: true })
   public async Login(userInfo: { user_code: string, password: string }) {
     let { user_code, password } = userInfo
     user_code = user_code.trim()
     const { data } = await login({ user_code, password })
     console.log(router)
-    const menuData = await getUserMenus ({ user_code })
+    const menuData = await getUserMenus({ user_code })
     localStorage.setItem('code', user_code)
     localStorage.setItem('menus', JSON.stringify(menuData.menus))
     setToken(data.token)
@@ -85,7 +85,7 @@ class User extends VuexModule implements IUserState {
   //   this.SET_INTRODUCTION(introduction)
   // }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async LogOut() {
     if (this.token === '') {
       throw Error('LogOut: token is undefined!')

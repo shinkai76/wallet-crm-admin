@@ -95,7 +95,7 @@ export const tokenQuery =(params:IData4_4) => {
 interface IData5 {
   token: string
   proto: string
-  level: number
+  user_level: number
   amount: string
 }
 export const createAirdrop = (params: IData5) => {
@@ -124,7 +124,7 @@ export const depositApprove = (params: IData7) => {
 interface IData8 {
   page_no: number
   page_size: number
-  status: string
+  status: number
   token?: string
 }
 export const getWithdrawList = (params: IData8) => {

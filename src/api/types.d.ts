@@ -30,6 +30,16 @@ export interface IAirdropData {
   token: string
   quantity: string
 }
+
+export interface ITokenQuery {
+  id: number
+  name: string
+  withdrawal_fee: string
+  internal_fee: string
+  contract_address: string
+  proto: string
+}
+
 /*  customer list  END  */
 
 
@@ -58,22 +68,41 @@ export interface IAirdropListData {
 /*  airdrop  END  */
 
 /* withdraw  */
-export interface IPendingListData {
-  order: string
-  account: string
-  application_time: number
+export interface IWithdrawPendingListData {
+  id: number
+  user_code: string
+  code: string
   token: string
-  type: string
-  quantity: string
+  amount: string
   fee: string
-  address: string
+  to: string
+  application_time: number
+  withdrawal_time: number
+  processing_time: number
+  withdrawal_type: number
+  is_profit: boolean
 }
-export interface IHistoryListData extends IPendingListData {
+export interface IHistoryListData extends IWithdrawPendingListData {
   chain_fee: string
 }
 
 /*  withdraw  END  */
+/* deposit */
+export interface IDepositPendingListData {
+  id: number
+  order:number
+  code: string
+  account: string
+  deposit_time: number
+  application_time: number
+  processing_time: number
+  token: string
+  deposit_type: string
+  deposit_quantity: number
+  from: number
+}
 
+/* deposit END */
 /*  finance   */
 
 export interface ICollectListData {

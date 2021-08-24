@@ -74,15 +74,15 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { IPendingListData } from '@/api/types'
-import { approve, depositApprove, getDepositList } from '@/api/users'
+import { IDepositPendingListData } from '@/api/types'
+import { depositApprove, getDepositList } from '@/api/users'
 @Component({
   name: 'pendingReview'
 })
 export default class extends Vue {
   private loading = false
   private total = 0
-  private tableData:IPendingListData[] = []
+  private tableData = []
 
   private query = {
     page_no: 1,
@@ -90,8 +90,8 @@ export default class extends Vue {
     status: 0
   }
 
-  private resultDialogVisible:boolean = false
-  private result:string = ''
+  private resultDialogVisible = false
+  private result = ''
 
   created() {
     this.getData()
@@ -100,7 +100,7 @@ export default class extends Vue {
   private getData():void {
     this.loading = true
     const params = this.query
-    getDepositList(params).then(res => {
+    getDepositList(params).then((res:any) => {
       console.log(res)
       this.total = res.data.total
       this.tableData = res.data.records
@@ -125,8 +125,8 @@ export default class extends Vue {
   private onApprove(code:string) {
     const params = { code }
     this.loading = true
-    depositApprove(params).then(res => {
-      if (res.code == 0) {
+    depositApprove(params).then((res:any) => {
+      if (res.code === 0) {
         this.$message.success('Execute successfully')
         this.query.page_no = 1
         this.getData()
@@ -141,7 +141,7 @@ export default class extends Vue {
     })
   }
 
-  private onSet(index:any, row:IPendingListData):void {
+  private onSet(index:any, row:IDepositPendingListData):void {
     this.secondConfirm(row.code)
   }
 }

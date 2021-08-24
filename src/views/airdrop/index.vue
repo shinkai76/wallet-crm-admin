@@ -99,57 +99,58 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { validateFee } from '@/utils/validate'
 import { createAirdrop, airdropList, tokenAddress, tokenQuery } from '@/api/users'
-import { IAirdropListData } from '@/api/types'
+import { IAirdropListData, ITokenQuery } from '@/api/types'
 @Component({
   name: 'airdrop'
 })
 export default class extends Vue {
   private showCreateDialog = false
   private loading = false
-  private total:number = 0
-  private tokens = []
-  private form:{ [key:string]:string } = {
+  private total = 0
+  private tokens:ITokenQuery[] = []
+  private form = {
     token: '',
     proto: '',
-    user_level: '',
+    user_level: 0,
     amount: ''
   }
-  private tokenQuery =  ''
+
+  private tokenQuery = ''
 
   private levels = [{
     value: -1,
     text: 'All levels'
-  },{
+  }, {
     value: 0,
     text: 'Level 0'
-  },{
+  }, {
     value: 1,
     text: 'Level 1'
-  },{
+  }, {
     value: 2,
     text: 'Level 2'
-  },{
+  }, {
     value: 3,
     text: 'Level 3'
-  },{
+  }, {
     value: 4,
     text: 'Level 4'
-  },{
+  }, {
     value: 5,
     text: 'Level 5'
-  },{
+  }, {
     value: 6,
     text: 'Level 6'
-  },{
+  }, {
     value: 7,
     text: 'Level 7'
-  },{
+  }, {
     value: 8,
     text: 'Level 8'
-  },{
+  }, {
     value: 9,
     text: 'Level 9'
-  },{
+  }, {
     value: 10,
     text: 'Level 10'
   }]
@@ -185,7 +186,7 @@ export default class extends Vue {
   private getData() {
     this.loading = true
     const params = this.query
-    airdropList(params).then(res => {
+    airdropList(params).then((res:any) => {
       this.tableData = res.data.records
       this.total = res.data.total
     }).finally(() => {
@@ -201,24 +202,26 @@ export default class extends Vue {
 
   private afterSelect(val:number) {
     this.tokenQuery = this.tokenQuery + '  ' + val
-    this.tokens.find(el=> {
-      if (el.id == val) {
+    this.tokens.find(el => {
+      if (el.id === val) {
         this.form.token = el.name
         this.form.proto = el.proto
         this.tokenQuery = el.proto + '  ' + el.name
-        return
+        return el
       }
+      return null
     })
   }
 
-  private selectFilter(val:string){
+  private selectFilter(val:string) {
     this.tokens = []
-    let params = {
+    const params = {
       proto: val
     }
-    tokenQuery(params).then(res=> {
-      if (res.code == 0)
+    tokenQuery(params).then((res:any) => {
+      if (res.code === 0) {
         this.tokens = res.data.tokens
+      }
     })
   }
 
@@ -229,12 +232,13 @@ export default class extends Vue {
   private openCreateDialog() {
     this.showCreateDialog = true
     this.tokens = []
-    let params = {
+    const params = {
       proto: ''
     }
-    tokenQuery(params).then(res=> {
-      if (res.code == 0)
+    tokenQuery(params).then((res:any) => {
+      if (res.code === 0) {
         this.tokens = res.data.tokens
+      }
     })
   }
 
@@ -263,7 +267,7 @@ export default class extends Vue {
   }
 
   private onSubmit() {
-    this.$refs.form.validate((valid)=> {
+    this.$refs.form.validate((valid:boolean) => {
       if (!valid) return
       this.secondConfirm()
     })
