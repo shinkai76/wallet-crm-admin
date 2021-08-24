@@ -257,7 +257,7 @@ export default class extends Vue {
     (this.$refs.settingForm as ElForm).validate((valid: boolean) => {
       if (!valid) return
       const params = {
-        id: this.currentTokenInfo?.id,
+        id: this.currentTokenInfo.id,
         proto: this.current,
         ...this.settingForm
       }
