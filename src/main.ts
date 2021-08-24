@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 import 'normalize.css'
 import ElementUI from 'element-ui'
-import locale from 'element-ui/lib/locale/lang/en'
+// import locale from 'element-ui/lib/locale/lang/en'
 import SvgIcon from 'vue-svgicon'
 
 import '@/styles/element-variables.scss'
@@ -21,7 +21,7 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, (filters as { [key: string ]: Function })[key])
 })
 
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI)
 Vue.use(SvgIcon, {
   tagName: 'svg-icon',
   defaultWidth: '1em',

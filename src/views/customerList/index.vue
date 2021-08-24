@@ -285,7 +285,7 @@ export default class extends Vue {
     if (!map.has(this.dialogType)) return
     const fn = map.get(this.dialogType)
     if (!fn) return
-    this[fn]()
+    (this as any)[fn]()
   }
 
   private _getEAData() {
