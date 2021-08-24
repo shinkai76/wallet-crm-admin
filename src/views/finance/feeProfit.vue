@@ -65,11 +65,12 @@
 </template>
 
 <script lang="ts">
+import { JSEncrypt } from 'jsencrypt'
 import { Component, Vue } from 'vue-property-decorator'
 import { IFeeProfitListData } from '@/api/types'
 import { authPwdVerify, feeProfit, profitWithdrawal, pubKey } from '@/api/users'
+import { ElForm } from 'element-ui/types/form'
 const sha256 = require('js-sha256').sha256
-import { JSEncrypt } from 'jsencrypt'
 
 @Component({
   name: 'feeProfit'
@@ -80,6 +81,7 @@ export default class extends Vue {
   private showDialog = false
   private showInnerDialog = false
   private currentToken = ''
+  private currentId = 0
   private pk = ''
 
   private withdrawForm = {
@@ -92,11 +94,11 @@ export default class extends Vue {
 
   private rules = {
     address: [
-      {required: true, message: 'required', trigger: 'blur'}
+      { required: true, message: 'required', trigger: 'blur' }
     ],
     password: [
-      {required: true, message: 'required', trigger: 'blur'}
-    ],
+      { required: true, message: 'required', trigger: 'blur' }
+    ]
   }
 
   created() {
@@ -109,9 +111,9 @@ export default class extends Vue {
 
   private getData() {
     this.loading = true
-    feeProfit().then(res => {
+    feeProfit().then((res:any) => {
       this.tableData = res.data.fee_profits
-    }).finally(()=> {
+    }).finally(() => {
       this.loading = false
     })
   }
@@ -119,10 +121,11 @@ export default class extends Vue {
   private openDialog(row: IFeeProfitListData): void {
     this.showDialog = true
     this.currentToken = row.token
+    this.currentId = row.id
   }
 
-  private submitForm(name) {
-    this.$refs[name].validate((valid) => {
+  private submitForm(name:string) {
+    (this.$refs[name] as ElForm).validate((valid:boolean) => {
       if (valid) {
         this.confirmForm.password = ''
         this.$confirm('Are you sure about this operation', '', {
@@ -135,8 +138,8 @@ export default class extends Vue {
     })
   }
 
-  private onConfirm(name) {
-    this.$refs[name].validate(async (valid) => {
+  private onConfirm(name:string) {
+    (this.$refs[name] as ElForm).validate(async(valid:boolean) => {
       if (!valid) return
       const resData = await pubKey()
       if (resData && resData.code === 0) {
@@ -145,7 +148,7 @@ export default class extends Vue {
       const params = JSON.parse(JSON.stringify(this.confirmForm))
       params.password = this.rsaData(sha256(this.confirmForm.password))
 
-      authPwdVerify(params).then(res=> {
+      authPwdVerify(params).then(() => {
         this.onWithdrawal()
         this.showInnerDialog = false
       })
@@ -154,26 +157,27 @@ export default class extends Vue {
 
   private rsaData(data: string): string|boolean {
     const PUBLIC_KEY = this.pk
-    let jsencrypt = new JSEncrypt()
+    const jsencrypt = new JSEncrypt()
     jsencrypt.setPublicKey(PUBLIC_KEY)
-    let result = jsencrypt.encrypt(data)
+    const result = jsencrypt.encrypt(data)
     return result
   }
 
   private onWithdrawal() {
-    let params = {
+    const params = {
       to_address: this.withdrawForm.address,
-      id: this.currentToken.id,
-      user_code: localStorage.getItem('code')
+      id: this.currentId,
+      user_code: localStorage.getItem('code') || ''
     }
-    profitWithdrawal(params).then(res=> {
+    profitWithdrawal(params).then(() => {
       this.$message.success('Withdraw successfully')
     })
   }
 
   private closeWithdrawDialog() {
     this.showDialog = false
-    this.$refs.withdrawForm.resetFields()
+    const form = (this.$refs.withdrawForm as ElForm)
+    form.resetFields()
   }
 }
 </script>

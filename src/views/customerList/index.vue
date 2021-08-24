@@ -166,7 +166,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ICustomerData } from '@/api/types'
-import { modifyLevel,getEAData, getDRData, getWRData, getARData, userList } from '@/api/users'
+import { modifyLevel, getEAData, getDRData, getWRData, getARData, userList } from '@/api/users'
 
 @Component({
   name: 'customerList'
@@ -200,37 +200,37 @@ export default class extends Vue {
   private levels = [{
     value: -1,
     text: 'All levels'
-  },{
+  }, {
     value: 0,
     text: 'Level 0'
-  },{
+  }, {
     value: 1,
     text: 'Level 1'
-  },{
+  }, {
     value: 2,
     text: 'Level 2'
-  },{
+  }, {
     value: 3,
     text: 'Level 3'
-  },{
+  }, {
     value: 4,
     text: 'Level 4'
-  },{
+  }, {
     value: 5,
     text: 'Level 5'
-  },{
+  }, {
     value: 6,
     text: 'Level 6'
-  },{
+  }, {
     value: 7,
     text: 'Level 7'
-  },{
+  }, {
     value: 8,
     text: 'Level 8'
-  },{
+  }, {
     value: 9,
     text: 'Level 9'
-  },{
+  }, {
     value: 10,
     text: 'Level 10'
   }]
@@ -262,9 +262,9 @@ export default class extends Vue {
   private getData() {
     this.loading = true
     const params = this.searchQuery
-    userList(params).then(res => {
-      if (res.code == 0) {
-        let { total, users } = res.data
+    userList(params).then((res:any) => {
+      if (res.code === 0) {
+        const { total, users } = res.data
         this.total = total
         this.tableData = users
       }
@@ -283,38 +283,39 @@ export default class extends Vue {
     const params = this.dialogSearchQuery
     params.user_code = this.currentUserInfo.email
     if (!map.has(this.dialogType)) return
-    let fn = map.get(this.dialogType)
+    const fn = map.get(this.dialogType)
     if (!fn) return
     this[fn]()
   }
 
   private _getEAData() {
-    let params = {}
-    params.user_code = this.currentUserInfo.email
-    getEAData(params).then(res=> {
+    getEAData({ user_code: this.currentUserInfo.email }).then((res:any) => {
       this.existingAssetsData = res.data.assets
     })
   }
+
   private _getDRData() {
-    let params = this.dialogSearchQuery
+    const params = this.dialogSearchQuery
     params.user_code = this.currentUserInfo.email
-    getDRData(params).then(res=> {
+    getDRData(params).then((res:any) => {
       this.depositData = res.data.records
       this.dialogTotal = res.data.total
     })
   }
+
   private _getWRData() {
-    let params = this.dialogSearchQuery
+    const params = this.dialogSearchQuery
     params.user_code = this.currentUserInfo.email
-    getWRData(params).then(res=> {
+    getWRData(params).then((res:any) => {
       this.withdrawData = res.data.records
       this.dialogTotal = res.data.total
     })
   }
+
   private _getARData() {
-    let params = this.dialogSearchQuery
+    const params = this.dialogSearchQuery
     params.user_code = this.currentUserInfo.email
-    getARData(params).then(res=> {
+    getARData(params).then((res:any) => {
       this.airdropData = res.data.records
       this.dialogTotal = res.data.total
     })
@@ -332,12 +333,12 @@ export default class extends Vue {
       level: this.userLevel,
       user_code: this.currentUserInfo.user_code
     }
-    modifyLevel(params).then(res => {
-      if (res.code == 0) {
+    modifyLevel(params).then((res:any) => {
+      if (res.code === 0) {
         this.$message({
           message: 'Set successfully',
           type: 'success'
-        });
+        })
         this.dialogVisible.level = false
       }
     })

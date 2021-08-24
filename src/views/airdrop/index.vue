@@ -100,6 +100,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { validateFee } from '@/utils/validate'
 import { createAirdrop, airdropList, tokenAddress, tokenQuery } from '@/api/users'
 import { IAirdropListData, ITokenQuery } from '@/api/types'
+import { ElForm } from 'element-ui/types/form'
 @Component({
   name: 'airdrop'
 })
@@ -196,7 +197,8 @@ export default class extends Vue {
 
   private closeDialog() {
     this.tokenQuery = ''
-    this.$refs.form.resetFields()
+    const form = this.$refs.form as ElForm
+    form.resetFields()
     this.showCreateDialog = false
   }
 
@@ -267,7 +269,7 @@ export default class extends Vue {
   }
 
   private onSubmit() {
-    this.$refs.form.validate((valid:boolean) => {
+    (this.$refs.form as ElForm).validate((valid:boolean) => {
       if (!valid) return
       this.secondConfirm()
     })

@@ -126,6 +126,7 @@ export interface ICollectAccountListData {
 export interface IFeeProfitListData {
   token: string
   balance: string
+  id: number
 }
 
 /*  finance  END  */

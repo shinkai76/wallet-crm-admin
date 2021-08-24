@@ -38,7 +38,7 @@
           <template slot-scope="scope">
             <span :class="'status-' + scope.row.status">{{STATE[scope.row.status]}}
 
-            <el-tooltip v-show="scope.row.status == 3" class="item" effect="dark" :content="scope.row.remark" placement="top-start">
+            <el-tooltip v-show="Number(scope.row.status) === 3" class="item" effect="dark" :content="scope.row.remark" placement="top-start">
               <i class="el-icon-warning"></i>
         </el-tooltip>
             </span>
@@ -72,27 +72,27 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { ICollectListData } from '@/api/types'
+import { ICollectListData, ITokenQuery } from '@/api/types'
 import { collectList, collect, tokenList } from '@/api/users'
-
 
 @Component({
   name: 'collectManagement'
 })
 export default class extends Vue {
   private showCollect = false
-  private token:string = ''
+  private token = 0
   private tableData:ICollectListData[] = []
   private loading = false
   private total = 0
-  private tokens = []
+  private tokens:ITokenQuery[] = []
 
-  private STATE =  {
-  0: 'waiting',
-  1: 'successful',
-  2: 'ongoing',
-  3: 'failed'
-}
+  private STATE = {
+    0: 'waiting',
+    1: 'successful',
+    2: 'ongoing',
+    3: 'failed'
+  }
+
   created() {
     this.init()
   }
@@ -125,17 +125,17 @@ export default class extends Vue {
     const params = {
       proto: ''
     }
-    tokenList(params).then(res => {
+    tokenList(params).then((res:any) => {
       this.tokens = res.data.tokens
     })
   }
 
   private onCollect() {
-    if (this.token == null)  return
+    if (this.token == null) return
     const params = {
-      token: this.token
+      token_id: this.token
     }
-    collect(params).then(res => {
+    collect(params).then(() => {
       this.$message.success('Collection successfully')
       this.showCollect = false
       this.query.page_no = 1

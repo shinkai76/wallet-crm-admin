@@ -5,12 +5,12 @@ const baseUrl = 'nuvateq/mgt/v1'
 export const getMenus = (params={}):any=> {
   return get(baseUrl + '/sys/menus', params)
 }
-export const getUserMenus = (params={}):any=> {
+export const getUserMenus = (params={}):any => {
   return post(baseUrl + '/user/menus/get', params)
 }
 
 // 获取公钥
-export const pubKey = (params:any):any =>{
+export const pubKey = (params:any = {}):any => {
   return post(baseUrl + '/user/pk', params)
 }
 
@@ -143,7 +143,7 @@ export const collectList = (params: IData10) => {
 }
 
 interface IData11 {
-  token: number
+  token_id: number
 }
 export const collect = (params: IData11) => {
   return post(baseUrl + '/collection/send', params)
@@ -193,10 +193,9 @@ interface IData15 {
   to_address: string
   id: number
 }
-export const profitWithdrawal = (params:IData15)=> {
+export const profitWithdrawal = (params:IData15) => {
   return post(baseUrl + '/finance/profit-withdrawal', params)
 }
-
 
 interface IData16 {
   password: string
