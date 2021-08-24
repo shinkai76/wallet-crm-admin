@@ -241,9 +241,9 @@ export default class extends Vue {
 
   private editRow(index:any, row: ITokenListData): void {
     this.currentTokenInfo = row
-    this.settingDialogTitle = this.currentTokenInfo?.name + `(${this.current}) SET`
+    this.settingDialogTitle = this.currentTokenInfo.name + `(${this.current}) SET`
     this.showSettingDialog = true
-    this.isNeedPay = this.currentTokenInfo.internal_fee != '0' ? '1' : '0'
+    this.isNeedPay = this.currentTokenInfo.internal_fee !== '0' ? '1' : '0'
     this.settingForm.withdrawal_fee = this.currentTokenInfo.withdrawal_fee
     this.settingForm.internal = this.currentTokenInfo.internal_fee
   }
