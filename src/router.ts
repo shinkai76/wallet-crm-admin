@@ -67,6 +67,7 @@ export default new Router({
           path: 'index',
           component: () => import(/* webpackChunkName: "customerList" */ '@/views/customerList/index.vue'),
           meta: {
+            icon: 'user',
             title: 'Customer list'
           }
         }
@@ -80,6 +81,7 @@ export default new Router({
           path: 'index',
           component: () => import(/* webpackChunkName: "tokenList" */ '@/views/tokenList/index.vue'),
           meta: {
+            icon: 'table',
             title: 'Token list'
           }
         }
@@ -93,6 +95,7 @@ export default new Router({
           path: 'index',
           component: () => import(/* webpackChunkName: "airdrop" */ '@/views/airdrop/index.vue'),
           meta: {
+            icon: 'example',
             title: 'Airdrop'
           }
         }
@@ -102,6 +105,7 @@ export default new Router({
       path: '/deposit',
       component: Layout,
       meta: {
+        icon: 'tree',
         title: 'Deposit'
       },
       children: [
@@ -125,6 +129,7 @@ export default new Router({
       path: '/withdrawal',
       component: Layout,
       meta: {
+        icon: 'withdraw',
         title: 'Withdrawal'
       },
       children: [
@@ -149,6 +154,7 @@ export default new Router({
       component: Layout,
       redirect: '/finance/collectManagement',
       meta: {
+        icon: 'tree',
         title: 'Finance'
       },
       children: [
@@ -187,6 +193,7 @@ export default new Router({
       component: Layout,
       redirect: '/set/collectManagement',
       meta: {
+        icon: 'setting',
         title: 'Set'
       },
       children: [
