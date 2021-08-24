@@ -53,6 +53,7 @@ export default new Router({
           name: 'overview',
           component: () => import(/* webpackChunkName: "overview" */ '@/views/overview/index.vue'),
           meta: {
+            icon: 'dashboard',
             title: 'Overview'
           }
         }
