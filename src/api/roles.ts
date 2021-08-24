@@ -27,7 +27,7 @@ export const deleteAdmin = (params:IData17)=> {
 
 interface IData18 {
   name: string
-  menus: []
+  menus_id: number[]
 }
 export const setRoles = (params:IData18)=> {
   return post(baseUrl + '/set/permissions/set', params)

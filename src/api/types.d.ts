@@ -42,8 +42,6 @@ export interface ITokenQuery {
 
 /*  customer list  END  */
 
-
-
 /*  token list  */
 export interface ITokenListData {
   id: number
@@ -52,7 +50,6 @@ export interface ITokenListData {
   internal_fee: string
   contract_address: string
 }
-
 
 /*  token list  END  */
 
@@ -63,7 +60,6 @@ export interface IAirdropListData {
   quantity: string
   level: string
 }
-
 
 /*  airdrop  END  */
 
@@ -130,3 +126,22 @@ export interface IFeeProfitListData {
 }
 
 /*  finance  END  */
+
+/* set */
+export interface IRolesList {
+  name: string
+  menus_id: number[]
+}
+
+export interface IAdminList {
+  authentication: string
+  code: string
+  create_time: string
+  update_time: string
+  name: string
+  permissions: string
+  salt: string
+  id: number
+  menus_id: number[]
+}
+/* set  END */

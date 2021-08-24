@@ -222,40 +222,44 @@
 </template>
 
 <script lang="ts">
+import { JSEncrypt } from 'jsencrypt'
+import { pubKey } from '@/api/users'
 import { Component, Vue } from 'vue-property-decorator'
 import { cloneDeep } from 'lodash'
 import { Tree } from 'element-ui'
-import { deleteRoles, setRoles, getRoutes, getRoles, createRoles,getAdmins,deleteAdmin, createAdmin } from '@/api/roles'
+import { deleteRoles, setRoles, getRoutes, getRoles, createRoles, getAdmins, deleteAdmin, createAdmin } from '@/api/roles'
+import { ElForm } from 'element-ui/types/form'
+import { IAdminList, IRolesList } from '@/api/types'
 const sha256 = require('js-sha256').sha256
-import { JSEncrypt } from 'jsencrypt'
-import { pubKey } from '@/api/users'
 
 const defaultRole = {
   name: '',
-  menus_id: []
+  menus_id: [] as any[]
 }
 const defaultAdmin = {
   name: '',
   permissions: '',
-  password: '',
+  password: ''
 }
 
 @Component({
   name: 'accountSet'
 })
-export default class extends Vue{
+export default class extends Vue {
   private role = Object.assign({}, defaultRole)
   private admin = Object.assign({}, defaultAdmin)
   private activeName = 'Permissions'
-  private total:number = 0
-  private adminTotal:number = 0
+  private total = 0
+  private adminTotal = 0
   private routesTreeData = [] // 树
-  private rolesList = []
+  private rolesList:IRolesList = []
   private adminList = []
   private dialogVisible = false
   private dialogVisibleAdmin = false
   private checkStrictly = false
   private dialogType = 'new'
+  private pk = ''
+
   private defaultProps = {
     children: 'children',
     label: 'title'
@@ -273,7 +277,7 @@ export default class extends Vue{
     permissions: [{
       required: true,
       trigger: 'blur'
-    }],
+    }]
   }
 
   private query = {
@@ -293,9 +297,9 @@ export default class extends Vue{
 
   private rsaData(data: string): string|boolean {
     const PUBLIC_KEY = this.pk
-    let jsencrypt = new JSEncrypt()
+    const jsencrypt = new JSEncrypt()
     jsencrypt.setPublicKey(PUBLIC_KEY)
-    let result = jsencrypt.encrypt(data)
+    const result = jsencrypt.encrypt(data)
     return result
   }
 
@@ -306,21 +310,21 @@ export default class extends Vue{
 
   private confirmRole() {
     const isEdit = this.dialogType === 'edit'
-    let checkedKeys = (this.$refs.tree as Tree).getCheckedKeys()
-    console.log(checkedKeys)
+    const checkedKeys = (this.$refs.tree as Tree).getCheckedKeys()
     this.role.menus_id = checkedKeys
-    if (isEdit)
-      setRoles( this.role ).then(res=> {
+    if (isEdit) {
+      setRoles(this.role).then(() => {
         this.$message.success('Set successfully')
         this.dialogVisible = false
         this.getRoles()
       })
-    else
-      createRoles( this.role ).then(res=> {
+    } else {
+      createRoles(this.role).then(() => {
         this.$message.success('Created successfully')
         this.dialogVisible = false
         this.getRoles()
       })
+    }
   }
 // ====  admin/user  ====
 
@@ -332,12 +336,12 @@ export default class extends Vue{
   }
 
   private createAdmin() {
-    this.$refs.admin.validate((valid) => {
+    (this.$refs.admin as ElForm).validate((valid:boolean) => {
       if (valid) {
         this.$confirm('Are you sure about this operation', '', {
           confirmButtonText: 'Sure',
           cancelButtonText: 'No'
-        }).then(async () => {
+        }).then(async() => {
           this.dialogVisibleAdmin = false
           const resData = await pubKey()
           if (resData && resData.code === 0) {
@@ -345,44 +349,40 @@ export default class extends Vue{
           }
           const params = JSON.parse(JSON.stringify(this.admin))
           params.password = this.rsaData(sha256(this.admin.password))
-          createAdmin(params).then(res=> {
+          createAdmin(params).then(() => {
             this.$message.success('created successfully')
             this.getAdmins()
           })
         })
       }
     })
-
   }
 
   private handleCurrentChangeAdmin():void {
     this.getAdmins()
   }
 
-  private handleEditAdmin(row) {
+  private handleEditAdmin(row:IAdminList) {
     this.dialogVisibleAdmin = true
     this.admin = cloneDeep(row)
-
   }
 
-  private handleDeleteAdmin(row) {
-    this.$confirm('Are you sure to delete ' +row.name, '', {
+  private handleDeleteAdmin(row:IAdminList) {
+    this.$confirm('Are you sure to delete ' + row.name, '', {
       confirmButtonText: 'confirm',
       cancelButtonText: 'cancel',
       type: 'warning'
     }).then(() => {
-      let params = {
+      const params = {
         name: row.name
       }
-      deleteAdmin(params).then(res=> {
-        if (res.code == 0) {
+      deleteAdmin(params).then((res:any) => {
+        if (res.code === 0) {
           this.$message.success('delete successfully')
           this.getAdmins()
         }
       })
-    }).catch(() => {
-
-    });
+    }).catch(() => {})
   }
 
   private handleCreateAdmin() {
@@ -406,7 +406,7 @@ export default class extends Vue{
     this.total = data.total
   }
 
-  private handleClick(tab, event) {
+  private handleClick() {
     if (this.activeName === 'Permissions') {
       this.getRoles()
     }
@@ -418,6 +418,7 @@ export default class extends Vue{
   private handleCurrentChange():void {
     this.getRoles()
   }
+
   private handleCreateRole() {
     this.role = Object.assign({}, defaultRole)
     if (this.$refs.tree) {
@@ -427,7 +428,7 @@ export default class extends Vue{
     this.dialogVisible = true
   }
 
-  private handleEditRole(row) {
+  private handleEditRole(row:IRolesList) {
     this.dialogType = 'edit'
     this.dialogVisible = true
     this.checkStrictly = true
@@ -438,24 +439,22 @@ export default class extends Vue{
     })
   }
 
-  private handleDeleteRole(row) {
-    this.$confirm('Are you sure to delete ' +row.name, '', {
+  private handleDeleteRole(row:IRolesList) {
+    this.$confirm('Are you sure to delete ' + row.name, '', {
       confirmButtonText: 'confirm',
       cancelButtonText: 'cancel',
       type: 'warning'
     }).then(() => {
-      let params = {
-        name:row.name
+      const params = {
+        name: row.name
       }
-      deleteRoles(params).then(res=> {
-        if (res.code == 0) {
+      deleteRoles(params).then((res:any) => {
+        if (res.code === 0) {
           this.$message.success('delete successfully')
           this.getRoles()
         }
       })
-    }).catch(() => {
-
-    });
+    }).catch(() => {})
   }
 }
 </script>

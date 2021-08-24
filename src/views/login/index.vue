@@ -70,20 +70,19 @@
 </template>
 
 <script lang="ts">
+import { JSEncrypt } from 'jsencrypt'
+import { pubKey } from '@/api/users'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 import { Dictionary } from 'vue-router/types/router'
 import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 const sha256 = require('js-sha256').sha256
-import { JSEncrypt } from 'jsencrypt'
-import { pubKey } from '@/api/users'
 
 @Component({
   name: 'Login'
 })
 export default class extends Vue {
-
   private loginForm = {
     user_code: 'admin',
     password: '123456'
@@ -99,8 +98,8 @@ export default class extends Vue {
       trigger: 'blur'
     }]
   }
-  private pk = ''
 
+  private pk = ''
   private passwordType = 'password'
   private loading = false
   private showDialog = false
@@ -138,7 +137,7 @@ export default class extends Vue {
   }
 
   private handleLogin() {
-    (this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
+    (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
       if (valid) {
         this.loading = true
         const resData = await pubKey()
@@ -170,11 +169,9 @@ export default class extends Vue {
 
   private rsaData(data: string): string|boolean {
     const PUBLIC_KEY = this.pk
-    let jsencrypt = new JSEncrypt()
+    const jsencrypt = new JSEncrypt()
     jsencrypt.setPublicKey(PUBLIC_KEY)
-    console.log(PUBLIC_KEY)
-    console.log(data)
-    let result = jsencrypt.encrypt(data)
+    const result = jsencrypt.encrypt(data)
     return result
   }
 }

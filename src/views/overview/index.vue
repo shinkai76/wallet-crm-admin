@@ -48,27 +48,28 @@ export default class extends Vue {
   }
 
   private getAssets():void {
-    getOverviewAssets().then(res=> {
-       if (res.code == 0) {
-         this.data = res.data.assets || []
-       }
-     }).catch(()=> {
-       this.$message({
-         type: 'error',
-         message: 'Network request failed'
-       })
-     })
+    getOverviewAssets().then((res:any) => {
+      if (res.code === 0) {
+        this.data = res.data.assets || []
+      }
+    }).catch(() => {
+      this.$message({
+        type: 'error',
+        message: 'Network request failed'
+      })
+    })
   }
+
   private getRegistrants():void {
-    getOverviewRegistrants().then(res=> {
-       if (res.code == 0) {
-         this.registrants = res.data
-       }
-    }).catch(()=> {
-       this.$message({
-         type: 'error',
-         message: 'Network request failed'
-       })
+    getOverviewRegistrants().then((res:any) => {
+      if (res.code === 0) {
+        this.registrants = res.data
+      }
+    }).catch(() => {
+      this.$message({
+        type: 'error',
+        message: 'Network request failed'
+      })
     })
   }
 }

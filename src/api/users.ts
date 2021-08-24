@@ -2,10 +2,10 @@
 import { get, post } from '@/utils/request'
 const baseUrl = 'nuvateq/mgt/v1'
 
-export const getMenus = (params={}):any=> {
+export const getMenus = (params = {}):any => {
   return get(baseUrl + '/sys/menus', params)
 }
-export const getUserMenus = (params={}):any => {
+export const getUserMenus = (params = {}):any => {
   return post(baseUrl + '/user/menus/get', params)
 }
 
@@ -29,7 +29,6 @@ export const modifyLevel = (params: IData2) => {
   return post(baseUrl + '/customer/set-level', params)
 }
 
-
 interface IData3 {
   user_code: string
   page_no: number
@@ -47,7 +46,6 @@ export const getWRData = (params: IData3) => {
 export const getARData = (params: IData3) => {
   return post(baseUrl + '/customer/airdrop/records', params)
 }
-
 
 interface IData4 {
   token_id: string
@@ -81,14 +79,14 @@ export const addToken = (params: IData4_2) => {
 interface IData4_3 {
   name:string
 }
-export const tokenAddress =(params:IData4_3) => {
+export const tokenAddress = (params:IData4_3) => {
   return post(baseUrl + '/token/all', params)
 }
 
 interface IData4_4 {
   proto:string
 }
-export const tokenQuery =(params:IData4_4) => {
+export const tokenQuery = (params:IData4_4) => {
   return post(baseUrl + '/token/query', params)
 }
 
@@ -159,15 +157,15 @@ export const userList = (params: IData12) => {
   return post(baseUrl + '/customer/list', params)
 }
 
-export const collectAccount = (params={})=> {
+export const collectAccount = (params = {}) => {
   return get(baseUrl + '/finance/collect/hot-account', params)
 }
 
-export const withdrawalAccount = (params={})=> {
+export const withdrawalAccount = (params = {}) => {
   return get(baseUrl + '/finance/withdrawal-account', params)
 }
 
-export const feeProfit = (params={})=> {
+export const feeProfit = (params = {}) => {
   return get(baseUrl + '/finance/fee-profit', params)
 }
 
@@ -175,7 +173,7 @@ interface IData13 {
   old_pwd: string
   new_pwd: string
 }
-export const setVerifyPwd = (params:IData13)=> {
+export const setVerifyPwd = (params:IData13) => {
   return post(baseUrl + '/set/verify-password', params)
 }
 
@@ -184,7 +182,7 @@ interface IData14 {
   new_pwd: string
   user_code: string
 }
-export const setAccountPwd = (params:IData14)=> {
+export const setAccountPwd = (params:IData14) => {
   return post(baseUrl + '/user/password/reset', params)
 }
 
@@ -200,19 +198,18 @@ export const profitWithdrawal = (params:IData15) => {
 interface IData16 {
   password: string
 }
-export const authPwdVerify = (params:IData16)=> {
+export const authPwdVerify = (params:IData16) => {
   return post(baseUrl + '/auth/verify-password', params)
 }
 
-
-export const getRoles = (params:IData10)=> {
+export const getRoles = (params:IData10) => {
   return post(baseUrl + '/set/permissions/list', params)
 }
 
 interface IData17 {
   name: string
 }
-export const deleteRoles = (params:IData17)=> {
+export const deleteRoles = (params:IData17) => {
   return post(baseUrl + '/set/permissions/delete', params)
 }
 
@@ -220,17 +217,17 @@ interface IData18 {
   name: string
   menus: []
 }
-export const setRoles = (params:IData18)=> {
+export const setRoles = (params:IData18) => {
   return post(baseUrl + '/set/permissions/set', params)
 }
 
-export const collectAddressList = (params:IData10)=> {
+export const collectAddressList = (params:IData10) => {
   return post(baseUrl + '/cold-address/list', params)
 }
 interface IData20 {
   token: string
   address: string
 }
-export const collectAddressSet = (params:IData20)=> {
+export const collectAddressSet = (params:IData20) => {
   return post(baseUrl + '/set/collect-address', params)
 }
