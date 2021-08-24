@@ -2,7 +2,6 @@ import Vue from 'vue'
 
 import 'normalize.css'
 import ElementUI from 'element-ui'
-// @ts-ignore
 import locale from 'element-ui/lib/locale/lang/en'
 import SvgIcon from 'vue-svgicon'
 
@@ -15,7 +14,6 @@ import router from '@/router'
 import '@/icons/components'
 import '@/permission'
 import * as filters from '@/filters'
-// @ts-ignore
 import VueClipboard from 'vue-clipboard2'
 
 Vue.use(VueClipboard)

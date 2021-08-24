@@ -3,7 +3,7 @@ import { Message, MessageBox } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 import router from '@/router'
 const service = axios.create({
-  baseURL: "",
+  baseURL: '',
   timeout: 5000
 })
 
@@ -12,7 +12,7 @@ service.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
-      config.headers['token'] = UserModule.token
+      config.headers.token = UserModule.token
     }
     return config
   },
@@ -71,7 +71,7 @@ export function get(url:string, params:any) {
     axios.get(url, {
       params: params
     }).then(res => {
-      if (res.data.code == 0) {
+      if (res.data.code === 0) {
         resolve(res.data);
       } else {
         Message({
@@ -95,11 +95,11 @@ export function post(url:string, params:any) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(res => {
-        if (res.data.code == 401) { // token 失效
-          router.push({path: '/login'})
+        if (res.data.code === 401) { // token 失效
+          router.push({ path: '/login' })
           return
         }
-        if (res.data.code != 0) {
+        if (res.data.code !== 0) {
           Message({
             message: res.data.msg || 'Error',
             type: 'error',
@@ -107,11 +107,11 @@ export function post(url:string, params:any) {
           })
           return
         }
-        resolve(res.data);
+        resolve(res.data)
       })
       .catch(err => {
         console.log(err)
         reject(err.data)
       })
-  });
+  })
 }
