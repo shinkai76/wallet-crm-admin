@@ -38,25 +38,25 @@
         <el-table-column
           label="Existing Assets">
           <template slot-scope="scope">
-            <span @click="openDialog(scope.row, 'ea')">View</span>
+            <span class="blue--text" @click="openDialog(scope.row, 'ea')">View</span>
           </template>
         </el-table-column>
         <el-table-column
           label="Deposit records">
           <template slot-scope="scope">
-           <span @click="openDialog(scope.row, 'dr')">View</span>
+           <span class="blue--text" @click="openDialog(scope.row, 'dr')">View</span>
           </template>
         </el-table-column>
         <el-table-column
           label="Withdrawal records">
           <template slot-scope="scope">
-           <span @click="openDialog(scope.row, 'wr')">View</span>
+           <span class="blue--text" @click="openDialog(scope.row, 'wr')">View</span>
           </template>
         </el-table-column>
         <el-table-column
           label="Airdrop records">
           <template slot-scope="scope">
-           <span @click="openDialog(scope.row, 'ar')">View</span>
+           <span class="blue--text" @click="openDialog(scope.row, 'ar')">View</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -64,7 +64,7 @@
           label="Level"
           width="120">
           <template slot-scope="scope">
-            <span v-if="scope.row.level">Lv {{ scope.row.level }}
+            <span>Lv {{ scope.row.level }}
               <i class="el-icon-s-tools pointer" @click="editRow(scope.$index, scope.row)"></i>
             </span>
           </template>
@@ -147,7 +147,7 @@
           :total="dialogTotal">
         </el-pagination>
       </el-dialog>
-      <el-dialog title="Level" :visible.sync="dialogVisible.level" width="330px">
+      <el-dialog title="Level" :visible.sync="dialogVisible.level" width="400px">
         <el-select v-model="userLevel" placeholder="Level" clearable style="width: 100%">
           <el-option
             :value="item.value"

@@ -52,8 +52,9 @@ class User extends VuexModule implements IUserState {
     const { data } = await login({ user_code, password })
     console.log(router)
     const menuData = await getUserMenus({ user_code })
+    console.log(menuData)
     localStorage.setItem('code', user_code)
-    localStorage.setItem('menus', JSON.stringify(menuData.menus))
+    localStorage.setItem('menus_id', JSON.stringify(menuData.data.menus))
     setToken(data.token)
     this.SET_TOKEN(data.token)
   }

@@ -3,4 +3,4 @@ declare module '*.vue' {
   export default Vue
 }
 declare module 'lodash'
-declare module 'element-plus/lib/locale/lang/en'
+declare module 'element-ui/lib/locale/lang/en'

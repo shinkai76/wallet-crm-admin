@@ -20,8 +20,7 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      let menus_id_arr = localStorage.getItem('menus')
-      console.log(menus_id_arr)
+      let menus_id_arr = localStorage.getItem('menus_id')
       next()
     }
   } else {
