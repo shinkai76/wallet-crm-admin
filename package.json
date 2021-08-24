@@ -2,12 +2,14 @@
   "name": "crm",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "svg": "vsvg -s ./src/icons/svg -t ./src/icons/components --ext ts --es6",
-    "test:unit": "jest --clearCache && vue-cli-service test:unit"
+    "test:unit": "jest --clearCache && vue-cli-service test:unit",
+    "test": "vue-cli-service build --mode test"
   },
   "dependencies": {
     "axios": "^0.21.1",
