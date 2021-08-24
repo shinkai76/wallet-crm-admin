@@ -18,10 +18,11 @@
 </template>
 
 <script lang="ts">
+import { JSEncrypt } from 'jsencrypt'
 import { Component, Vue } from 'vue-property-decorator'
 import { pubKey, setVerifyPwd } from '@/api/users'
+import { ElForm } from 'element-ui/types/form'
 const sha256 = require('js-sha256').sha256
-import { JSEncrypt } from 'jsencrypt'
 
 @Component({
   name: 'verifyPasswordSet'
@@ -33,45 +34,35 @@ export default class extends Vue {
     repeat_pwd: ''
   }
 
-  private validatePass = (rule, value, callback) => {
+  private pk = ''
+
+  private validatePass = (rule:any, value:any, callback:any) => {
     if (value === '') {
-      callback(new Error('required'));
+      callback(new Error('required'))
     } else if (value !== this.form.new_pwd) {
-      callback(new Error('The two passwords are inconsistent!'));
-    } else if (value == this.form.old_pwd) {
-      callback(new Error('Cannot be the same as the old password!'));
+      callback(new Error('The two passwords are inconsistent!'))
+    } else if (value === this.form.old_pwd) {
+      callback(new Error('Cannot be the same as the old password!'))
+    } else {
+      callback()
     }
-    else {
-      callback();
-    }
-  };
+  }
+
   private rules = {
     old_pwd: [
-      {required: true, message: 'required', trigger: 'blur'}
+      { required: true, message: 'required', trigger: 'blur' }
     ],
     new_pwd: [
-      {required: true, message: 'required', trigger: 'blur'}
+      { required: true, message: 'required', trigger: 'blur' }
     ],
     repeat_pwd: [
-      {required: true, message: 'required', trigger: 'blur'},
+      { required: true, message: 'required', trigger: 'blur' },
       { validator: this.validatePass, trigger: 'blur' }
     ]
   }
 
-  created() {
-    this.init()
-  }
-
-  private init() {
-    this.getData()
-  }
-
-  private getData() {
-
-  }
-
-  private submitForm(name) {
-    this.$refs[name].validate((valid) => {
+  private submitForm(name:string) {
+    (this.$refs[name] as ElForm).validate((valid:boolean) => {
       if (valid) {
         this.onReset()
       }
@@ -88,8 +79,8 @@ export default class extends Vue {
     }
     params.new_pwd = this.rsaData(sha256(this.form.new_pwd))
     params.old_pwd = this.rsaData(sha256(this.form.old_pwd))
-    setVerifyPwd(params).then(res=> {
-      if (res.code == 0) {
+    setVerifyPwd(params).then((res:any) => {
+      if (res.code === 0) {
         this.$message.success('Modified successfully')
       }
     }).finally(() => {
@@ -99,16 +90,14 @@ export default class extends Vue {
 
   private rsaData(data: string): string|boolean {
     const PUBLIC_KEY = this.pk
-    let jsencrypt = new JSEncrypt()
+    const jsencrypt = new JSEncrypt()
     jsencrypt.setPublicKey(PUBLIC_KEY)
-    console.log(PUBLIC_KEY)
-    console.log(data)
-    let result = jsencrypt.encrypt(data)
+    const result = jsencrypt.encrypt(data)
     return result
   }
 
-  private resetForm(formName) {
-    this.$refs[formName].resetFields();
+  private resetForm(formName:string) {
+    (this.$refs[formName] as ElForm).resetFields()
   }
 }
 </script>

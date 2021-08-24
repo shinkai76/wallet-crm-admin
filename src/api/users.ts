@@ -48,10 +48,10 @@ export const getARData = (params: IData3) => {
 }
 
 interface IData4 {
-  token_id: string
-  type: string
-  withdraw_fee:string
-  internal_withdraw_fee: string
+  id: number
+  proto: string
+  withdrawal_fee: string
+  internal: string
 }
 export const setToken = (params: IData4) => {
   return post(baseUrl + '/token/set', params)

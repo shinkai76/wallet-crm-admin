@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch} from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { IHistoryListData } from '@/api/types'
 import { getWithdrawList, tokenList } from '@/api/users'
 @Component({
@@ -115,7 +115,7 @@ export default class extends Vue {
   private getData():void {
     this.loading = true
     const params = this.query
-    getWithdrawList(params).then(res => {
+    getWithdrawList(params).then((res:any) => {
       this.tableData = res.data.records
     }).finally(() => {
       this.loading = false
@@ -126,7 +126,7 @@ export default class extends Vue {
     const params = {
       proto: ''
     }
-    tokenList(params).then(res=> {
+    tokenList(params).then((res:any) => {
       this.tokens = res.data.tokens
     })
   }

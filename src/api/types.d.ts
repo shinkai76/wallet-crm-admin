@@ -46,9 +46,10 @@ export interface ITokenQuery {
 export interface ITokenListData {
   id: number
   name: string
-  withdraw_fee: string
+  withdrawal_fee: string
   internal_fee: string
   contract_address: string
+  proto: string
 }
 
 /*  token list  END  */

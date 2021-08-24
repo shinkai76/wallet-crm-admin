@@ -62,11 +62,12 @@
 </template>
 
 <script lang="ts">
+import { JSEncrypt } from 'jsencrypt'
 import { Component, Vue } from 'vue-property-decorator'
 import { IFeeProfitListData } from '@/api/types'
 import { collectAddressSet, collectAddressList, pubKey, authPwdVerify } from '@/api/users'
+import { ElForm } from 'element-ui/types/form'
 const sha256 = require('js-sha256').sha256
-import { JSEncrypt } from 'jsencrypt'
 
 @Component({
   name: 'collectAddressSet'
@@ -87,13 +88,18 @@ export default class extends Vue {
     password: ''
   }
 
+  private query = {
+    page_no: 1,
+    page_size: 50
+  }
+
   private rules = {
     address: [
-      {required: true, message: 'required', trigger: 'blur'}
+      { required: true, message: 'required', trigger: 'blur' }
     ],
     password: [
-      {required: true, message: 'required', trigger: 'blur'}
-    ],
+      { required: true, message: 'required', trigger: 'blur' }
+    ]
   }
 
   created() {
@@ -106,9 +112,9 @@ export default class extends Vue {
 
   private getData() {
     this.loading = true
-    collectAddressList().then(res => {
+    collectAddressList(this.query).then((res:any) => {
       this.tableData = res.data.Address
-    }).finally(()=> {
+    }).finally(() => {
       this.loading = false
     })
   }
@@ -118,8 +124,8 @@ export default class extends Vue {
     this.currentToken = row.token
   }
 
-  private submitForm(name) {
-    this.$refs[name].validate((valid) => {
+  private submitForm(name:string) {
+    (this.$refs[name] as ElForm).validate((valid:boolean) => {
       if (valid) {
         this.confirmForm.password = ''
         this.$confirm('Are you sure about this operation', '', {
@@ -130,13 +136,13 @@ export default class extends Vue {
         }).catch(() => {
           this.showDialog = false
           this.form.address = ''
-        });
+        })
       }
     })
   }
 
-  private onConfirm(name) {
-    this.$refs[name].validate(async (valid) => {
+  private onConfirm(name:string) {
+    (this.$refs[name] as ElForm).validate(async(valid:boolean) => {
       if (!valid) return
       const resData = await pubKey()
       if (resData && resData.code === 0) {
@@ -145,7 +151,7 @@ export default class extends Vue {
       const params = JSON.parse(JSON.stringify(this.confirmForm))
       params.password = this.rsaData(sha256(this.confirmForm.password))
 
-      authPwdVerify(params).then(res=> {
+      authPwdVerify(params).then(() => {
         this.onSet()
         this.showInnerDialog = false
       })
@@ -153,11 +159,11 @@ export default class extends Vue {
   }
 
   private onSet() {
-    let params = {
+    const params = {
       address: this.form.address,
       token: this.currentToken
     }
-    collectAddressSet(params).then(res=> {
+    collectAddressSet(params).then(() => {
       this.$message.success('Set successfully')
       this.showDialog = false
       this.showInnerDialog = false
@@ -166,17 +172,17 @@ export default class extends Vue {
 
   private closeSetDialog() {
     this.showDialog = false
-    this.$refs.form.resetFields()
+    const form = (this.$refs.form as ElForm)
+    form.resetFields()
   }
 
   private rsaData(data: string): string|boolean {
     const PUBLIC_KEY = this.pk
-    let jsencrypt = new JSEncrypt()
+    const jsencrypt = new JSEncrypt()
     jsencrypt.setPublicKey(PUBLIC_KEY)
-    let result = jsencrypt.encrypt(data)
+    const result = jsencrypt.encrypt(data)
     return result
   }
-
 }
 </script>
 

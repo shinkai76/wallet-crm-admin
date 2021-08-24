@@ -79,7 +79,7 @@
           </el-radio-group>
           <el-form-item prop="internal_fee" v-show="isNeedPay === '1'">
             <el-input class="input-width"
-                      v-model.trim="settingForm.internal_fee"
+                      v-model.trim="settingForm.internal"
             ></el-input>
           </el-form-item>
         </el-form-item>
@@ -147,6 +147,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { ITokenListData } from '@/api/types'
 import { addToken, setToken, tokenAddress, tokenList } from '@/api/users'
 import { validateFee } from '@/utils/validate'
+import { ElForm } from 'element-ui/types/form'
 
 @Component({
   name: 'tokenList'
@@ -160,15 +161,15 @@ export default class extends Vue {
   private currentTokenInfo!: ITokenListData
   private showSettingDialog = false
   private showAddDialog = false
-  private isNeedPay: string = '0'
-  private settingDialogTitle: string = ''
+  private isNeedPay = '0'
+  private settingDialogTitle = ''
   private addForm = {
-    'token_name': '',
-    'withdrawal_fee': '',
-    'internal_fee': '',
-    'contract_address': '',
-    'collect_limit': '',
-    'proto': '' // 就是tab的名字
+    token_name: '',
+    withdrawal_fee: '',
+    internal_fee: '',
+    contract_address: '',
+    collect_limit: '',
+    proto: '' // 就是tab的名字
   }
 
   private rules = {
@@ -199,20 +200,20 @@ export default class extends Vue {
         required: true,
         message: 'required',
         trigger: 'blur'
-      },
+      }
     ],
     contract_address: [
       {
         required: true,
         message: 'required',
         trigger: 'blur'
-      },
+      }
     ]
   }
 
-  private settingForm: { [key: string]: string } = {
+  private settingForm = {
     withdrawal_fee: '',
-    internal_fee: ''
+    internal: ''
   }
 
   mounted() {
@@ -228,9 +229,9 @@ export default class extends Vue {
     const params = {
       proto: this.current
     }
-    tokenList(params).then(res => {
-      if (res.code == 0) {
-        let { tokens } = res.data
+    tokenList(params).then((res:any) => {
+      if (res.code === 0) {
+        const { tokens } = res.data
         this.tableData = tokens
       }
     }).finally(() => {
@@ -244,7 +245,7 @@ export default class extends Vue {
     this.showSettingDialog = true
     this.isNeedPay = this.currentTokenInfo.internal_fee != '0' ? '1' : '0'
     this.settingForm.withdrawal_fee = this.currentTokenInfo.withdrawal_fee
-    this.settingForm.internal_fee = this.currentTokenInfo.internal_fee
+    this.settingForm.internal = this.currentTokenInfo.internal_fee
   }
 
   private refresh(tab:string) {
@@ -253,15 +254,15 @@ export default class extends Vue {
   }
 
   private onModifySet() {
-    this.$refs.settingForm.validate((valid: boolean) => {
+    (this.$refs.settingForm as ElForm).validate((valid: boolean) => {
       if (!valid) return
-      let params = {
+      const params = {
         id: this.currentTokenInfo?.id,
         proto: this.current,
         ...this.settingForm
       }
-      if (this.isNeedPay === '0') params.internal_fee = '0'
-      setToken(params).then(res => {
+      if (this.isNeedPay === '0') params.internal = '0'
+      setToken(params).then(() => {
         this.$message.success('Set successfully!')
         this.getData()
       }).finally(() => {
@@ -271,11 +272,11 @@ export default class extends Vue {
   }
 
   private onAdd() {
-    this.$refs.addForm.validate((valid) => {
+    (this.$refs.addForm as ElForm).validate((valid:boolean) => {
       if (!valid) return
-      let params = this.addForm
+      const params = this.addForm
       params.proto = this.current
-      addToken(params).then(res => {
+      addToken(params).then(() => {
         this.$message.success('Added successfully!')
         this.getData()
       })
@@ -291,16 +292,17 @@ export default class extends Vue {
   }
 
   private resetForm(formName:string) {
-    this.$refs[formName] && this.$refs[formName].resetFields()
+    const form = (this.$refs[formName] as ElForm)
+    form && form.resetFields()
   }
 
-  private selectFilter(val:string){
+  private selectFilter(val:string) {
     this.addressList = []
-    let params = {
+    const params = {
       name: val
     }
-    tokenAddress(params).then(res=> {
-      if (res.code == 0)
+    tokenAddress(params).then((res:any) => {
+      if (res.code !== 0) return
       this.addressList = res.data.sys_tokens
     })
   }

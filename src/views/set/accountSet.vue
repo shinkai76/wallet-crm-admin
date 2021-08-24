@@ -252,7 +252,7 @@ export default class extends Vue {
   private total = 0
   private adminTotal = 0
   private routesTreeData = [] // 树
-  private rolesList:IRolesList = []
+  private rolesList:IRolesList[] = []
   private adminList = []
   private dialogVisible = false
   private dialogVisibleAdmin = false
