@@ -361,6 +361,7 @@ export default class extends Vue{
 
   private handleEditAdmin(row) {
     this.dialogVisibleAdmin = true
+    this.admin = cloneDeep(row)
 
   }
 

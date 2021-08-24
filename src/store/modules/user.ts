@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
-import { login } from '@/api/users'
+import { getUserMenus, login } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/cookies'
 import store from '@/store'
 import router from '@/router'
@@ -51,9 +51,10 @@ class User extends VuexModule implements IUserState {
     user_code = user_code.trim()
     const { data } = await login({ user_code, password })
     console.log(router)
+    const menuData = await getUserMenus ({ user_code })
     localStorage.setItem('code', user_code)
-    // TODO 删除TEST
-    setToken(data.token || 'TEST')
+    localStorage.setItem('menus', JSON.stringify(menuData.menus))
+    setToken(data.token)
     this.SET_TOKEN(data.token)
   }
 

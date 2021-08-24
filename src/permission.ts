@@ -14,13 +14,14 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
   NProgress.start()
 
   // Determine whether the user has logged in
-  // TODO 删除TEST
-  if (UserModule.token || 'TEST') {
+  if (UserModule.token) {
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     } else {
+      let menus_id_arr = localStorage.getItem('menus')
+      console.log(menus_id_arr)
       next()
     }
   } else {

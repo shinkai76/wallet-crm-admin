@@ -2,8 +2,11 @@
 import { get, post } from '@/utils/request'
 const baseUrl = 'nuvateq/mgt/v1'
 
-export const getMenus = (params={})=> {
+export const getMenus = (params={}):any=> {
   return get(baseUrl + '/sys/menus', params)
+}
+export const getUserMenus = (params={}):any=> {
+  return post(baseUrl + '/user/menus/get', params)
 }
 
 // 获取公钥

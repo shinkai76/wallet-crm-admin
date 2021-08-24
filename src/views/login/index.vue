@@ -150,6 +150,7 @@ export default class extends Vue {
 
         await UserModule.Login(params)
         // TODO 获取menus
+
         this.$router.push('/overview')
         this.loading = false
       } else {
