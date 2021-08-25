@@ -132,11 +132,11 @@
         <el-table :data="airdropData">
           <el-table-column property="time" label="Time">
             <template slot-scope="scope">
-              <span>{{ scope.row.airdrop_time | formatTime }}</span>
+              <span>{{ scope.row.time | formatTime }}</span>
             </template>
           </el-table-column>
           <el-table-column property="token" label="Token"></el-table-column>
-          <el-table-column property="amount" label="Quantity"></el-table-column>
+          <el-table-column property="quantity" label="Quantity"></el-table-column>
         </el-table>
         <el-pagination
           class="pagination-container"

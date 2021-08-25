@@ -10,7 +10,7 @@ const whiteList = ['/login']
 
 router.beforeEach(async(to: Route, form: Route, next: any) => {
   // Start progress bar
-  debugger
+
   NProgress.start()
   const token = localStorage.getItem('token')
   // Determine whether the user has logged in
@@ -26,7 +26,7 @@ router.beforeEach(async(to: Route, form: Route, next: any) => {
       PermissionModule.GenerateRoutes(menusId)
       PermissionModule.dynamicRoutes.forEach((route, index, arr) => {
         router.addRoute(route)
-        store.commit('SET_ROUTES', route.name)
+        // store.commit('SET_ROUTES', route.name)
         if (index == arr.length - 1) {
           next({ ...to, replace: true })
         }

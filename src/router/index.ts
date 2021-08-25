@@ -81,6 +81,7 @@ export const asyncRoutes: RouteConfig[] = [
 
   {
     path: '/customerList',
+    redirect: '/customerList/index',
     component: Layout,
     children: [
       {
@@ -96,6 +97,7 @@ export const asyncRoutes: RouteConfig[] = [
   },
   {
     path: '/tokenList',
+    redirect: '/tokenList/index',
     component: Layout,
     children: [
       {
@@ -111,6 +113,7 @@ export const asyncRoutes: RouteConfig[] = [
   },
   {
     path: '/airdrop',
+    redirect: '/airdrop/index',
     component: Layout,
     children: [
       {
@@ -126,6 +129,7 @@ export const asyncRoutes: RouteConfig[] = [
   },
   {
     path: '/deposit',
+    redirect: '/deposit/pendingReview',
     component: Layout,
     meta: {
       permissionId: '18',
@@ -154,6 +158,7 @@ export const asyncRoutes: RouteConfig[] = [
   {
     path: '/withdrawal',
     component: Layout,
+    redirect: '/withdrawal/pendingReview',
     meta: {
       permissionId: '5',
       icon: 'withdraw',
