@@ -3,12 +3,14 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Route } from 'vue-router'
 import { PermissionModule } from '@/store/modules/permission'
+import store from './store'
 NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login']
 
 router.beforeEach(async(to: Route, form: Route, next: any) => {
   // Start progress bar
+  debugger
   NProgress.start()
   const token = localStorage.getItem('token')
   // Determine whether the user has logged in
@@ -18,24 +20,19 @@ router.beforeEach(async(to: Route, form: Route, next: any) => {
       next({ path: '/' })
       NProgress.done()
     }
-    else {
-      try {
-        const menusId = JSON.parse(localStorage.getItem('menus_id'))
-        // TODO 判断是否需要生成路由
-        PermissionModule.GenerateRoutes(menusId)
-        PermissionModule.dynamicRoutes.forEach(route => {
-          console.log(route)
-          router.addRoute(route)
-          // router.options.routes?.push(route)
-        })
-        // next({ ...to, replace: true })
-        next()
-      } catch (err) {
-        // Remove token and redirect to login page
-        localStorage.removeItem('token')
-        next(`/login?redirect=${to.path}`)
-        NProgress.done()
-      }
+    if (!store.state.user.routes.length) {
+      const menusId = JSON.parse(localStorage.getItem('menus_id'))
+      // TODO 判断是否需要生成路由
+      PermissionModule.GenerateRoutes(menusId)
+      PermissionModule.dynamicRoutes.forEach((route, index, arr) => {
+        router.addRoute(route)
+        store.commit('SET_ROUTES', route.name)
+        if (index == arr.length - 1) {
+          next({ ...to, replace: true })
+        }
+      })
+    } else {
+      next()
     }
   }
   else {
