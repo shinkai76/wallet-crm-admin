@@ -187,10 +187,9 @@
                 placeholder="User Name"
               />
             </el-form-item>
-            <el-form-item label="Password" prop="password">
+            <el-form-item label="Password" prop="password" v-if="dialogType == 'new'">
               <el-input
                 v-model="admin.password"
-                :readonly="dialogType==='edit'"
                 type="password"
                 placeholder="password"
               />
@@ -212,7 +211,7 @@
               size="small"
               @click="createAdmin"
             >
-              ADD
+              Confirm
             </el-button>
           </div>
         </el-dialog>
@@ -227,7 +226,7 @@ import { pubKey } from '@/api/users'
 import { Component, Vue } from 'vue-property-decorator'
 import { cloneDeep } from 'lodash'
 import { Tree } from 'element-ui'
-import { deleteRoles, setRoles, getRoutes, getRoles, createRoles, getAdmins, deleteAdmin, createAdmin } from '@/api/roles'
+import { deleteRoles, setRoles, getRoutes, getRoles, createRoles, getAdmins, deleteAdmin, createAdmin, editAdmin } from '@/api/roles'
 import { ElForm } from 'element-ui/types/form'
 import { IAdminList, IRolesList } from '@/api/types'
 const sha256 = require('js-sha256').sha256
@@ -343,16 +342,27 @@ export default class extends Vue {
           cancelButtonText: 'No'
         }).then(async() => {
           this.dialogVisibleAdmin = false
-          const resData = await pubKey()
-          if (resData && resData.pk) {
-            this.pk = resData.pk
+          if (this.dialogType === 'edit') {
+            const params = {
+              user_code: this.admin.name,
+              permissions: this.admin.permissions
+            }
+            editAdmin(params).then((res:any) => {
+              console.log(res)
+            })
           }
-          const params = JSON.parse(JSON.stringify(this.admin))
-          params.password = this.rsaData(sha256(this.admin.password))
-          createAdmin(params).then(() => {
-            this.$message.success('created successfully')
-            this.getAdmins()
-          })
+          if (this.dialogType === 'new') {
+            const resData = await pubKey()
+            if (resData && resData.pk) {
+              this.pk = resData.pk
+            }
+            const params = JSON.parse(JSON.stringify(this.admin))
+            params.password = this.rsaData(sha256(this.admin.password))
+            createAdmin(params).then(() => {
+              this.$message.success('created successfully')
+              this.getAdmins()
+            })
+          }
         })
       }
     })
@@ -363,6 +373,8 @@ export default class extends Vue {
   }
 
   private handleEditAdmin(row:IAdminList) {
+    this.dialogType = 'edit'
+    this.checkStrictly = true
     this.dialogVisibleAdmin = true
     this.admin = cloneDeep(row)
   }

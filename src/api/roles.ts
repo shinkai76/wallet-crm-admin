@@ -48,3 +48,10 @@ interface IData19 {
 export const createAdmin = (params:IData19) => {
   return post(baseUrl + '/user/add', params)
 }
+interface IData21 {
+  user_code: string
+  permissions: string
+}
+export const editAdmin = (params: IData21) => {
+  return post(baseUrl + '/user/menus/set', params)
+}

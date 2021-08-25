@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { get, post } from '@/utils/request'
+import { report } from 'node:process'
 const baseUrl = 'nuvateq/mgt/v1'
 
 export const getMenus = (params = {}):any => {
