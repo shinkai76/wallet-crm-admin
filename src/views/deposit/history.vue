@@ -112,8 +112,8 @@ export default class extends Vue {
     this.loading = true
     const params = this.query
     getDepositList(params).then((res:any) => {
-      this.total = res.data.total
-      this.tableData = res.data.records
+      this.total = res.total
+      this.tableData = res.records
     }).finally(() => {
       this.loading = false
     })
@@ -124,7 +124,7 @@ export default class extends Vue {
       proto: ''
     }
     tokenList(params).then((res:any) => {
-      this.tokens = res.data.tokens
+      this.tokens = res.tokens
     })
   }
 

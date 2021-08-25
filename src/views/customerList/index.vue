@@ -263,11 +263,9 @@ export default class extends Vue {
     this.loading = true
     const params = this.searchQuery
     userList(params).then((res:any) => {
-      if (res.code === 0) {
-        const { total, users } = res.data
-        this.total = total
-        this.tableData = users
-      }
+      const { total, users } = res
+      this.total = total
+      this.tableData = users
     }).finally(() => {
       this.loading = false
     })
@@ -290,7 +288,7 @@ export default class extends Vue {
 
   private _getEAData() {
     getEAData({ user_code: this.currentUserInfo.email }).then((res:any) => {
-      this.existingAssetsData = res.data.assets
+      this.existingAssetsData = res.assets
     })
   }
 
@@ -298,8 +296,8 @@ export default class extends Vue {
     const params = this.dialogSearchQuery
     params.user_code = this.currentUserInfo.email
     getDRData(params).then((res:any) => {
-      this.depositData = res.data.records
-      this.dialogTotal = res.data.total
+      this.depositData = res.records
+      this.dialogTotal = res.total
     })
   }
 
@@ -307,8 +305,8 @@ export default class extends Vue {
     const params = this.dialogSearchQuery
     params.user_code = this.currentUserInfo.email
     getWRData(params).then((res:any) => {
-      this.withdrawData = res.data.records
-      this.dialogTotal = res.data.total
+      this.withdrawData = res.records
+      this.dialogTotal = res.total
     })
   }
 
@@ -316,8 +314,8 @@ export default class extends Vue {
     const params = this.dialogSearchQuery
     params.user_code = this.currentUserInfo.email
     getARData(params).then((res:any) => {
-      this.airdropData = res.data.records
-      this.dialogTotal = res.data.total
+      this.airdropData = res.records
+      this.dialogTotal = res.total
     })
   }
 

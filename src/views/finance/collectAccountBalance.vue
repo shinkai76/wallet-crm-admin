@@ -76,7 +76,7 @@ export default class extends Vue {
   private getData() {
     this.loading = true
     collectAccount().then((res:any) => {
-      this.tableData = res.data.accounts
+      this.tableData = res.accounts
     }).finally(() => {
       this.loading = false
     })

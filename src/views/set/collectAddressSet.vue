@@ -113,7 +113,7 @@ export default class extends Vue {
   private getData() {
     this.loading = true
     collectAddressList(this.query).then((res:any) => {
-      this.tableData = res.data.Address
+      this.tableData = res.Address
     }).finally(() => {
       this.loading = false
     })

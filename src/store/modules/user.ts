@@ -3,7 +3,7 @@ import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-dec
 import { getUserMenus, login } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/cookies'
 import store from '@/store'
-import router from '@/router'
+
 export interface IUserState {
   token: string
   name: string
@@ -49,13 +49,12 @@ class User extends VuexModule implements IUserState {
   public async Login(userInfo: { user_code: string, password: string }) {
     let { user_code, password } = userInfo
     user_code = user_code.trim()
-    const { data } = await login({ user_code, password })
-    console.log(router)
+    const data = await login({ user_code, password })
+    // console.log(router)
     const menuData = await getUserMenus({ user_code })
-    console.log(menuData)
     localStorage.setItem('code', user_code)
     localStorage.setItem('token', data.token)
-    localStorage.setItem('menus_id', JSON.stringify(menuData.data.menus))
+    localStorage.setItem('menus_id', JSON.stringify(menuData.menus))
     setToken(data.token)
     this.SET_TOKEN(data.token)
   }
@@ -92,6 +91,7 @@ class User extends VuexModule implements IUserState {
     if (this.token === '') {
       throw Error('LogOut: token is undefined!')
     }
+    localStorage.removeItem('token')
     removeToken()
     this.SET_TOKEN('')
     this.SET_ROLES([])

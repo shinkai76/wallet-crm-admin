@@ -50,7 +50,7 @@ export default class extends Vue {
   private getAssets():void {
     getOverviewAssets().then((res:any) => {
       if (res.code === 0) {
-        this.data = res.data.assets || []
+        this.data = res.assets || []
       }
     }).catch(() => {
       this.$message({
@@ -62,9 +62,7 @@ export default class extends Vue {
 
   private getRegistrants():void {
     getOverviewRegistrants().then((res:any) => {
-      if (res.code === 0) {
-        this.registrants = res.data
-      }
+      this.registrants = res
     }).catch(() => {
       this.$message({
         type: 'error',

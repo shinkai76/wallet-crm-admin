@@ -304,7 +304,7 @@ export default class extends Vue {
   }
 
   private async getRoutes() {
-    const { data } = await getRoutes({ /* Your params here */ })
+    const data = await getRoutes({ /* Your params here */ })
     this.routesTreeData = data.menus
   }
 
@@ -330,7 +330,7 @@ export default class extends Vue {
 
   private async getAdmins() {
     const params = this.queryAdmin
-    const { data } = await getAdmins(params)
+    const data = await getAdmins(params)
     this.adminList = data.users
     this.adminTotal = data.total
   }
@@ -401,7 +401,7 @@ export default class extends Vue {
 
   private async getRoles() {
     const params = this.query
-    const { data } = await getRoles(params)
+    const data = await getRoles(params)
     this.rolesList = data.roles
     this.total = data.total
   }

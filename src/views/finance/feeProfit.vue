@@ -112,7 +112,7 @@ export default class extends Vue {
   private getData() {
     this.loading = true
     feeProfit().then((res:any) => {
-      this.tableData = res.data.fee_profits
+      this.tableData = res.fee_profits
     }).finally(() => {
       this.loading = false
     })

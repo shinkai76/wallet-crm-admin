@@ -188,8 +188,8 @@ export default class extends Vue {
     this.loading = true
     const params = this.query
     airdropList(params).then((res:any) => {
-      this.tableData = res.data.records
-      this.total = res.data.total
+      this.tableData = res.records
+      this.total = res.total
     }).finally(() => {
       this.loading = false
     })
@@ -221,9 +221,7 @@ export default class extends Vue {
       proto: val
     }
     tokenQuery(params).then((res:any) => {
-      if (res.code === 0) {
-        this.tokens = res.data.tokens
-      }
+      this.tokens = res.tokens
     })
   }
 
@@ -238,9 +236,7 @@ export default class extends Vue {
       proto: ''
     }
     tokenQuery(params).then((res:any) => {
-      if (res.code === 0) {
-        this.tokens = res.data.tokens
-      }
+      this.tokens = res.tokens
     })
   }
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
-import router from '@/router'
+import router from '@/router/index'
 const service = axios.create({
   baseURL: '',
   timeout: 5000
@@ -95,7 +95,6 @@ export function post(url:string, params:any) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(res => {
-        console.log(res)
         if (res.code === 401) { // token 失效
           router.push({ path: '/login' })
           return

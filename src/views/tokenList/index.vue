@@ -230,10 +230,8 @@ export default class extends Vue {
       proto: this.current
     }
     tokenList(params).then((res:any) => {
-      if (res.code === 0) {
-        const { tokens } = res.data
-        this.tableData = tokens
-      }
+      const { tokens } = res
+      this.tableData = tokens
     }).finally(() => {
       this.loading = false
     })
@@ -302,8 +300,7 @@ export default class extends Vue {
       name: val
     }
     tokenAddress(params).then((res:any) => {
-      if (res.code !== 0) return
-      this.addressList = res.data.sys_tokens
+      this.addressList = res.sys_tokens
     })
   }
 

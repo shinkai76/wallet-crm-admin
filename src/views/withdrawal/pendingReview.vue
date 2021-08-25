@@ -8,6 +8,7 @@
       <el-table-column
         fixed
         prop="id"
+        width="100"
         label="Order">
       </el-table-column>
       <el-table-column
@@ -17,6 +18,7 @@
       <el-table-column
         prop="application_time"
         label="Application time"
+        width="170"
       >
       <template slot-scope="scope">
         <span>{{ scope.row.application_time | formatTime }}</span>
@@ -25,11 +27,13 @@
       <el-table-column
         prop="token"
         label="Token"
+        width="150"
       >
       </el-table-column>
       <el-table-column
         prop="withdrawal_type"
         label="Withdrawal Type"
+        width="150"
       >
       </el-table-column>
       <el-table-column
@@ -40,10 +44,12 @@
       <el-table-column
         prop="to"
         label="Withdrawal address"
+        width="400"
       >
       </el-table-column>
       <el-table-column
         prop=""
+        fixed="right"
         label="Set"
         width="120">
         <template slot-scope="scope">
@@ -101,8 +107,7 @@ export default class extends Vue {
     this.loading = true
     const params = this.query
     getWithdrawList(params).then((res:any) => {
-      console.log(res)
-      this.tableData = res.data.records
+      this.tableData = res.records
     }).finally(() => {
       this.loading = false
     })

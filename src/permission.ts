@@ -1,29 +1,44 @@
-import router from './router'
+import router from '@/router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { Message } from 'element-ui'
 import { Route } from 'vue-router'
-import { UserModule } from '@/store/modules/user'
-
+import { PermissionModule } from '@/store/modules/permission'
 NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login']
 
-router.beforeEach(async(to: Route, _: Route, next: any) => {
+router.beforeEach(async(to: Route, form: Route, next: any) => {
   // Start progress bar
   NProgress.start()
-
+  const token = localStorage.getItem('token')
   // Determine whether the user has logged in
-  if (UserModule.token) {
+  if (token) {
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
-    } else {
-      let menus_id_arr = localStorage.getItem('menus_id')
-      next()
     }
-  } else {
+    else {
+      try {
+        const menusId = JSON.parse(localStorage.getItem('menus_id'))
+        // TODO 判断是否需要生成路由
+        PermissionModule.GenerateRoutes(menusId)
+        PermissionModule.dynamicRoutes.forEach(route => {
+          console.log(route)
+          router.addRoute(route)
+          // router.options.routes?.push(route)
+        })
+        // next({ ...to, replace: true })
+        next()
+      } catch (err) {
+        // Remove token and redirect to login page
+        localStorage.removeItem('token')
+        next(`/login?redirect=${to.path}`)
+        NProgress.done()
+      }
+    }
+  }
+  else {
     // Has no token
     if (whiteList.indexOf(to.path) !== -1) {
       // In the free login whitelist, go directly
