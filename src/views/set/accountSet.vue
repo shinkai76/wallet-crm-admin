@@ -390,10 +390,8 @@ export default class extends Vue {
         name: row.name
       }
       deleteAdmin(params).then((res:any) => {
-        if (res.code === 0) {
-          this.$message.success('delete successfully')
-          this.getAdmins()
-        }
+        this.$message.success('delete successfully')
+        this.getAdmins()
       })
     }).catch(() => {})
   }
@@ -462,10 +460,8 @@ export default class extends Vue {
         name: row.name
       }
       deleteRoles(params).then((res:any) => {
-        if (res.code === 0) {
-          this.$message.success('delete successfully')
-          this.getRoles()
-        }
+        this.$message.success('delete successfully')
+        this.getRoles()
       })
     }).catch(() => {})
   }

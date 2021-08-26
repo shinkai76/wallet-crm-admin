@@ -81,9 +81,7 @@ export default class extends Vue {
     params.old_pwd = this.rsaData(sha256(this.form.old_pwd))
 
     setAccountPwd(params).then((res:any) => {
-      if (res.code === 0) {
-        this.$message.success('Modified successfully')
-      }
+      this.$message.success('Modified successfully')
     }).finally(() => {
       this.resetForm('form')
     })

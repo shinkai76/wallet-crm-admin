@@ -332,13 +332,11 @@ export default class extends Vue {
       user_code: this.currentUserInfo.user_code
     }
     modifyLevel(params).then((res:any) => {
-      if (res.code === 0) {
-        this.$message({
-          message: 'Set successfully',
-          type: 'success'
-        })
-        this.dialogVisible.level = false
-      }
+      this.$message({
+        message: 'Set successfully',
+        type: 'success'
+      })
+      this.dialogVisible.level = false
     })
   }
 

@@ -49,9 +49,7 @@ export default class extends Vue {
 
   private getAssets():void {
     getOverviewAssets().then((res:any) => {
-      if (res.code === 0) {
-        this.data = res.assets || []
-      }
+      this.data = res.assets || []
     }).catch(() => {
       this.$message({
         type: 'error',
