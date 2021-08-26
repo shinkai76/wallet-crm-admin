@@ -348,7 +348,8 @@ export default class extends Vue {
               permissions: this.admin.permissions
             }
             editAdmin(params).then((res:any) => {
-              console.log(res)
+              this.$message.success('Changed successfully')
+              this.getAdmins()
             })
           }
           if (this.dialogType === 'new') {

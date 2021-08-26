@@ -71,10 +71,13 @@ export function get(url:string, params:any) {
     axios.get(url, {
       params: params
     }).then(res => {
+      console.log(res)
+      // @ts-ignore
       if (res.code === 0) {
-        resolve(res.data);
+        resolve(res.data)
       } else {
         Message({
+          // @ts-ignore
           message: res.msg || 'Error',
           type: 'error',
           duration: 5 * 1000
@@ -83,7 +86,7 @@ export function get(url:string, params:any) {
     }).catch(err => {
       throw err
     })
-  });
+  })
 }
 
 /**
@@ -95,12 +98,15 @@ export function post(url:string, params:any) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(res => {
+        // @ts-ignore
         if (res.code === 401) { // token 失效
           router.push({ path: '/login' })
           return
         }
+        // @ts-ignore
         if (res.code !== 0) {
           Message({
+            // @ts-ignore
             message: res.msg || 'Error',
             type: 'error',
             duration: 5 * 1000
