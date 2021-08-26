@@ -240,13 +240,13 @@ export default class extends Vue {
     email: '',
     level: -1,
     page_no: 1,
-    page_size: 50
+    page_size: 10
   }
 
   private dialogSearchQuery = {
     user_code: '',
     page_no: 1,
-    page_size: 15
+    page_size: 10
   }
 
   private dialogType = ''

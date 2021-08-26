@@ -55,7 +55,7 @@
           label="Set"
           width="120">
           <template slot-scope="scope">
-            <i class="el-icon-s-tools" @click="onSet(scope.$index, scope.row)"></i>
+            <span class="blue--text" @click="onSet(scope.$index, scope.row)">Approve</span>
           </template>
         </el-table-column>
       </el-table>
@@ -94,7 +94,7 @@ export default class extends Vue {
 
   private query = {
     page_no: 1,
-    page_size: 50,
+    page_size: 10,
     status: 0
   }
 

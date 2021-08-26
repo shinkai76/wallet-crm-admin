@@ -90,7 +90,7 @@ export default class extends Vue {
 
   private query = {
     page_no: 1,
-    page_size: 50
+    page_size: 10
   }
 
   private rules = {

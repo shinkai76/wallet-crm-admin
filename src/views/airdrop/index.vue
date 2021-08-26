@@ -99,7 +99,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { validateFee } from '@/utils/validate'
-import { createAirdrop, airdropList, tokenAddress, tokenQuery } from '@/api/users'
+import { createAirdrop, airdropList, tokenQuery } from '@/api/users'
 import { IAirdropListData, ITokenQuery } from '@/api/types'
 import { ElForm } from 'element-ui/types/form'
 @Component({
@@ -159,7 +159,7 @@ export default class extends Vue {
 
   private query = {
     page_no: 1,
-    page_size: 50
+    page_size: 10
   }
 
   private tableData:IAirdropListData[] = []

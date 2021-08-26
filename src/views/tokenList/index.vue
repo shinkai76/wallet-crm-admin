@@ -73,12 +73,12 @@
         <el-form-item :label="current + ' Withdraw Fee'" prop="withdrawal_fee">
           <el-input class="input-width" v-model.trim="settingForm.withdrawal_fee"></el-input>
         </el-form-item>
-        <el-form-item label="Internal Withdraw Fee" prop="internal_fee">
+        <el-form-item label="Internal Withdraw Fee" prop="internal">
           <el-radio-group v-model="isNeedPay">
             <el-radio label="0">Free</el-radio>
             <el-radio label="1">Need pay</el-radio>
           </el-radio-group>
-          <el-form-item prop="internal_fee" v-show="isNeedPay === '1'">
+          <el-form-item v-show="isNeedPay === '1'">
             <el-input class="input-width"
                       v-model.trim="settingForm.internal"
             ></el-input>
@@ -90,7 +90,7 @@
         </span>
     </el-dialog>
 
-    <el-dialog title="ADD"
+    <el-dialog :title="'ADD - ' + current"
                :visible.sync="showAddDialog"
                center
                width="460px"
@@ -144,7 +144,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { ITokenListData } from '@/api/types'
 import { addToken, setToken, tokenAddress, tokenList } from '@/api/users'
 import { validateFee } from '@/utils/validate'
@@ -155,7 +155,7 @@ import { ElForm } from 'element-ui/types/form'
 })
 export default class extends Vue {
   private loading = false
-  private btns: string[] = ['OMNI', 'ERC20', 'TRC20', 'BSC', 'HECO', 'OKT']
+  private btns: string[] = ['OMNI', 'ERC20', 'TRC20', 'BEP20', 'HRC20', 'OIP20']
   private current = 'OMNI'
   private tableData = []
   private addressList = []
@@ -196,6 +196,17 @@ export default class extends Vue {
         trigger: 'blur'
       }
     ],
+    internal: [
+      {
+        required: true,
+        message: 'required',
+        trigger: 'blur'
+      },
+      {
+        validator: validateFee,
+        trigger: 'blur'
+      }
+    ],
     collect_limit: [
       {
         required: true,
@@ -219,6 +230,18 @@ export default class extends Vue {
 
   mounted() {
     this.init()
+  }
+
+  @Watch('isNeedPay')
+  private resetFormValidate() {
+    this.$nextTick(() => {
+      if (this.showSettingDialog) {
+        (this.$refs.settingForm as ElForm).resetFields();
+      }
+      if (this.showAddDialog) {
+        (this.$refs.addForm as ElForm).resetFields();
+      }
+    })
   }
 
   private init() {
@@ -298,7 +321,8 @@ export default class extends Vue {
   private selectFilter(val:string) {
     this.addressList = []
     const params = {
-      name: val
+      name: val,
+      proto: this.current
     }
     tokenAddress(params).then((res:any) => {
       this.addressList = res.sys_tokens
