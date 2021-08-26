@@ -52,6 +52,16 @@ export interface ITokenListData {
   proto: string
 }
 
+export interface ITokenAddress {
+  address: string
+  decimals?: number
+  id: number
+  logo_url: string
+  name: string
+  proto: string
+  symbol: string
+}
+
 /*  token list  END  */
 
 /* airdrop  */

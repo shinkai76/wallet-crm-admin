@@ -146,7 +146,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { ITokenListData } from '@/api/types'
+import { ITokenListData, ITokenAddress } from '@/api/types'
 import { addToken, setToken, tokenAddress, tokenList } from '@/api/users'
 import { validateFee } from '@/utils/validate'
 import { ElForm } from 'element-ui/types/form'
@@ -159,7 +159,7 @@ export default class extends Vue {
   private btns: string[] = ['OMNI', 'ERC20', 'TRC20', 'BEP20', 'HRC20', 'OIP20']
   private current = 'OMNI'
   private tableData = []
-  private addressList = []
+  private addressList:ITokenAddress[] = []
   private currentTokenInfo!: ITokenListData
   private showSettingDialog = false
   private showAddDialog = false
@@ -239,7 +239,7 @@ export default class extends Vue {
     })
   }
 
-  private selectChanged(val) {
+  private selectChanged(val:ITokenAddress) {
     this.addForm.contract_address = val.address || ''
     this.addForm.token_name = val.name || ''
   }

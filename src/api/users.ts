@@ -52,7 +52,7 @@ interface IData4 {
   id: number
   proto: string
   withdrawal_fee: string
-  internal: string
+  internal_fee: string
 }
 export const setToken = (params: IData4) => {
   return post(baseUrl + '/token/set', params)
