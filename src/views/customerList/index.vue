@@ -338,6 +338,7 @@ export default class extends Vue {
         type: 'success'
       })
       this.dialogVisible.level = false
+      this.getData()
     })
   }
 
