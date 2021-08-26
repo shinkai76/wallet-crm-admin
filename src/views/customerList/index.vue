@@ -22,7 +22,7 @@
           fixed
           width="120"
           prop="user_id"
-          label="UserIO">
+          label="UserID">
         </el-table-column>
         <el-table-column
           prop="email"
