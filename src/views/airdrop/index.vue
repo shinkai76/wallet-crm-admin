@@ -33,7 +33,7 @@
           prop="customer_level"
           label="Customer Level">
           <template slot-scope="scope">
-            <span v-if="scope.row.customer_level">
+            <span>
               Lv {{ scope.row.customer_level }}
             </span>
           </template>
@@ -63,13 +63,13 @@
                        :remote-method="selectFilter"
                        placeholder="Search"
                        style="width: 100%"
-                       @change="afterSelect"
+                       @change="selectChanged"
             >
               <el-option
                 v-for="item in tokens"
                 :key="item.id"
                 :label="item.proto"
-                :value="item.id">
+                :value="item">
                 <div style="float: left">{{ item.proto }}</div> &nbsp;&nbsp;
                 <div style="float: right">{{ item.name }}</div>
               </el-option>
@@ -203,17 +203,11 @@ export default class extends Vue {
     this.showCreateDialog = false
   }
 
-  private afterSelect(val:number) {
-    this.tokenQuery = this.tokenQuery + '  ' + val
-    this.tokens.find(el => {
-      if (el.id === val) {
-        this.form.token = el.name
-        this.form.proto = el.proto
-        this.tokenQuery = el.proto + '  ' + el.name
-        return el
-      }
-      return null
-    })
+  private selectChanged(val:ITokenQuery) {
+    const { name, proto } = val
+    this.form.token = name
+    this.form.proto = proto
+    this.tokenQuery = proto + '  ' + name
   }
 
   private selectFilter(val:string) {
@@ -231,13 +225,17 @@ export default class extends Vue {
   }
 
   private openCreateDialog() {
-    this.showCreateDialog = true
+    this.tokenQuery = ''
     this.tokens = []
     const params = {
       proto: ''
     }
     tokenQuery(params).then((res:any) => {
       this.tokens = res.tokens
+      this.showCreateDialog = true
+      this.$nextTick(() => {
+        (this.$refs.form as ElForm).resetFields()
+      })
     })
   }
 
