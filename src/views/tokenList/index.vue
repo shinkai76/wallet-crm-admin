@@ -73,14 +73,14 @@
         <el-form-item :label="current + ' Withdraw Fee'" prop="withdrawal_fee">
           <el-input class="input-width" v-model.trim="settingForm.withdrawal_fee"></el-input>
         </el-form-item>
-        <el-form-item label="Internal Withdraw Fee" prop="internal">
+        <el-form-item label="Internal Withdraw Fee" prop="internal_fee">
           <el-radio-group v-model="isNeedPay">
             <el-radio label="0">Free</el-radio>
             <el-radio label="1">Need pay</el-radio>
           </el-radio-group>
           <el-form-item v-show="isNeedPay === '1'">
             <el-input class="input-width"
-                      v-model.trim="settingForm.internal"
+                      v-model.trim="settingForm.internal_fee"
             ></el-input>
           </el-form-item>
         </el-form-item>
@@ -196,17 +196,6 @@ export default class extends Vue {
         trigger: 'blur'
       }
     ],
-    internal: [
-      {
-        required: true,
-        message: 'required',
-        trigger: 'blur'
-      },
-      {
-        validator: validateFee,
-        trigger: 'blur'
-      }
-    ],
     collect_limit: [
       {
         required: true,
@@ -225,7 +214,7 @@ export default class extends Vue {
 
   private settingForm = {
     withdrawal_fee: '',
-    internal: ''
+    internal_fee: ''
   }
 
   mounted() {
@@ -267,7 +256,7 @@ export default class extends Vue {
     this.showSettingDialog = true
     this.isNeedPay = this.currentTokenInfo.internal_fee !== '0' ? '1' : '0'
     this.settingForm.withdrawal_fee = this.currentTokenInfo.withdrawal_fee
-    this.settingForm.internal = this.currentTokenInfo.internal_fee
+    this.settingForm.internal_fee = this.currentTokenInfo.internal_fee
   }
 
   private refresh(tab:string) {
@@ -283,7 +272,7 @@ export default class extends Vue {
         proto: this.current,
         ...this.settingForm
       }
-      if (this.isNeedPay === '0') params.internal = '0'
+      if (this.isNeedPay === '0') params.internal_fee = '0'
       setToken(params).then(() => {
         this.$message.success('Set successfully!')
         this.getData()
