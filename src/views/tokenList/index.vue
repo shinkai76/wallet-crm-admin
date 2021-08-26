@@ -108,11 +108,12 @@
                      :remote-method="selectFilter"
                      placeholder="Search"
                      style="width: 100%"
+                     @change="selectChanged"
           >
             <el-option
               v-for="item in addressList"
               :key="item.id"
-              :value="item.address">
+              :value="item">
               <div style="float: left">{{ item.name }}</div> &nbsp;&nbsp;
               <div style="float: right">{{ item.address }}</div>
             </el-option>
@@ -144,7 +145,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import { ITokenListData } from '@/api/types'
 import { addToken, setToken, tokenAddress, tokenList } from '@/api/users'
 import { validateFee } from '@/utils/validate'
@@ -221,18 +222,6 @@ export default class extends Vue {
     this.init()
   }
 
-  @Watch('isNeedPay')
-  private resetFormValidate() {
-    this.$nextTick(() => {
-      if (this.showSettingDialog) {
-        (this.$refs.settingForm as ElForm).resetFields();
-      }
-      if (this.showAddDialog) {
-        (this.$refs.addForm as ElForm).resetFields();
-      }
-    })
-  }
-
   private init() {
     this.getData()
   }
@@ -248,6 +237,11 @@ export default class extends Vue {
     }).finally(() => {
       this.loading = false
     })
+  }
+
+  private selectChanged(val) {
+    this.addForm.contract_address = val.address || ''
+    this.addForm.token_name = val.name || ''
   }
 
   private editRow(index:any, row: ITokenListData): void {
