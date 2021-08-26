@@ -2,6 +2,7 @@
   <div class="page-container">
     <div class="table-wrap">
       <el-table
+        height="720px"
         v-loading="loading"
         :data="tableData"
         highlight-current-row>

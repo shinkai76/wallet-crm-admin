@@ -22,7 +22,7 @@ export default class extends Vue {}
 .app-main {
   background: white;
   position: absolute;
-  height: 100%;
+  height: calc(100% - 50px);
   width: 100%;
   overflow: hidden;
 }

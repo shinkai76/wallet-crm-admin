@@ -1,6 +1,7 @@
 <template>
   <div class="page-container">
     <el-table
+      height="720px"
       v-loading="loading"
       :data="tableData"
       style="width: 100%"
@@ -129,7 +130,7 @@ export default class extends Vue {
   private onApprove(code:string) {
     const params = { code }
     this.loading = true
-    depositApprove(params).then((() => {
+    depositApprove(params).then(() => {
       this.$message.success('Execute successfully')
       this.query.page_no = 1
       this.getData()

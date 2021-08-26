@@ -1,63 +1,65 @@
 <template>
   <div class="page-container">
-    <el-table
-      v-loading="loading"
-      :data="tableData"
-      style="width: 100%"
-      highlight-current-row>
-      <el-table-column
-        fixed
-        prop="id"
-        width="100"
-        label="Order">
-      </el-table-column>
-      <el-table-column
-        prop="user_code"
-        label="Account">
-      </el-table-column>
-      <el-table-column
-        prop="application_time"
-        label="Application time"
-        width="170"
-      >
-      <template slot-scope="scope">
-        <span>{{ scope.row.application_time | formatTime }}</span>
-      </template>
-      </el-table-column>
-      <el-table-column
-        prop="token"
-        label="Token"
-        width="150"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="withdrawal_type"
-        label="Withdrawal Type"
-        width="150"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="fee"
-        label="Fee"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="to"
-        label="Withdrawal address"
-        width="400"
-      >
-      </el-table-column>
-      <el-table-column
-        prop=""
-        fixed="right"
-        label="Set"
-        width="120">
+    <div class="table-wrap">
+      <el-table
+        height="720px"
+        v-loading="loading"
+        :data="tableData"
+        style="width: 100%"
+        highlight-current-row>
+        <el-table-column
+          fixed
+          prop="id"
+          width="100"
+          label="Order">
+        </el-table-column>
+        <el-table-column
+          prop="user_code"
+          label="Account">
+        </el-table-column>
+        <el-table-column
+          prop="application_time"
+          label="Application time"
+          width="170"
+        >
         <template slot-scope="scope">
-          <i class="el-icon-s-tools" @click="onSet(scope.$index, scope.row)"></i>
+          <span>{{ scope.row.application_time | formatTime }}</span>
         </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
+        </el-table-column>
+        <el-table-column
+          prop="token"
+          label="Token"
+          width="150"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="withdrawal_type"
+          label="Withdrawal Type"
+          width="150"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="fee"
+          label="Fee"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="to"
+          label="Withdrawal address"
+          width="400"
+        >
+        </el-table-column>
+        <el-table-column
+          prop=""
+          fixed="right"
+          label="Set"
+          width="120">
+          <template slot-scope="scope">
+            <i class="el-icon-s-tools" @click="onSet(scope.$index, scope.row)"></i>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
         class="pagination-container"
         @current-change="handleCurrentChange"
         :current-page.sync="query.page_no"
@@ -65,7 +67,7 @@
         layout="prev, pager, next, jumper"
         :total="total">
       </el-pagination>
-
+    </div>
     <el-dialog
       :visible.sync="resultDialogVisible"
       width="400px"
@@ -108,6 +110,7 @@ export default class extends Vue {
     const params = this.query
     getWithdrawList(params).then((res:any) => {
       this.tableData = res.records
+      this.total = res.total
     }).finally(() => {
       this.loading = false
     })

@@ -15,6 +15,7 @@
     </div>
     <div class="table-wrap">
       <el-table
+        height="720px"
         v-loading="loading"
         :data="tableData"
         highlight-current-row>
@@ -329,9 +330,9 @@ export default class extends Vue {
   private onModifyLevel():void {
     const params = {
       level: this.userLevel,
-      user_code: this.currentUserInfo.user_code
+      user_code: this.currentUserInfo.email
     }
-    modifyLevel(params).then((res:any) => {
+    modifyLevel(params).then(() => {
       this.$message({
         message: 'Set successfully',
         type: 'success'
