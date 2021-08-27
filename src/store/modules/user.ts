@@ -10,7 +10,7 @@ export interface IUserState {
   avatar: string
   introduction: string
   roles: string[]
-  routes: string[]
+  routes: any[] | null
 }
 
 @Module({ dynamic: true, store, name: 'user' })
@@ -20,7 +20,7 @@ class User extends VuexModule implements IUserState {
   public avatar = ''
   public introduction = ''
   public roles: string[] = []
-  public routes: string[] = []
+  public routes = null
 
   @Mutation
   private SET_TOKEN(token: string) {
@@ -48,8 +48,8 @@ class User extends VuexModule implements IUserState {
   }
 
   @Mutation
-  private SET_ROUTES(routes: string) {
-    this.routes.push(routes)
+  private SET_ROUTES(routes:any) {
+    this.routes = routes
   }
 
   @Action({ rawError: true })
@@ -100,6 +100,7 @@ class User extends VuexModule implements IUserState {
     }
     localStorage.removeItem('token')
     removeToken()
+    this.SET_ROUTES(null)
     this.SET_TOKEN('')
     this.SET_ROLES([])
   }

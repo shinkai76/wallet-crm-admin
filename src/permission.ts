@@ -15,14 +15,13 @@ router.beforeEach(async(to: Route, form: Route, next: any) => {
   const token = localStorage.getItem('token')
   // Determine whether the user has logged in
 
-  console.log('守卫')
   if (token) {
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     }
-    if (!store.state.user.routes.length) {
+    if (!store.state.user.routes) {
       const menusId = JSON.parse(localStorage.getItem('menus_id') || '')
       // TODO 判断是否需要生成路由
       PermissionModule.GenerateRoutes(menusId)

@@ -45,23 +45,21 @@ import { RouteConfig } from 'vue-router'
   }
 })
 export default class extends Vue {
-  // private routes = []
+  private routes:RouteConfig[] = []
 
-  // @Watch('$route', { deep: true, immediate: true })
-  // private getRoutes() {
-  //   console.log('get routes')
-  //   this.routes = PermissionModule.routes
-  //   console.log(PermissionModule.routes)
-  // }
+  @Watch('$route', { deep: true, immediate: true })
+  private getRoutes() {
+    this.routes = PermissionModule.routes
+  }
 
   get sidebar() {
     return AppModule.sidebar
   }
 
-  get routes() {
-    console.log('get routes', PermissionModule.routes)
-    return PermissionModule.routes
-  }
+  // get routes() {
+  //   console.log('get routes', PermissionModule.routes)
+  //   return PermissionModule.routes
+  // }
 
   get showLogo() {
     return SettingsModule.showSidebarLogo
