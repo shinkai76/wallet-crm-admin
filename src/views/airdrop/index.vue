@@ -49,7 +49,11 @@
         :total="total">
       </el-pagination>
     </div>
-    <el-dialog title="ADD" :visible.sync="showCreateDialog" :before-close="closeDialog">
+    <el-dialog title="ADD"
+               :visible.sync="showCreateDialog"
+               :before-close="closeDialog"
+               center
+    >
         <el-form ref="form"
                   label-position='top'
                   :model="form"
@@ -90,7 +94,7 @@
           </el-form-item>
         </el-form>
          <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="onSubmit">Submit</el-button>
+            <el-button type="primary" @click="onSubmit" class="full-btn">Submit</el-button>
         </span>
       </el-dialog>
   </div>

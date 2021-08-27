@@ -54,7 +54,7 @@
         :total="total">
       </el-pagination>
     </div>
-    <el-dialog title="Collect" :visible.sync="showCollect" width="400px">
+    <el-dialog title="Collect" :visible.sync="showCollect" width="400px" center>
       <el-select v-model="token" placeholder="Token" style="width: 100%">
         <el-option
           v-for="item in tokens"
@@ -64,7 +64,7 @@
         </el-option>
       </el-select>
         <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onCollect">Collect</el-button>
+        <el-button type="primary" @click="onCollect" class="full-btn">Collect</el-button>
       </span>
     </el-dialog>
   </div>

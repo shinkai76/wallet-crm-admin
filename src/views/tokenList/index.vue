@@ -86,7 +86,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="onModifySet">OK</el-button>
+            <el-button type="primary" @click="onModifySet" class="full-btn">OK</el-button>
         </span>
     </el-dialog>
 
@@ -138,7 +138,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="onAdd">OK</el-button>
+            <el-button type="primary" @click="onAdd" class="full-btn">OK</el-button>
       </span>
     </el-dialog>
   </div>

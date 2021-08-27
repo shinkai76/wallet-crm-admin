@@ -148,7 +148,7 @@
           :total="dialogTotal">
         </el-pagination>
       </el-dialog>
-      <el-dialog title="Level" :visible.sync="dialogVisible.level" width="400px">
+      <el-dialog title="Level" :visible.sync="dialogVisible.level" width="400px" center>
         <el-select v-model="userLevel" placeholder="Level" clearable style="width: 100%">
           <el-option
             :value="item.value"
@@ -158,7 +158,7 @@
           ></el-option>
         </el-select>
          <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="onModifyLevel">OK</el-button>
+          <el-button type="primary" @click="onModifyLevel" class="full-btn">OK</el-button>
         </span>
       </el-dialog>
   </div>
