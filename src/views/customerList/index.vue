@@ -343,6 +343,7 @@ export default class extends Vue {
   }
 
   private editRow(index:any, row:ICustomerData):void {
+    this.userLevel = row.level
     this.currentUserInfo = row
     this.dialogSearchQuery.user_code = row.user_code
     this.dialogSearchQuery.page_no = 1
