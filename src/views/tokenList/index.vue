@@ -157,7 +157,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { ITokenListData, ITokenAddress } from '@/api/types'
 import { addToken, setToken, tokenAddress, tokenList } from '@/api/users'
-import { validateFee } from '@/utils/validate'
 import { ElForm } from 'element-ui/types/form'
 
 @Component({
@@ -177,9 +176,10 @@ export default class extends Vue {
   private addForm = {
     token_name: '',
     withdrawal_fee: '',
-    internal_fee: '',
+    internal_fee: '0',
     contract_address: '',
     collect_limit: '',
+    decimals: 0,
     proto: '' // 就是tab的名字
   }
 
@@ -191,7 +191,7 @@ export default class extends Vue {
         trigger: 'blur'
       },
       {
-        validator: validateFee,
+        validator: this.validateFee,
         trigger: 'blur'
       }
     ],
@@ -202,7 +202,7 @@ export default class extends Vue {
         trigger: 'blur'
       },
       {
-        validator: validateFee,
+        validator: this.validateFee,
         trigger: 'blur'
       }
     ],
@@ -249,9 +249,22 @@ export default class extends Vue {
     })
   }
 
+  private validateFee(rule:any, value:any, callback:any){
+    if (this.isNeedPay === '0') {
+      callback()
+      return
+    }
+    if (Number(value) <= 0 || isNaN(Number(value))) {
+      callback(new Error('Must be greater than 0'))
+    } else {
+      callback()
+    }
+  }
+
   private selectChanged(val:ITokenAddress) {
     this.addForm.contract_address = val.address || ''
     this.addForm.token_name = val.name || ''
+    this.addForm.decimals = val.decimals || 0
   }
 
   private editRow(index:any, row: ITokenListData): void {
@@ -326,6 +339,8 @@ export default class extends Vue {
 
   private openAddDialog() {
     this.showAddDialog = true
+    this.isNeedPay = '0'
+    this.addForm.internal_fee = '0'
   }
 }
 </script>
