@@ -151,7 +151,6 @@ export default class extends Vue {
   private onSet(index:any, row:IWithdrawPendingListData):void {
     this.secondConfirm(row.code)
   }
-
 }
 </script>
 

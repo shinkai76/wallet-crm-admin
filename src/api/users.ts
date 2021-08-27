@@ -142,7 +142,7 @@ export const collectList = (params: IData10) => {
 }
 
 interface IData11 {
-  token_id: number
+  token_id: number | string
 }
 export const collect = (params: IData11) => {
   return post(baseUrl + '/collection/send', params)

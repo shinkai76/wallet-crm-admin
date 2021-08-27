@@ -80,7 +80,7 @@ import { collectList, collect, tokenList } from '@/api/users'
 })
 export default class extends Vue {
   private showCollect = false
-  private token = ''
+  private token: number | string = ''
   private tableData:ICollectListData[] = []
   private loading = false
   private total = 0

@@ -3,7 +3,8 @@
     <div class="btns-wrap">
       <el-button-group>
         <el-button :type="current === item? 'primary' : 'default'"
-                   v-for="item in btns"
+                   v-for="(item, index) in btns"
+                   :key="index"
                    @click="refresh(item)"
         >{{ item }}
         </el-button>
