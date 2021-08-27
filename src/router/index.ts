@@ -83,6 +83,9 @@ export const asyncRoutes: RouteConfig[] = [
     path: '/customerList',
     redirect: '/customerList/index',
     component: Layout,
+    meta: {
+      permissionId: '2'
+    },
     children: [
       {
         path: 'index',
@@ -99,6 +102,9 @@ export const asyncRoutes: RouteConfig[] = [
     path: '/tokenList',
     redirect: '/tokenList/index',
     component: Layout,
+    meta: {
+      permissionId: '3'
+    },
     children: [
       {
         path: 'index',
@@ -115,6 +121,9 @@ export const asyncRoutes: RouteConfig[] = [
     path: '/airdrop',
     redirect: '/airdrop/index',
     component: Layout,
+    meta: {
+      permissionId: '4'
+    },
     children: [
       {
         path: 'index',
