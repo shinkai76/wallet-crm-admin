@@ -80,7 +80,7 @@ import { collectList, collect, tokenList } from '@/api/users'
 })
 export default class extends Vue {
   private showCollect = false
-  private token = 0
+  private token = ''
   private tableData:ICollectListData[] = []
   private loading = false
   private total = 0
@@ -131,7 +131,20 @@ export default class extends Vue {
   }
 
   private onCollect() {
-    if (this.token == null) return
+    if (this.token == null || this.token == '') return
+    this.secondConfirm()
+  }
+
+  private secondConfirm() {
+    this.$confirm('Are you sure about this operation', '', {
+      confirmButtonText: 'Sure',
+      cancelButtonText: 'No'
+    }).then(() => {
+      this.onConfirmCollect()
+    })
+  }
+
+  private onConfirmCollect() {
     const params = {
       token_id: this.token
     }
