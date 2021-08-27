@@ -44,6 +44,11 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="collect_limit"
+          label="Collect limit"
+        >
+        </el-table-column>
+        <el-table-column
           prop="contract_address"
           label="Contract address"
         >
@@ -62,7 +67,7 @@
     <el-dialog :title="settingDialogTitle"
                :visible.sync="showSettingDialog"
                center
-               width="430px"
+               width="450px"
                :before-close="closeDialog"
     >
       <el-form ref="settingForm"
@@ -73,6 +78,9 @@
       >
         <el-form-item :label="current + ' Withdraw Fee'" prop="withdrawal_fee">
           <el-input class="input-width" v-model.trim="settingForm.withdrawal_fee"></el-input>
+        </el-form-item>
+        <el-form-item label="Collect limit" prop="collect_limit">
+          <el-input v-model.trim="settingForm.collect_limit"></el-input>
         </el-form-item>
         <el-form-item label="Internal Withdraw Fee" prop="internal_fee">
           <el-radio-group v-model="isNeedPay">
@@ -216,7 +224,8 @@ export default class extends Vue {
 
   private settingForm = {
     withdrawal_fee: '',
-    internal_fee: ''
+    internal_fee: '',
+    collect_limit: ''
   }
 
   mounted() {
@@ -252,6 +261,7 @@ export default class extends Vue {
     this.isNeedPay = this.currentTokenInfo.internal_fee !== '0' ? '1' : '0'
     this.settingForm.withdrawal_fee = this.currentTokenInfo.withdrawal_fee
     this.settingForm.internal_fee = this.currentTokenInfo.internal_fee
+    this.settingForm.collect_limit = this.currentTokenInfo.collect_limit
   }
 
   private refresh(tab:string) {
@@ -282,6 +292,7 @@ export default class extends Vue {
       if (!valid) return
       const params = this.addForm
       params.proto = this.current
+      if (this.isNeedPay === '0') params.internal_fee = '0'
       addToken(params).then(() => {
         this.$message.success('Added successfully!')
         this.getData()

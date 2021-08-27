@@ -50,6 +50,7 @@ export interface ITokenListData {
   internal_fee: string
   contract_address: string
   proto: string
+  collect_limit: string
 }
 
 export interface ITokenAddress {

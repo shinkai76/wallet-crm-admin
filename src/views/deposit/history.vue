@@ -81,7 +81,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { IHistoryListData } from '@/api/types'
-import { getDepositList, getWithdrawList, tokenList } from '@/api/users'
+import { getDepositList, tokenList } from '@/api/users'
 
 @Component({
   name: 'history'

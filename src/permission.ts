@@ -14,6 +14,8 @@ router.beforeEach(async(to: Route, form: Route, next: any) => {
   NProgress.start()
   const token = localStorage.getItem('token')
   // Determine whether the user has logged in
+
+  console.log('守卫')
   if (token) {
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
@@ -24,13 +26,10 @@ router.beforeEach(async(to: Route, form: Route, next: any) => {
       const menusId = JSON.parse(localStorage.getItem('menus_id') || '')
       // TODO 判断是否需要生成路由
       PermissionModule.GenerateRoutes(menusId)
-      PermissionModule.dynamicRoutes.forEach((route, index, arr) => {
+      PermissionModule.dynamicRoutes.forEach((route) => {
         router.addRoute(route)
-        // store.commit('SET_ROUTES', route.name)
-        if (index == arr.length - 1) {
-          next({ ...to, replace: true })
-        }
       })
+      next({ ...to, replace: true })
     } else {
       next()
     }

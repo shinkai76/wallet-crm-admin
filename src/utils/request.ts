@@ -71,7 +71,6 @@ export function get(url:string, params:any) {
     axios.get(url, {
       params: params
     }).then(res => {
-      console.log(res)
       // @ts-ignore
       if (res.code === 0) {
         resolve(res.data)
@@ -117,7 +116,6 @@ export function post(url:string, params:any) {
         resolve(res.data)
       })
       .catch(err => {
-        console.log(err)
         reject(err.data)
       })
   })

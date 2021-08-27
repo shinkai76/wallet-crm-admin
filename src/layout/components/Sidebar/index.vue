@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
 import { PermissionModule } from '@/store/modules/permission'
 import { SettingsModule } from '@/store/modules/settings'
@@ -44,11 +44,21 @@ import variables from '@/styles/_variables.scss'
   }
 })
 export default class extends Vue {
+  // private routes = []
+
+  // @Watch('$route', { deep: true, immediate: true })
+  // private getRoutes() {
+  //   console.log('get routes')
+  //   this.routes = PermissionModule.routes
+  //   console.log(PermissionModule.routes)
+  // }
+
   get sidebar() {
     return AppModule.sidebar
   }
 
   get routes() {
+    console.log('get routes')
     return PermissionModule.routes
   }
 

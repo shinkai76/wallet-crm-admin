@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 <template>
   <div class="page-container">
     <div class="btns-wrap">
@@ -118,7 +119,8 @@ export default class extends Vue {
     token: '',
     proto: '',
     user_level: 0,
-    amount: ''
+    amount: '',
+    contract_address: ''
   }
 
   private tokenQuery = ''
@@ -208,9 +210,10 @@ export default class extends Vue {
   }
 
   private selectChanged(val:ITokenQuery) {
-    const { name, proto } = val
+    const { name, proto, contract_address } = val
     this.form.token = name
     this.form.proto = proto
+    this.form.contract_address = contract_address
     this.tokenQuery = proto + '  ' + name
   }
 
