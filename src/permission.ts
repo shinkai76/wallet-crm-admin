@@ -21,9 +21,9 @@ router.beforeEach(async(to: Route, form: Route, next: any) => {
       next({ path: '/' })
       NProgress.done()
     }
+    console.log(store.state.user.routes)
     if (!store.state.user.routes) {
       const menusId = JSON.parse(localStorage.getItem('menus_id') || '')
-      // TODO 判断是否需要生成路由
       PermissionModule.GenerateRoutes(menusId)
       PermissionModule.dynamicRoutes.forEach((route) => {
         router.addRoute(route)

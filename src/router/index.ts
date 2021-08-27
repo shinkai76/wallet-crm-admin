@@ -63,9 +63,6 @@ export const asyncRoutes: RouteConfig[] = [
     path: '/',
     component: Layout,
     redirect: '/overview',
-    meta: {
-      permissionId: '1'
-    },
     children: [
       {
         path: '/overview',
