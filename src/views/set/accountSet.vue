@@ -2,56 +2,61 @@
   <div class="page-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="Role Permissions" name="Permissions">
-        <el-button
-          type="primary"
-          @click="handleCreateRole"
-        >
-          ADD Permissions
-        </el-button>
-        <el-table
-          :data="rolesList"
-          style="width: 100%;margin-top:30px;"
-          border
-        >
-          <el-table-column
-            align="center"
-            label="Role Name"
-            width="320"
+        <div class="btns-wrap">
+          <el-button
+            type="primary"
+            @click="handleCreateRole"
           >
-            <template slot-scope="{row}">
-              {{ row.name }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="Operations"
+            ADD Permissions
+          </el-button>
+        </div>
+        <div class="table-wrap">
+          <el-table
+            :data="rolesList"
+            style="width: 100%;margin-top:30px;"
+            border
+            height="620px"
           >
-            <template slot-scope="scope">
-              <el-button
-                type="primary"
-                size="small"
-                @click="handleEditRole(scope.row)"
-              >
-                EDIT
-              </el-button>
-              <el-button
-                type="danger"
-                size="small"
-                @click="handleDeleteRole(scope.row)"
-              >
-                DELETE
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          class="pagination-container"
-          @current-change="handleCurrentChange"
-          :current-page.sync="query.page_no"
-          :page-size="query.page_size"
-          layout="prev, pager, next, jumper"
-          :total="total">
-        </el-pagination>
+            <el-table-column
+              align="center"
+              label="Role Name"
+              width="320"
+            >
+              <template slot-scope="{row}">
+                {{ row.name }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="Operations"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  type="primary"
+                  size="small"
+                  @click="handleEditRole(scope.row)"
+                >
+                  EDIT
+                </el-button>
+                <el-button
+                  type="danger"
+                  size="small"
+                  @click="handleDeleteRole(scope.row)"
+                >
+                  DELETE
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            class="pagination-container"
+            @current-change="handleCurrentChange"
+            :current-page.sync="query.page_no"
+            :page-size="query.page_size"
+            layout="prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
+        </div>
         <!--        新建编辑弹窗-->
         <el-dialog
           :visible.sync="dialogVisible"
@@ -98,74 +103,80 @@
         </el-dialog>
       </el-tab-pane>
       <el-tab-pane label="Administrator" name="Administrator">
-        <el-button
-          type="primary"
-          @click="handleCreateAdmin"
-        >
-          ADD Administrator
-        </el-button>
-        <el-table
-          :data="adminList"
-          style="width: 100%;margin-top:30px;"
-          border
-        >
-          <el-table-column
-            align="center"
-            label="UserName"
-            width="320"
+        <div class="btns-wrap">
+          <el-button
+            type="primary"
+            @click="handleCreateAdmin"
           >
-            <template slot-scope="{row}">
-              {{ row.name }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="Password"
-            width="320"
-          >
-            <template slot-scope="{row}">
-              ******
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="Permissions"
-            width="320"
-          >
-            <template slot-scope="{row}">
-              {{ row.permissions }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="Set"
-          >
-            <template slot-scope="scope">
-              <el-button
-                type="primary"
-                size="small"
-                @click="handleEditAdmin(scope.row)"
-              >
-                EDIT
-              </el-button>
-              <el-button
-                type="danger"
-                size="small"
-                @click="handleDeleteAdmin(scope.row)"
-              >
-                DELETE
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          class="pagination-container"
-          @current-change="handleCurrentChangeAdmin"
-          :current-page.sync="queryAdmin.page_no"
-          :page-size="queryAdmin.page_size"
-          layout="prev, pager, next, jumper"
-          :total="adminTotal">
-        </el-pagination>
+            ADD Administrator
+          </el-button>
+        </div>
+       <div class="table-wrap">
+
+         <el-table
+           :data="adminList"
+           style="width: 100%;margin-top:30px;"
+           border
+           height="620px"
+         >
+           <el-table-column
+             align="center"
+             label="UserName"
+             width="320"
+           >
+             <template slot-scope="{row}">
+               {{ row.name }}
+             </template>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             label="Password"
+             width="320"
+           >
+             <template slot-scope="{row}">
+               ******
+             </template>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             label="Permissions"
+             width="320"
+           >
+             <template slot-scope="{row}">
+               {{ row.permissions }}
+             </template>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             label="Set"
+           >
+             <template slot-scope="scope">
+               <el-button
+                 type="primary"
+                 size="small"
+                 @click="handleEditAdmin(scope.row)"
+               >
+                 EDIT
+               </el-button>
+               <el-button
+                 type="danger"
+                 size="small"
+                 @click="handleDeleteAdmin(scope.row)"
+               >
+                 DELETE
+               </el-button>
+             </template>
+           </el-table-column>
+         </el-table>
+         <el-pagination
+           class="pagination-container"
+           @current-change="handleCurrentChangeAdmin"
+           :current-page.sync="queryAdmin.page_no"
+           :page-size="queryAdmin.page_size"
+           layout="prev, pager, next, jumper"
+           :total="adminTotal">
+         </el-pagination>
+       </div>
         <!--        新建admin弹窗-->
         <el-dialog
           center
