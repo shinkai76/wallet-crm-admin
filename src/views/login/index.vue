@@ -84,8 +84,8 @@ const sha256 = require('js-sha256').sha256
 })
 export default class extends Vue {
   private loginForm = {
-    user_code: 'admin',
-    password: '123456'
+    user_code: '',
+    password: ''
   }
 
   private loginRules = {
