@@ -149,7 +149,7 @@
         </el-pagination>
       </el-dialog>
       <el-dialog title="Level" :visible.sync="dialogVisible.level" width="400px" center>
-        <el-select v-model="userLevel" placeholder="Level" clearable style="width: 100%">
+        <el-select v-model="userLevel" placeholder="Level" style="width: 100%">
           <el-option
             :value="item.value"
             v-for="item in levels.slice(1)"

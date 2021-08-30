@@ -81,7 +81,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="Customer Level" prop="user_level">
-            <el-select v-model="form.user_level" placeholder="Level" clearable style="width: 100%">
+            <el-select v-model="form.user_level" placeholder="Level" style="width: 100%">
               <el-option
                 :value="item.value"
                 v-for="item in levels.slice(1)"
