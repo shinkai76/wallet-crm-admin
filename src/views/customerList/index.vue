@@ -83,20 +83,20 @@
     </div>
 
       <el-dialog title="Existing  Assets" :visible.sync="dialogVisible.ea">
-        <el-table :data="existingAssetsData">
+        <el-table :data="existingAssetsData" height="500">
           <el-table-column property="name" label="Token"></el-table-column>
           <el-table-column property="num" label="Quantity"></el-table-column>
         </el-table>
       </el-dialog>
       <el-dialog title="Deposit records" :visible.sync="dialogVisible.dr">
-        <el-table :data="depositData">
-          <el-table-column property="deposit_time" label="Time">
+        <el-table :data="depositData" height="500">
+          <el-table-column property="deposit_time" label="Time" width="180">
             <template slot-scope="scope">
               <span>{{ scope.row.deposit_time | formatTime }}</span>
             </template>
           </el-table-column>
-          <el-table-column property="coin" label="Token"></el-table-column>
-          <el-table-column property="amount" label="Quantity"></el-table-column>
+          <el-table-column property="token" label="Token" width="130"></el-table-column>
+          <el-table-column property="deposit_quantity" label="Quantity" width="180"></el-table-column>
           <el-table-column property="from" label="From address"></el-table-column>
         </el-table>
         <el-pagination
@@ -109,7 +109,7 @@
         </el-pagination>
       </el-dialog>
       <el-dialog title="Withdrawal records" :visible.sync="dialogVisible.wr">
-        <el-table :data="withdrawData">
+        <el-table :data="withdrawData" height="500">
           <el-table-column property="time" label="Time">
             <template slot-scope="scope">
               <span>{{ scope.row.withdrawal_time | formatTime }}</span>
@@ -130,7 +130,7 @@
         </el-pagination>
       </el-dialog>
       <el-dialog title="Airdrop records" :visible.sync="dialogVisible.ar">
-        <el-table :data="airdropData">
+        <el-table :data="airdropData" height="500">
           <el-table-column property="time" label="Time">
             <template slot-scope="scope">
               <span>{{ scope.row.time | formatTime }}</span>
@@ -362,11 +362,5 @@ export default class extends Vue {
 </script>
 
 <style scoped lang="scss">
-.actions-wrap {
 
-}
-
-.table-wrap {
-
-}
 </style>

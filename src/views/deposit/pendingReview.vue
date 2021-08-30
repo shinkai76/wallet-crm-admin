@@ -8,7 +8,7 @@
       highlight-current-row>
       <el-table-column
         fixed
-        prop="id"
+        prop="order"
         width="120"
         label="Order">
       </el-table-column>

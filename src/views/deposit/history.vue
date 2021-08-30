@@ -22,7 +22,7 @@
         highlight-current-row>
         <el-table-column
           fixed
-          prop="id"
+          prop="order"
           label="Order">
         </el-table-column>
         <el-table-column
