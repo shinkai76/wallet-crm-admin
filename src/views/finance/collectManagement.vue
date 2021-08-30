@@ -112,6 +112,7 @@ export default class extends Vue {
     const params = this.query
     collectList(params).then((res:any) => {
       this.tableData = res.list
+      this.total = res.total
     }).finally(() => {
       this.loading = false
     })
