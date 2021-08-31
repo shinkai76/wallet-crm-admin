@@ -210,16 +210,17 @@ export default class extends Vue {
   }
 
   private selectChanged(id:number) {
-    const selectedItem = this.tokens.find(el => {
+    const selectedItem:ITokenQuery | undefined = this.tokens.find(el => {
       return el.id === id
     })
+    if (!selectedItem) return
     const { name, proto, contract_address } = selectedItem
     this.form.token = name
     this.form.proto = proto
     this.form.contract_address = contract_address
   }
 
-  private tokenNameInADDForm(p, n) {
+  private tokenNameInADDForm(p:string, n:string) {
     return p + n
   }
 
