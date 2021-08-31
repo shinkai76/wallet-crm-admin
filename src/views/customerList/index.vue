@@ -12,6 +12,7 @@
         ></el-option>
       </el-select>
       <el-button type="primary" @click="getData">Search</el-button>
+      <el-button type="primary" @click="resetFilter">Reset</el-button>
     </div>
     <div class="table-wrap">
       <el-table
@@ -356,6 +357,16 @@ export default class extends Vue {
 
   private handleDialogCurrentChange():void {
     this.getDialogData()
+  }
+
+  private resetFilter():void {
+    this.searchQuery = {
+      email: '',
+      level: -1,
+      page_no: 1,
+      page_size: 10
+    }
+    this.getData()
   }
 }
 
