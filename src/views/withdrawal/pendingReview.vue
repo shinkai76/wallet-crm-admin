@@ -39,6 +39,14 @@
         >
         </el-table-column>
         <el-table-column
+          prop="amount"
+          label="Withdrawal quantity"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.amount }} {{ scope.row.token }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="fee"
           label="Fee"
         >
