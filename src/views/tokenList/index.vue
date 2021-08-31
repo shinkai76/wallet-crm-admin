@@ -267,6 +267,7 @@ export default class extends Vue {
     const selectedItem = this.addressList.find(el => {
       return el.address === address
     })
+    if (!selectedItem) return
     this.addForm.contract_address = selectedItem.address || ''
     this.addForm.token_name = selectedItem.name || ''
     this.addForm.decimals = selectedItem.decimals || 0
