@@ -73,8 +73,8 @@
               <el-option
                 v-for="item in tokens"
                 :key="item.id"
-                :label="item.proto"
-                :value="item">
+                :label="tokenNameInADDForm(item.proto, item.name)"
+                :value="item.id">
                 <div style="float: left">{{ item.proto }}</div> &nbsp;&nbsp;
                 <div style="float: right">{{ item.name }}</div>
               </el-option>
@@ -209,12 +209,18 @@ export default class extends Vue {
     this.showCreateDialog = false
   }
 
-  private selectChanged(val:ITokenQuery) {
-    const { name, proto, contract_address } = val
+  private selectChanged(id:number) {
+    const selectedItem = this.tokens.find(el => {
+      return el.id === id
+    })
+    const { name, proto, contract_address } = selectedItem
     this.form.token = name
     this.form.proto = proto
     this.form.contract_address = contract_address
-    this.tokenQuery = proto + '  ' + name
+  }
+
+  private tokenNameInADDForm(p, n) {
+    return p + n
   }
 
   private selectFilter(val:string) {

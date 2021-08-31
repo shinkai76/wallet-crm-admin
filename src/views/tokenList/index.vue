@@ -122,7 +122,9 @@
             <el-option
               v-for="item in addressList"
               :key="item.id"
-              :value="item">
+              :label="item.address"
+              :value="item.address"
+            >
               <div style="float: left">{{ item.name }}</div> &nbsp;&nbsp;
               <div style="float: right">{{ item.address }}</div>
             </el-option>
@@ -249,7 +251,7 @@ export default class extends Vue {
     })
   }
 
-  private validateFee(rule:any, value:any, callback:any){
+  private validateFee(rule:any, value:any, callback:any) {
     if (this.isNeedPay === '0') {
       callback()
       return
@@ -261,10 +263,13 @@ export default class extends Vue {
     }
   }
 
-  private selectChanged(val:ITokenAddress) {
-    this.addForm.contract_address = val.address || ''
-    this.addForm.token_name = val.name || ''
-    this.addForm.decimals = val.decimals || 0
+  private selectChanged(address:string) {
+    const selectedItem = this.addressList.find(el => {
+      return el.address === address
+    })
+    this.addForm.contract_address = selectedItem.address || ''
+    this.addForm.token_name = selectedItem.name || ''
+    this.addForm.decimals = selectedItem.decimals || 0
   }
 
   private editRow(index:any, row: ITokenListData): void {
