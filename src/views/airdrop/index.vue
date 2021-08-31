@@ -221,7 +221,7 @@ export default class extends Vue {
   }
 
   private tokenNameInADDForm(p:string, n:string) {
-    return p + n
+    return p + '  ' + n
   }
 
   private selectFilter(val:string) {
