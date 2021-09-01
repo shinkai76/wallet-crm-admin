@@ -18,7 +18,7 @@
       <div class="token-blocks">
         <div class="token-block" v-for="item in data">
           <div class="token-name">{{ item.name }}</div>
-          <div>{{ item.num | formatNumber  }}</div>
+          <div>{{ item.num }}</div>
         </div>
       </div>
       <p class="text-center">Total Assets</p>
