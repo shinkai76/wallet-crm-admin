@@ -64,7 +64,7 @@
         </el-option>
       </el-select>
         <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onCollect" class="full-btn">Collect</el-button>
+        <el-button type="primary" :loading="collectLoading" @click="onCollect" class="full-btn">Collect</el-button>
       </span>
     </el-dialog>
   </div>
@@ -85,6 +85,7 @@ export default class extends Vue {
   private loading = false
   private total = 0
   private tokens:ITokenQuery[] = []
+  private collectLoading = false
 
   private STATE = {
     0: 'waiting',
@@ -133,6 +134,7 @@ export default class extends Vue {
 
   private onCollect() {
     if (this.token == null || this.token == '') return
+    this.collectLoading = true
     this.secondConfirm()
   }
 
@@ -142,6 +144,8 @@ export default class extends Vue {
       cancelButtonText: 'No'
     }).then(() => {
       this.onConfirmCollect()
+    }).catch(() => {
+      this.collectLoading = false
     })
   }
 
@@ -154,6 +158,8 @@ export default class extends Vue {
       this.showCollect = false
       this.query.page_no = 1
       this.getData()
+    }).finally(() => {
+      this.collectLoading = false
     })
   }
 

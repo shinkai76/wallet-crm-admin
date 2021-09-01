@@ -104,7 +104,7 @@ export function post(url:string, params:any) {
         }
         // @ts-ignore
         if (res.code !== 0) {
-          reject(res.data)
+          reject(res)
           Message({
             // @ts-ignore
             message: res.msg || 'Error',

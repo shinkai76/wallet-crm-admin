@@ -141,14 +141,12 @@ export default class extends Vue {
     const params = { code }
     this.loading = true
     approve(params).then((res:any) => {
-      if (res.code === 0) {
-        this.$message.success('Execute successfully')
-        this.query.page_no = 1
-        this.getData()
-        return
-      }
-      this.resultDialogVisible = true
+      this.$message.success('Execute successfully')
+      this.query.page_no = 1
+      this.getData()
+    }).catch((res) => {
       if (res.code === '100600') {
+        this.resultDialogVisible = true
         this.result = 'withdrawal account balance is not enough'
       }
     }).finally(() => {
