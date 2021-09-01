@@ -166,6 +166,7 @@ export default class extends Vue {
     }
     collectAddressSet(params).then(() => {
       this.$message.success('Set successfully')
+      this.getData()
       this.showDialog = false
       this.showInnerDialog = false
     })
