@@ -20,7 +20,7 @@ module.exports = {
     open: true,
     proxy: {
       '/nuvateq': {
-        target: 'http://192.168.0.110:9099/',
+        target: 'http://admin.nuvateq.vbhdid.com/',
         changeOrigin: true,
       }
     }
