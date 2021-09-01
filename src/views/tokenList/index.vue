@@ -177,6 +177,7 @@ export default class extends Vue {
   private settingDialogTitle = ''
   private addForm = {
     token_name: '',
+    token_symbol: '',
     withdrawal_fee: '',
     internal_fee: '0',
     contract_address: '',
@@ -271,6 +272,7 @@ export default class extends Vue {
     this.addForm.contract_address = selectedItem.address || ''
     this.addForm.token_name = selectedItem.name || ''
     this.addForm.decimals = selectedItem.decimals || 0
+    this.addForm.token_symbol = selectedItem.symbol || ''
   }
 
   private editRow(index:any, row: ITokenListData): void {
