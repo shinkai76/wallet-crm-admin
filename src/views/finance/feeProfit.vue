@@ -49,6 +49,7 @@
         <el-form :model="confirmForm" :rules="rules" ref="confirmForm">
           <el-form-item label="" prop="password">
             <el-input v-model="confirmForm.password"
+                      type="password"
                       placeholder="Verify Password"
             ></el-input>
           </el-form-item>
@@ -171,6 +172,8 @@ export default class extends Vue {
     }
     profitWithdrawal(params).then(() => {
       this.$message.success('Withdraw successfully')
+      this.closeWithdrawDialog()
+      this.getData()
     })
   }
 
