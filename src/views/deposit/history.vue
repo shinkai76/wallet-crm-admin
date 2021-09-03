@@ -144,7 +144,12 @@ export default class extends Vue {
     this.getData()
   }
 
-  private selectChanged(id:number) {
+  private selectChanged(id:number | string) {
+    if (id === '') {
+      this.query.token = ''
+      this.query.proto = ''
+      return
+    }
     const selectedItem:ITokenQuery | undefined = this.tokens.find(el => {
       return el.id === id
     })
