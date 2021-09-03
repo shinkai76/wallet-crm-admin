@@ -1,13 +1,18 @@
 <template>
   <div class="page-container">
     <div class="actions-wrap">
-      <el-select v-model="query.token" placeholder="" class="mr-2">
+      <el-select
+        v-model="tokenText"
+        placeholder=""
+        class="mr-2"
+        @change="selectChanged"
+      >
         <el-option value="" label="ALL">ALL</el-option>
         <el-option
           v-for="item in tokens"
           :key="item.id"
-          :label="item.name"
-          :value="item.name">
+          :label="tokenNameInADDForm(item.proto, item.name)"
+          :value="item.id">
         </el-option>
       </el-select>
       <el-button type="primary" @click="onSearch">Search</el-button>
@@ -93,7 +98,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { IHistoryListData } from '@/api/types'
+import { IHistoryListData, ITokenQuery } from '@/api/types'
 import { getWithdrawList, tokenList } from '@/api/users'
 @Component({
   name: 'history'
@@ -102,13 +107,15 @@ export default class extends Vue {
   private loading = false
   private total = 0
   private tableData:IHistoryListData[] = []
-  private tokens = []
+  private tokens:ITokenQuery[] = []
+  private tokenText = ''
 
   private query = {
     page_no: 1,
     page_size: 10,
     status: 1,
-    token: ''
+    token: '',
+    proto: ''
   }
 
   created() {
@@ -146,6 +153,20 @@ export default class extends Vue {
 
   private handleCurrentChange():void {
     this.getData()
+  }
+
+  private selectChanged(id:number) {
+    const selectedItem:ITokenQuery | undefined = this.tokens.find(el => {
+      return el.id === id
+    })
+    if (!selectedItem) return
+    const { name, proto } = selectedItem
+    this.query.token = name
+    this.query.proto = proto
+  }
+
+  private tokenNameInADDForm(p:string, n:string) {
+    return p + '  ' + n
   }
 }
 </script>
