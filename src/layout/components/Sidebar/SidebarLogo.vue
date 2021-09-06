@@ -10,10 +10,10 @@
         class="sidebar-logo-link"
         to="/"
       >
-        <img
+        <!-- <img
           src="favicon.ico"
           class="sidebar-logo"
-        >
+        > -->
       </router-link>
       <router-link
         v-else
@@ -21,10 +21,10 @@
         class="sidebar-logo-link"
         to="/"
       >
-        <img
+        <!-- <img
           src="favicon.ico"
           class="sidebar-logo"
-        >
+        > -->
         <h1 class="sidebar-title">
           {{ title }}
         </h1>
