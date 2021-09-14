@@ -166,11 +166,8 @@ import { ElForm } from 'element-ui/types/form'
 })
 export default class extends Vue {
   private loading = false
-  // TODO 隐藏OMNI
-  // private btns: string[] = ['OMNI', 'ERC20', 'TRC20', 'BEP20', 'HRC20', 'OIP20']
-  // private current = 'OMNI'
-  private btns: string[] = ['ERC20', 'TRC20', 'BEP20', 'HRC20', 'OIP20']
-  private current = 'ERC20'
+  private btns: string[] = ['OMNI', 'ERC20', 'TRC20', 'BEP20', 'HRC20', 'OIP20']
+  private current = 'OMNI'
   private tableData = []
   private addressList:ITokenAddress[] = []
   private currentTokenInfo!: ITokenListData
