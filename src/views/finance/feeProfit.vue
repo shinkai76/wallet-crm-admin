@@ -4,6 +4,7 @@
       <el-table
         v-loading="loading"
         :data="tableData"
+        height="720"
         highlight-current-row>
         <el-table-column
           fixed

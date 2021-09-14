@@ -7,6 +7,7 @@
       <el-table
         v-loading="loading"
         :data="tableData"
+        height="720"
         style="width: 100%"
         highlight-current-row>
         <el-table-column
@@ -133,7 +134,7 @@ export default class extends Vue {
   }
 
   private onCollect() {
-    if (this.token == null || this.token == '') return
+    if (this.token == null || this.token === '') return
     this.collectLoading = true
     this.secondConfirm()
   }

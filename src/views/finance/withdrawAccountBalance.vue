@@ -4,11 +4,15 @@
       <el-table
         v-loading="loading"
         :data="tableData"
+        height="720"
         highlight-current-row>
         <el-table-column
           fixed
           prop="token"
           label="Token">
+          <template slot-scope="scope">
+            <span>{{ scope.row.token }}&nbsp;{{ scope.row.proto }}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="balance"
