@@ -95,9 +95,9 @@ class User extends VuexModule implements IUserState {
 
   @Action({ rawError: true })
   public async LogOut() {
-    if (this.token === '') {
-      throw Error('LogOut: token is undefined!')
-    }
+    // if (this.token === '') {
+    //   throw Error('LogOut: token is undefined!')
+    // }
     localStorage.removeItem('token')
     removeToken()
     this.SET_ROUTES(null)
