@@ -9,7 +9,7 @@
         >{{ item }}
         </el-button>
       </el-button-group>
-      <el-button type="primary" circle icon="el-icon-plus" @click="openAddDialog"></el-button>
+      <el-button type="primary" v-show="current !== 'OMNI'" circle icon="el-icon-plus" @click="openAddDialog"></el-button>
     </div>
     <div class="table-wrap">
       <el-table
