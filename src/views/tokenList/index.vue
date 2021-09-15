@@ -68,7 +68,7 @@
                :visible.sync="showSettingDialog"
                center
                width="450px"
-               :before-close="closeDialog"
+               :before-close="closeSettingDialog"
     >
       <el-form ref="settingForm"
                label-position='top'
@@ -103,7 +103,7 @@
                :visible.sync="showAddDialog"
                center
                width="460px"
-               :before-close="closeDialog"
+               :before-close="closeAddDialog"
     >
       <el-form ref="addForm"
                label-position='top'
@@ -303,7 +303,7 @@ export default class extends Vue {
         this.$message.success('Set successfully!')
         this.getData()
       }).finally(() => {
-        this.showSettingDialog = false
+        this.closeSettingDialog()
       })
     })
   }
@@ -317,15 +317,19 @@ export default class extends Vue {
       addToken(params).then(() => {
         this.$message.success('Added successfully!')
         this.getData()
+      }).finally(() => {
+        this.closeAddDialog()
       })
-      this.showAddDialog = false
     })
   }
 
-  private closeDialog() {
-    this.resetForm('settingForm')
+  private closeAddDialog() {
     this.resetForm('addForm')
     this.showAddDialog = false
+  }
+
+  private closeSettingDialog() {
+    this.resetForm('settingForm')
     this.showSettingDialog = false
   }
 
