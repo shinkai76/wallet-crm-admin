@@ -10,3 +10,9 @@ export const validateFee = (rule:any, value:any, callback:any) => {
     callback()
   }
 }
+
+export const isEmail = (str:string) => {
+  const result = str.match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/)
+  if (result == null) return false
+  return true
+}

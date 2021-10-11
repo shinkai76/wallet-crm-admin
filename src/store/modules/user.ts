@@ -3,6 +3,7 @@ import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-dec
 import { getUserMenus, login } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/cookies'
 import store from '@/store'
+import { isEmail } from '@/utils/validate'
 
 export interface IUserState {
   token: string
@@ -53,10 +54,17 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action({ rawError: true })
-  public async Login(userInfo: { user_code: string, password: string }) {
-    let { user_code, password } = userInfo
+  public async Login(userInfo: { user_code: string, password: string, verify_code:string }) {
+    let { user_code, password, verify_code } = userInfo
     user_code = user_code.trim()
-    const data = await login({ user_code, password })
+    let params = {}
+    if (isEmail(user_code)) {
+      params = { user_code, password, verify_code }
+    } else {
+      params = { user_code, password }
+    }
+    const data = await login(params)
+
     // console.log(router)
     const menuData = await getUserMenus({ user_code })
     localStorage.setItem('code', user_code)

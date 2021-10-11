@@ -24,7 +24,8 @@
           name="username"
           type="text"
           autocomplete="off"
-          placeholder="username"
+          placeholder="username or email"
+          @blur="checkAccount"
         />
       </el-form-item>
 
@@ -49,6 +50,22 @@
           <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
         </span>
       </el-form-item>
+
+      <transition name="fade">
+        <el-form-item prop="verify_code" v-show="isShowEmailCodeInput">
+          <span class="svg-container">
+            <svg-icon name="password" />
+          </span>
+          <el-input
+            ref="verify_code"
+            v-model.trim="loginForm.verify_code"
+            name="verify_code"
+            type="text"
+            autocomplete="off"
+            placeholder="verify code"
+          />
+        </el-form-item>
+      </transition>
 
       <el-button
         :loading="loading"
@@ -77,6 +94,7 @@ import { Route } from 'vue-router'
 import { Dictionary } from 'vue-router/types/router'
 import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
+import { isEmail } from '@/utils/validate'
 const sha256 = require('js-sha256').sha256
 
 @Component({
@@ -85,7 +103,8 @@ const sha256 = require('js-sha256').sha256
 export default class extends Vue {
   private loginForm = {
     user_code: '',
-    password: ''
+    password: '',
+    verify_code: ''
   }
 
   private loginRules = {
@@ -98,6 +117,11 @@ export default class extends Vue {
       required: true,
       trigger: 'blur',
       message: 'required'
+    }],
+    verify_code: [{
+      required: true,
+      trigger: 'blur',
+      message: 'required'
     }]
   }
 
@@ -107,6 +131,7 @@ export default class extends Vue {
   private showDialog = false
   private redirect?: string
   private otherQuery: Dictionary<string> = {}
+  private isShowEmailCodeInput = false
 
   @Watch('$route', { immediate: true })
   private onRouteChange(route: Route) {
@@ -125,6 +150,12 @@ export default class extends Vue {
     } else if (this.loginForm.password === '') {
       (this.$refs.password as Input).focus()
     }
+  }
+
+  private checkAccount():void {
+    this.loginForm.verify_code = ''
+    if (!this.loginForm.user_code) return
+    this.isShowEmailCodeInput = isEmail(this.loginForm.user_code)
   }
 
   private showPwd() {
