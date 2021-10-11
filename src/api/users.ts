@@ -120,6 +120,18 @@ export const depositApprove = (params: IData7) => {
   return post(baseUrl + '/deposit/pass', params)
 }
 
+interface IData7_1 {
+  codes: string[]
+  ids: number[]
+  user_code: string
+}
+export const approveMulti = (params: IData7_1) => {
+  return post(baseUrl + '/withdrawal/pass/multi', params)
+}
+export const depositApproveMulti = (params: IData7_1) => {
+  return post(baseUrl + '/deposit/pass/multi', params)
+}
+
 interface IData8 {
   page_no: number
   page_size: number

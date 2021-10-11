@@ -121,7 +121,7 @@
          >
            <el-table-column
              align="center"
-             label="UserName"
+             label="Email"
              width="320"
            >
              <template slot-scope="{row}">

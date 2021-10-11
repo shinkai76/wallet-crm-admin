@@ -1,12 +1,22 @@
 <template>
   <div class="page-container">
+    <div class="btns-wrap">
+      <el-button type="primary" @click="onMultiAction">Approve</el-button>
+    </div>
     <div class="table-wrap">
       <el-table
         height="720px"
         v-loading="loading"
         :data="tableData"
         style="width: 100%"
-        highlight-current-row>
+        @selection-change="handleSelectionChange"
+        highlight-current-row
+      >
+      <el-table-column
+          fixed
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           fixed
           prop="id"
@@ -81,6 +91,12 @@
       width="400px"
       center>
       <span>{{ result }}</span>
+      <div v-if="failedResults.length" class="failedResults">
+        <div v-for="item in failedResults" :key="item.id">
+          <div>{{ item.id }}</div>
+          <div>{{ item.err_msg }}</div>
+        </div>
+      </div>
       <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="resultDialogVisible = false">OK</el-button>
   </span>
@@ -91,7 +107,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { IWithdrawPendingListData } from '@/api/types'
-import { approve, getWithdrawList } from '@/api/users'
+import { approve, getWithdrawList, approveMulti } from '@/api/users'
 @Component({
   name: 'pendingReview'
 })
@@ -99,6 +115,8 @@ export default class extends Vue {
   private loading = false
   private total = 0
   private tableData = []
+  private multipleSelection: IWithdrawPendingListData[] | [] = []
+  private failedResults = []
 
   private query = {
     page_no: 1,
@@ -124,12 +142,20 @@ export default class extends Vue {
     })
   }
 
-  private secondConfirm(code:string) {
+  private handleSelectionChange(val:IWithdrawPendingListData[] | []) {
+    this.multipleSelection = val
+  }
+
+  private secondConfirm(code?:string) {
     this.$confirm('Are you sure about this operation', '', {
       confirmButtonText: 'Sure',
       cancelButtonText: 'No'
     }).then(() => {
-      this.onApprove(code)
+      if (typeof code === 'string') {
+        this.onApprove(code)
+      } else {
+        this.onApproveMulti()
+      }
     })
   }
 
@@ -149,7 +175,39 @@ export default class extends Vue {
       if (res && res.code === '100600') {
         this.resultDialogVisible = true
         this.result = 'withdrawal account balance is not enough'
+      } else {
+        this.result = 'failed'
       }
+    }).finally(() => {
+      this.loading = false
+    })
+  }
+
+  private onApproveMulti() {
+    const codes:string[] = []
+    const ids:number[] = []
+    this.multipleSelection.forEach((el:IWithdrawPendingListData) => {
+      codes.push(el.code)
+      ids.push(el.id)
+    })
+
+    const params = {
+      codes,
+      ids,
+      user_code: localStorage.getItem('code') || ''
+    }
+    this.loading = true
+    approveMulti(params).then((res:any) => {
+      // 处理成功和失败
+      if (res.failed_count === 0) {
+        this.$message.success('Execute successfully')
+      } else {
+        this.resultDialogVisible = true
+        this.result = `${res.total - res.failed_count} were executed successfully, and ${res.failed_count} failed.`
+        this.failedResults = res.fail_result
+      }
+      this.query.page_no = 1
+      this.getData()
     }).finally(() => {
       this.loading = false
     })
@@ -157,6 +215,10 @@ export default class extends Vue {
 
   private onSet(index:any, row:IWithdrawPendingListData):void {
     this.secondConfirm(row.code)
+  }
+
+  private onMultiAction():void {
+    this.multipleSelection.length && this.secondConfirm()
   }
 }
 </script>

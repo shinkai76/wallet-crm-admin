@@ -87,7 +87,7 @@ export default class extends Vue {
   justify-content: space-between;
   box-sizing: border-box;
   .register-info-block {
-    width: 32%;
+    width: 25%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
