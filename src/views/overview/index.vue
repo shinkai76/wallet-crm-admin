@@ -13,6 +13,10 @@
         <span class="register-info-num">{{ registrants.yesterday }}</span>
         <div class="register-info-title">yesterday registrants</div>
       </div>
+      <div class="register-info-block block-shadow">
+        <span class="register-info-num">{{ registrants.last_30_days || 0 }}</span>
+        <div class="register-info-title">Last 30 days registrants</div>
+      </div>
     </div>
     <div class="token-wrap block-shadow">
       <div class="token-blocks">

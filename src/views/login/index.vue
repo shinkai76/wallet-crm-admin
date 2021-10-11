@@ -52,7 +52,7 @@
       </el-form-item>
 
       <transition name="fade">
-        <el-form-item prop="verify_code" v-show="isShowEmailCodeInput">
+        <el-form-item prop="verify_code" v-if="isShowEmailCodeInput">
           <span class="svg-container">
             <svg-icon name="password" />
           </span>

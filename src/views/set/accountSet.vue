@@ -191,11 +191,11 @@
             ref="admin"
             :rules="rules"
           >
-            <el-form-item label="Name" prop="name">
+            <el-form-item label="Email" prop="name">
               <el-input
                 v-model="admin.name"
                 :readonly="dialogType==='edit'"
-                placeholder="User Name"
+                placeholder="Email"
               />
             </el-form-item>
             <el-form-item label="Password" prop="password" v-if="dialogType == 'new'">
