@@ -23,7 +23,7 @@
           v-model="loginForm.user_code"
           name="username"
           type="text"
-          autocomplete="on"
+          autocomplete="off"
           placeholder="username"
         />
       </el-form-item>
@@ -39,7 +39,7 @@
           :type="passwordType"
           placeholder="password"
           name="password"
-          autocomplete="on"
+          autocomplete="off"
           @keyup.enter.native="handleLogin"
         />
         <span
@@ -91,11 +91,13 @@ export default class extends Vue {
   private loginRules = {
     user_code: [{
       required: true,
-      trigger: 'blur'
+      trigger: 'blur',
+      message: 'required'
     }],
     password: [{
       required: true,
-      trigger: 'blur'
+      trigger: 'blur',
+      message: 'required'
     }]
   }
 
