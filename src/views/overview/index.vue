@@ -20,9 +20,15 @@
     </div>
     <div class="token-wrap block-shadow">
       <div class="token-blocks">
-        <div class="token-block" v-for="item in data">
+        <div class="token-block" v-for="item in data" :key="item.name">
           <div class="token-name">{{ item.name }}</div>
-          <div>{{ item.num }}</div>
+          <div>{{ item.num }}
+            <svg-icon
+              name="arrow"
+              width="20"
+              height="20"
+            />
+          </div>
         </div>
       </div>
       <p class="text-center">Total Assets</p>
@@ -115,17 +121,18 @@ export default class extends Vue {
     justify-content: space-between;
     min-height: 200px;
   }
-  .token-block {
+ .token-block {
     width: 45%;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
+    line-height: 1.2;
     border-bottom: 2px solid #f1f1f1;
     padding: 4px 0;
     font-size: 14px;
     margin-bottom: 10px;
     .token-name {
-      color: lightslategray
+      color: lightslategray;
     }
   }
 }
