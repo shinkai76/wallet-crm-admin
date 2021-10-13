@@ -37,29 +37,69 @@
 
     <div class="charts-dialog" v-show="isShowCharts">
       <el-button
-        icon="el-icon-close"
+        icon="el-icon-back"
         circle
         size="small"
-        class="close-icon"
+        class="back-icon"
         @click="isShowCharts = false"
       ></el-button>
-      <div class="charts-title-wrap">{{ name }}} assets</div>
+      <div class="charts-title-wrap">{{ name }} assets</div>
+      <small class="charts-subtitle">The last 30 days data</small>
+      <div id="main" style="width: 1300px; height: 700px"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { getOverviewAssets, getOverviewRegistrants } from '@/api/overview'
+import { getCoinStatistics, getOverviewAssets, getOverviewRegistrants } from '@/api/overview'
+import * as echarts from 'echarts/core'
+import {
+  TitleComponent,
+  TitleComponentOption,
+  TooltipComponent,
+  TooltipComponentOption,
+  GridComponent,
+  GridComponentOption,
+  VisualMapComponent,
+  VisualMapComponentOption
+} from 'echarts/components'
+import { LineChart, LineSeriesOption } from 'echarts/charts'
+import { UniversalTransition } from 'echarts/features'
+import { CanvasRenderer } from 'echarts/renderers'
+
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  VisualMapComponent,
+  LineChart,
+  CanvasRenderer,
+  UniversalTransition
+])
+
+type EChartsOption = echarts.ComposeOption<
+  | TitleComponentOption
+  | TooltipComponentOption
+  | GridComponentOption
+  | VisualMapComponentOption
+  | LineSeriesOption
+  >;
 
 @Component({
   name: 'Overview'
 })
 export default class extends Vue {
-  private data: object[] = []
-  private registrants: object = {}
+  private data = []
+  private registrants = {}
   private name = ''
   private isShowCharts = false
+  private thirtyData = []
+  private chartDom:any
+  private myChart:any
+  private dateList:string[] = []
+  private inList:string[] = []
+  private outList:string[] = []
 
   mounted() {
     this.init()
@@ -68,6 +108,7 @@ export default class extends Vue {
   private init(): void {
     this.getAssets()
     this.getRegistrants()
+    this.initCharts()
   }
 
   private getAssets(): void {
@@ -101,13 +142,126 @@ export default class extends Vue {
     this.isShowCharts = true
     this.getChartsData()
   }
-  
-  private getChartsData() {
 
+  private getChartsData() {
+    this.inList.length = 0
+    this.outList.length = 0
+    this.dateList.length = 0
+    const params = {
+      coin_name: this.name
+    }
+    getCoinStatistics(params)
+      .then((res:any) => {
+        this.thirtyData = res.in_and_out
+        this.dateList = this.thirtyData.map((el:{in:string, out:string, timestamp_str:string}) => {
+          this.inList.push(el.in + Math.random()*150)
+          this.outList.push(el.out + Math.random()*150)
+          return el.timestamp_str
+        })
+        this.setChartOptions()
+      })
+  }
+
+  private setChartOptions() {
+    const option:EChartsOption = {
+      title: [
+        {
+          left: 'center',
+          text: 'Total inflow'
+        },
+        {
+          top: '55%',
+          left: 'center',
+          text: 'Total outflow'
+        }
+      ],
+      tooltip: {
+        trigger: 'axis',
+        formatter: '{b} <br/>Quantity:  {c}'
+      },
+      xAxis: [
+        {
+          boundaryGap: false,
+          data: this.dateList
+        },
+        {
+          boundaryGap: false,
+          data: this.dateList,
+          gridIndex: 1
+        }
+      ],
+      yAxis: [
+        {},
+        {
+          gridIndex: 1
+        }
+      ],
+      grid: [
+        {
+          bottom: '60%'
+        },
+        {
+          top: '60%'
+        }
+      ],
+      series: [
+        {
+          type: 'line',
+          itemStyle: {
+            color: 'rgba(252, 190, 4, 1)'
+          },
+          showSymbol: false,
+          data: this.inList,
+          lineStyle: {
+            color: 'rgba(72, 162, 248, 1)'
+          },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgba(86, 171, 251, 1)'
+              },
+              {
+                offset: 1,
+                color: 'rgba(131, 190, 245, 1)'
+              }
+            ])
+          }
+        },
+        {
+          type: 'line',
+          itemStyle: {
+            color: 'rgba(252, 190, 4, 1)'
+          },
+          showSymbol: false,
+          data: this.outList,
+          lineStyle: {
+            color: 'rgba(19, 183, 210, 1)'
+          },
+          xAxisIndex: 1,
+          yAxisIndex: 1,
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgba(40, 192, 217, 1)'
+              },
+              {
+                offset: 1,
+                color: 'rgba(127, 225, 241, 1)'
+              }
+            ])
+          }
+        }
+      ]
+    }
+
+    this.myChart.setOption(option)
   }
 
   private initCharts() {
-
+    this.chartDom = document.getElementById('main')!
+    this.myChart = echarts.init(this.chartDom)
   }
 }
 </script>
@@ -176,17 +330,24 @@ export default class extends Vue {
   position: absolute;
   left: 20px;
   right: 20px;
-  bottom: 20px;
+  bottom: 0;
   top: 20px;
   z-index: 100;
   background: #fff;
-  border: 1px solid gray;
-  box-shadow: 1px 2px 9px 9px gray;
-  .close-icon {
+  .back-icon {
     position: absolute;
     right: 40px;
     top: 40px;
     z-index: 200;
   }
+  .charts-subtitle {
+    color: #666
+  }
+}
+#main {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

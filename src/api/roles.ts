@@ -6,11 +6,11 @@ interface IData10 {
   page_no: number
   page_size: number
 }
-export const getRoles = (params:IData10):any => {
+export const getRoles = (params:IData10) => {
   return post(baseUrl + '/set/permissions/list', params)
 }
 
-export const getAdmins = (params:IData10):any => {
+export const getAdmins = (params:IData10) => {
   return post(baseUrl + '/user/list', params)
 }
 
@@ -33,11 +33,11 @@ export const setRoles = (params:IData18) => {
   return post(baseUrl + '/set/permissions/set', params)
 }
 
-export const createRoles = (params:IData18):any => {
+export const createRoles = (params:IData18) => {
   return post(baseUrl + '/set/permissions/add', params)
 }
 
-export const getRoutes = (params: any):any => {
+export const getRoutes = (params: any) => {
   return get(baseUrl + '/sys/menus', params)
 }
 interface IData19 {

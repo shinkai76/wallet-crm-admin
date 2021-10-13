@@ -3,19 +3,19 @@ import { get, post } from '@/utils/request'
 import { report } from 'node:process'
 const baseUrl = 'nuvateq/mgt/v1'
 
-export const getMenus = (params = {}):any => {
+export const getMenus = (params = {}) => {
   return get(baseUrl + '/sys/menus', params)
 }
-export const getUserMenus = (params = {}):any => {
+export const getUserMenus = (params = {}) => {
   return post(baseUrl + '/user/menus/get', params)
 }
 
 // 获取公钥
-export const pubKey = (params:any = {}):any => {
+export const pubKey = (params:any = {}) => {
   return post(baseUrl + '/user/pk', params)
 }
 
-export const login = (params: any):any => {
+export const login = (params: any) => {
   return post(baseUrl + '/user/login', params)
 }
 //
