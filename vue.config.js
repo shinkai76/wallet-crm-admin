@@ -21,7 +21,7 @@ module.exports = {
     proxy: {
       '/nuvateq': {
         target: 'http://admin.nuvateq.vbhdid.com/',
-        changeOrigin: true,
+        changeOrigin: true
       }
     }
   },
@@ -49,8 +49,7 @@ module.exports = {
               inline: /runtime\..*\.js$/
             }])
             .end()
-          config
-            .optimization.splitChunks({
+          config.optimization.splitChunks({
             chunks: 'all',
             cacheGroups: {
               libs: {
