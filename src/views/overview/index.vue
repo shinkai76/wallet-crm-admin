@@ -154,8 +154,8 @@ export default class extends Vue {
       .then((res:any) => {
         this.thirtyData = res.in_and_out
         this.dateList = this.thirtyData.map((el:{in:string, out:string, timestamp_str:string}) => {
-          this.inList.push(el.in + Math.random()*150)
-          this.outList.push(el.out + Math.random()*150)
+          this.inList.push(el.in)
+          this.outList.push(el.out)
           return el.timestamp_str
         })
         this.setChartOptions()
