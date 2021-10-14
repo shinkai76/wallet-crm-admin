@@ -480,4 +480,10 @@ export default class extends Vue {
 </script>
 
 <style scoped lang="scss">
+.m {
+
+}
+.pc {
+
+}
 </style>

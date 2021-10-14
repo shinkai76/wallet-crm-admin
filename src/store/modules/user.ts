@@ -63,10 +63,10 @@ class User extends VuexModule implements IUserState {
     } else {
       params = { user_code, password }
     }
-    const data = await login(params)
+    const data:any = await login(params)
 
     // console.log(router)
-    const menuData = await getUserMenus({ user_code })
+    const menuData:any = await getUserMenus({ user_code })
     localStorage.setItem('code', user_code)
     localStorage.setItem('token', data.token)
     localStorage.setItem('menus_id', JSON.stringify(menuData.menus))
